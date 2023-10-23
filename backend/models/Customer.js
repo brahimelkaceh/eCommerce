@@ -6,28 +6,28 @@ const bcrypt = require("bcrypt");
 const customerSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, "please enter a first name"],
+    // required: [true, "please enter a first name"],
   },
   lastName: {
     type: String,
-    required: [true, "please enter a last name"],
+    // required: [true, "please enter a last name"],
   },
 
   email: {
     type: String,
-    required: [true, "please enter a email address"],
+    // required: [true, "please enter a email address"],
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, "plaese provide a valid email address"],
   },
   password: {
     type: String,
-    required: [true, "please enter a password"],
+    // required: [true, "please enter a password"],
     minLength: 10,
   },
   confirmPassword: {
     type: String,
-    required: [true, "please enter a password to confirm"],
+    // required: [true, "please enter a password to confirm"],
     validate: {
       validator: function (e) {
         return e === this.password; // abc === abc
@@ -60,5 +60,12 @@ customerSchema.pre("save", async function (next) {
   this.confirmPassword = undefined;
   next();
 });
+
+customerSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 module.exports = mongoose.model("Customermodel", customerSchema);

@@ -3,8 +3,14 @@
 const express = require("express");
 const Router = express.Router();
 
-const { AddNewCustomer } = require("../controllers/customerController");
+const {
+  AddNewCustomer,
+  signup,
+  login,
+} = require("../controllers/customerController");
 
 Router.post("/customers", AddNewCustomer);
+Router.post("/customers/signup", signup);
+Router.post("/customers/login", login);
 
 module.exports = Router;
