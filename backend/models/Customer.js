@@ -49,8 +49,9 @@ const customerSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true,
+    default: false,
   },
+  activationToken: {type:String}
 });
 customerSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

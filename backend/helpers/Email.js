@@ -1,3 +1,4 @@
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 // const pug = require('pug');
 // const htmlToText = require('html-to-text');
@@ -47,7 +48,7 @@ module.exports = class Email {
       to: this.to,
       subject,
       // html,
-      text: `Hello akhi, ${this.firstName}`,
+      text: `Hello akhi, ${this.firstName}, please follow this url; ${this.url}`,
     };
 
     // 3) Create a transport and send email
