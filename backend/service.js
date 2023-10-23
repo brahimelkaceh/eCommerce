@@ -2,6 +2,7 @@ const express = require("express");
 const server = express();
 
 const { connection } = require("./config/db");
+// !this is a comment
 
 const db = connection();
 
