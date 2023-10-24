@@ -69,32 +69,119 @@ exports.login = catchAsync(async (req, res, next) => {
   // createSendToken(user, 200, req, res);
 });
 
-exports.activate = async (req, res) => {
+exports.activate = catchAsync(async (req, res) => {
   const { token } = req.query;
 
-  try {
-    // Find the customer with the given token
-    const customer = await Customer.findOne({ activationToken: token });
+  // Find the customer with the given token
+  const customer = await Customer.findOne({ activationToken: token });
 
-    if (!customer) {
-      return res.status(404).json({ message: "Invalid activation token" });
-    }
-
-    // Check if the account is already active
-    if (customer.active) {
-      return res.json({ message: "Account is already active" });
-    }
-
-    // Activate the account
-    customer.active = true;
-    customer.activationToken = ""; // You can clear the token
-    await customer.save();
-
-    // Redirect to a confirmation page or display a success message
-    return res.json({ message: "Account activated successfully" });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "An error occurred while processing your request" });
+  if (!customer) {
+    return res.status(404).json({
+      status: "fail",
+      data: "Invalid activation token",
+    });
   }
-};
+  // Check if the account is already active
+  if (customer.active) {
+    return res.status(404).json({
+      status: "fail",
+      data: "Account is already active",
+    });
+  }
+  // Activate the account
+  customer.active = true;
+  customer.activationToken = ""; // You can clear the token
+  await customer.save();
+
+  // Redirect to a confirmation page or display a success message
+  return res.status(200).json({
+    status: "success",
+    data: "Account activated successfully",
+  });
+});
+
+exports.getAllCustomers = catchAsync(async (req, res, next) => {
+  const customers = await Customer.find({});
+  if (!customers) {
+    return res.status(404).json({
+      status: "fail",
+      data: "No customers",
+    });
+  }
+  res.status(200).json({
+    status: "success",
+    data: { customers },
+  });
+});
+
+exports.deleteCustomer = catchAsync(async (req, res, next) => {
+  const cid = req.params.cid;
+  const customer2delete = await Customer.findByIdAndDelete(cid);
+  if (!customer2delete) {
+    res.status(404).json({
+      status: "fail",
+      data: "Customer not found",
+    });
+  }
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
+exports.updateCustomer = catchAsync(async (req, res, next) => {
+  const cid = req.params.cid;
+  const { firstName, lastName, email } = req.body;
+  const customer2update = await Customer.findByIdAndUpdate(
+    cid,
+    {
+      firstName,
+      lastName,
+      email,
+    },
+    { new: true, runValidators: true },
+  );
+  if (!customer2update) {
+    res.status(404).json({
+      status: "fail",
+      data: "Customer not updated",
+    });
+  }
+  res.status(200).json({
+    status: "success",
+    data: { customer2update },
+  });
+});
+
+exports.getCustomerById = catchAsync(async (req, res, next) => {
+  const cid = req.params.cid;
+  const customer = await Customer.findById(cid);
+  if (!customer) {
+    res.status(404).json({
+      status: "fail",
+      data: "Customer not found",
+    });
+  }
+  res.status(200).json({
+    status: "success",
+    data: { customer },
+  });
+});
+
+exports.search4Customer = catchAsync(async (req, res, next) => {
+  const searchParams = req.query;
+  console.log(searchParams);
+  const customers = await Customer.find(searchParams);
+  // console.log(customers);
+  if (!customers || customers.length === 0) {
+    return res.status(404).json({
+      status: "fail",
+      data: "No customers found",
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { customers },
+  });
+});
