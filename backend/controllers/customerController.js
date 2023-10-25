@@ -32,7 +32,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   // Construct the activation URL with the token
   const activationURL = `${req.protocol}://${req.get(
-    "host",
+    "host"
   )}/customers/activate?token=${activationToken}`;
 
   // Send the activation email
@@ -139,7 +139,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       lastName,
       email,
     },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   );
   if (!customer2update) {
     res.status(404).json({
