@@ -30,6 +30,7 @@ module.exports.USER_LOGIN_OK = 'User logged in.';
 module.exports.USER_LOGIN_FAILED = 'User not found.';
 module.exports.USER_FOUND = 'Users founds.';
 module.exports.USER_CREATED = 'User Created Successfully.';
+module.exports.USER_CREATED_FAILED = "user Creation failed"
 module.exports.USER_UPDATED = 'User Updated Successfully.';
 module.exports.USER_DELETED = 'User Deleted Successfully.';
 module.exports.ALREADY_USER_DELETED = 'No User Deleted';
