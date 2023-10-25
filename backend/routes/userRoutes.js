@@ -1,9 +1,9 @@
 // ! Express.js routes for users
 const express = require("express");
 const Router = express.Router();
+const { TokenCheck } = require("../Middlewares/TokenCheck"); // use it when you get a create a real token 
+const { Register,createUser,updateUser } = require("../controllers/userController");
 
-const { Register } = require("../controllers/userController");
-
-Router.post("/users", Register);
-
+Router.post("/users" ,createUser);
+Router.patch("/users/:id", updateUser);
 module.exports = Router;
