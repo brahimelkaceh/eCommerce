@@ -1,9 +1,15 @@
 // ! Controller handling Customers-related logic
-const Customer = require("../models/Customer");
+require("dotenv").config();
 const crypto = require("crypto");
+// const salt = await bcrypt.genSalt(10);
+const jwt = require("jsonwebtoken");
+
+const Customer = require("../models/Customer");
 const Email = require("../helpers/Email");
 const AppError = require("../helpers/AppError");
 const catchAsync = require("../helpers/catchAsync");
+const { webcrypto } = require("crypto");
+const bcrypt = require("bcrypt");
 
 exports.AddNewCustomer = catchAsync(async (req, res) => {
   const newCustomer = await Customer.create(req.body);
@@ -61,12 +67,17 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
   }
 
-  res.status(200).json({
-    status: "success",
-    data: "logged in",
+  const token = jwt.sign({ customer }, process.env.SECRET_KEY, {
+    expiresIn: "1h",
   });
+
   // 3) If everything ok, send token to client
   // createSendToken(user, 200, req, res);
+  res.status(200).json({
+    status: "success",
+    data: { customer },
+    token,
+  });
 });
 
 exports.activate = catchAsync(async (req, res) => {

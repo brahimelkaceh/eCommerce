@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "please enter a email address"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "plaese provide a valid email address"],
+    validate: [validator.isEmail, "please provide a valid email address"],
   },
   role: {
     type: String,
@@ -69,5 +69,25 @@ userSchema.pre("save", async function (next) {
   this.confirmPassword = undefined;
   next();
 });
+
+// Middleware to hash the password before saving the user
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Method to compare a password with the hashed password
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("Usermodel", userSchema);

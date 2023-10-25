@@ -18,12 +18,12 @@ const customerSchema = new mongoose.Schema({
     // required: [true, "please enter a email address"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "plaese provide a valid email address"],
+    // validate: [validator.isEmail, "plaese provide a valid email address"],
   },
   password: {
     type: String,
     // required: [true, "please enter a password"],
-    minLength: 10,
+    // minLength: 10,
   },
   confirmPassword: {
     type: String,
@@ -34,6 +34,10 @@ const customerSchema = new mongoose.Schema({
       },
       message: "passwords must be the same",
     },
+  },
+  role: {
+    type: String,
+    default: "customer",
   },
   creationDate: {
     type: Date,
@@ -51,7 +55,7 @@ const customerSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  activationToken: {type:String}
+  activationToken: { type: String },
 });
 customerSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
