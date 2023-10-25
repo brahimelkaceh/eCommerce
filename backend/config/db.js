@@ -1,4 +1,5 @@
 // ! database configuration file
+require("dotenv").config();
 const { color, database } = require("./config");
 
 const mongoose = require("mongoose");
@@ -6,7 +7,7 @@ const mongoose = require("mongoose");
 exports.connection = () => {
   const connectToMongo = () => {
     mongoose
-      .connect("mongodb://0.0.0.0:27017")
+      .connect(process.env.DB_CONNECTION_STRING)
       .then(
         () => {},
         (err) => {

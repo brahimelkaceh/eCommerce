@@ -15,15 +15,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["admin", "manager"],
-    default: "manager",
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
+    enum: ["admin", "manager", "customer"],
   },
   userName: {
     type: String,
