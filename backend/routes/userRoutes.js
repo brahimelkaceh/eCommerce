@@ -35,5 +35,8 @@ Router.post("/users", Register);
 Router.get("/users/",search);
 Router.get("/users/:id",getbyid)
 Router.delete('/users/:id', checkAdminAuthorization,deletee)
+const { createUser } = require("../controllers/userController");
+
+Router.post("/users", createUser);
 
 module.exports = Router;

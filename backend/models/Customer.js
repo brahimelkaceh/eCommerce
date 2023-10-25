@@ -1,39 +1,28 @@
 // ! MongoDB schema/model for customers
-//  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcrypt");
 const customerSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, "please enter a first name"],
+    required: true,
+    trim: true,
   },
   lastName: {
     type: String,
-    required: [true, "please enter a last name"],
+    required: true,
+    trim: true,
   },
-
   email: {
     type: String,
-    required: [true, "please enter a email address"],
+    required: true,
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "plaese provide a valid email address"],
+    trim: true,
   },
   password: {
     type: String,
-    required: [true, "please enter a password"],
+    required: true,
+    trim: true,
     minLength: 10,
-  },
-  confirmPassword: {
-    type: String,
-    required: [true, "please enter a password to confirm"],
-    validate: {
-      validator: function (e) {
-        return e === this.password; // abc === abc
-      },
-      message: "passwords must be the same",
-    },
   },
   creationDate: {
     type: Date,
@@ -51,14 +40,6 @@ const customerSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-});
-customerSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
-  this.password = await bcrypt.hash(this.password, 12);
-
-  this.confirmPassword = undefined;
-  next();
 });
 
 module.exports = mongoose.model("Customermodel", customerSchema);
