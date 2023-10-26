@@ -5,8 +5,7 @@ exports.TokenCheck = (req, res, next) => {
     // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;
     const token = authHeader && authHeader.split(" ")[1];
-    console.log("======================================");
-    console.log(token);
+
     if (!token) {
       throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }

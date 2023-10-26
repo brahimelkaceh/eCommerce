@@ -10,6 +10,7 @@ const {
   searchUser,
   getUserById,
   deleteUser,
+  showAllUsers,
 } = require("../controllers/userController");
 
 Router.post("/users/login", login);
@@ -18,5 +19,6 @@ Router.patch("/users/:id", TokenCheck, ValidatorSanitizer.validate, updateUser);
 Router.delete("/users/:id", TokenCheck, deleteUser);
 Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
+Router.get("/getallusers/", TokenCheck, showAllUsers);
 
 module.exports = Router;

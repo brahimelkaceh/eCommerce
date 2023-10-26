@@ -175,3 +175,13 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+exports.showAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().sort({ _id: "descending" }).limit(10); // This assumes you have a User model defined
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
