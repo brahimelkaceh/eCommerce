@@ -1,34 +1,48 @@
+
+/* use another schema */
 //  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
-  },
-
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
+    trim: true,
   },
   role: {
     type: String,
     required: true,
     trim: true,
-    enum: ["admin", "manager", "customer"],
+    enum: ["admin", "manager"],
+    default: "manager",
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
+  role: {
+     type: String,
+     required: true,
+     trim: true,
+    enum: ["admin", "manager"],
+     default : "manager"
+   },
   userName: {
     type: String,
     required: true,
+    trim: true,
   },
   password: {
     type: String,
     required: true,
+    trim: true,
     minLength: 10,
   },
   creationDate: {
