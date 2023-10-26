@@ -5,6 +5,46 @@ const Customer = require("../models/Customer");
 const catchAsync = require("../helpers/catchAsync");
 const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
+const jwt = require("jsonwebtoken");
+
+exports.login = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  
+  // Find the user by their email
+  const user = await User.findOne({ email });
+ // Verify the hashed entered password with the hashed password stored in the database
+ const isPasswordValid = await bcrypt.compare(password, user.password);
+ 
+ if (!isPasswordValid) {
+   return res.status(401).json({ message: "Invalid email or password" });
+ }
+  if (!user) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
+  
+  if (user.role === "admin") {
+    // Admins can log in directly
+    const token = jwt.sign({ _id: user._id, email: user.email, role: user.role }, "your-secret-key");
+    return res.status(200).json({ token });
+  }
+  
+  // For managers, check if the user is active
+  if (!user.active) {
+    return res.status(401).json({ message: "User is not active" });
+  }
+ 
+  // Update the last login date
+  user.lastLogin = new Date();
+  await user.save();
+  
+  // Create and send the JWT token for managers
+  const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, "your-secret-key");
+  
+  res.status(200).json({ token });
+});
+
+
+
 
 exports.createUser = catchAsync(async (req, res) => {
   const { userName, email, password, confirmPassword, role, ...userData } =
