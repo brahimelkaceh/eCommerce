@@ -147,6 +147,8 @@ exports.searchUser=async(req,res)=>{
   console.log(allusers)
 }}catch(err)
 {throw err}}
+
+
 exports.getUserById=async(req,res)=>{
   const id = req.params.id
   console.log(id)
@@ -156,6 +158,8 @@ exports.getUserById=async(req,res)=>{
   console.log(user)
   res.json({data:user})
  }}
+
+
  exports.deleteUser=async(req,res)=>{
   try {
     const userId = req.params.id;
@@ -169,6 +173,17 @@ exports.getUserById=async(req,res)=>{
     }
   } catch (err) {
     res.status(500).json({ message: 'Internal server error' });
+  }
+};
+exports.showAllUsers= async (req, res) => {
+  try {
+    console.log('teston');
+    const users = await User.find().sort({_id:"descending"}).limit(10); // This assumes you have a User model defined
+
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 };
  

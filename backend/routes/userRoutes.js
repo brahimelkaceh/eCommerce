@@ -6,7 +6,7 @@ const {
   login,
   createUser,
   updateUser,
-  searchUser,getUserById,deleteUser
+  searchUser,getUserById,deleteUser,showAllUsers
 } = require("../controllers/userController");
 
 
@@ -49,6 +49,8 @@ function checkAdminAuthorization(req, res, next) {
 Router.get("/users/",searchUser);
 Router.get("/users/:id",getUserById)
 Router.delete('/users/:id', checkAdminAuthorization,deleteUser)
+// Router.get("/users/",showAllUsers)
+Router.get("/getallusers/",showAllUsers)          //must add admin and manager authorization
 
 module.exports = Router;
 
