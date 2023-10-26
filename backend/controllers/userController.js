@@ -94,36 +94,26 @@ exports.updateUser = catchAsync(async (req, res) => {
   try {
     const id = req.params.id;
     const newUserData = req.body;
-
-    const updateData = { lastUpdate: Date.now() };
-    if (newUserData.password && newUserData.confirmPassword) {
-      if (newUserData.password === newUserData.confirmPassword) {
-        const hashedPassword = await bcrypt.hash(newUserData.password, 12);
-        updateData.password = hashedPassword;
-      } else {
-        response.message = "password doesn't match";
-        response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
-        return res.json({ response });
+      if ((newUserData.password && !newUserData.confirmPassword) || (!newUserData.password && newUserData.confirmPassword)) {
+         response.message = "password and confirm Password are required";
+       response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
+       return res.json({ response });
       }
-    } else {
-      response.message = "password and confirm Password are required";
-      response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
-      return res.json({ response });
-    }
-    if (newUserData.firstName) {
-      updateData.firstName = newUserData.firstName;
-    }
-    if (newUserData.lastName) {
-      updateData.lastName = newUserData.lastName;
-    }
-    if (newUserData.email) {
-      updateData.email = newUserData.email;
-    }
-    if (newUserData.userName) {
-      updateData.userName = newUserData.userName;
-    }
+      if (newUserData.password && newUserData.confirmPassword) {
+              if (newUserData.password === newUserData.confirmPassword) {
+          const hashedPassword = await bcrypt.hash(newUserData.password, 12);
+          newUserData.password = hashedPassword;
+      } else { 
+           response.message = "password doesn't match";
+             response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
+            return res.json({ response });
+      }
+      }
+  
 
-    await User.updateOne({ _id: id }, { $set: updateData });
+        const updateData = { lastUpdate: Date.now(),...newUserData };
+      console.log(updateData)
+      await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
   } catch (err) {

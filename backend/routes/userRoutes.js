@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
-
+const validatorSanitizer = require("../middlewares/validator");
+const ValidatorSanitizer = new validatorSanitizer();
 const {
   login,
   createUser,
@@ -25,7 +26,7 @@ function checkAdminAuthorization(req, res, next) {
 
 Router.post("/users/login", login);
 Router.post("/users", createUser);
-Router.patch("/users/:id", updateUser);
+Router.patch("/users/:id", ValidatorSanitizer.validate, updateUser);
 Router.get("/users/", searchUser);
 Router.get("/users/:id", getUserById);
 Router.delete("/users/:id", checkAdminAuthorization, deleteUser);
