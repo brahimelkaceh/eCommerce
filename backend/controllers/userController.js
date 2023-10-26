@@ -6,11 +6,6 @@ const catchAsync = require("../helpers/catchAsync");
 const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
 
-
-
-
-
-
 exports.createUser = catchAsync(async (req, res) => {
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
