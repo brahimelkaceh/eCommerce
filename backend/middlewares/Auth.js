@@ -1,11 +1,19 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 function authenticateJWT(req, res, next) {
-  const token = req.header("Authorization");
-
-  if (!token) {
+  const authHeader = req.header("Authorization");
+  if (!authHeader) {
     return res.status(401).json({ status: "fail", message: "Unauthorized" });
   }
+
+  const tokenParts = authHeader.split(" ");
+  if (tokenParts.length !== 2 || tokenParts[0].toLowerCase() !== "bearer") {
+    return res
+      .status(401)
+      .json({ status: "fail", message: "Invalid Authorization header format" });
+  }
+
+  const token = tokenParts[1];
 
   jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
@@ -17,16 +25,18 @@ function authenticateJWT(req, res, next) {
   });
 }
 
-function restrictTo(...roles) {
+function restrictTo(roles) {
   return (req, res, next) => {
-    const user = req.user; // Assuming you have user information attached by JWT middleware
+    const user = req.user;
+    console.log(user);
+    console.log("User role:", user.customer.role);
+    console.log("Allowed roles:", roles);
 
-    if (user && roles.includes(user.role)) {
-      // User has one of the allowed roles; continue to the route
+    if (user && roles.includes(user.customer.role)) {
       next();
     } else {
-      // User does not have one of the allowed roles; send a 403 Forbidden response
-      res.status(403).json({ message: "Access denied" });
+      console.log("Access denied");
+      res.status(403).json({ status: "fail", data: "Access denied" });
     }
   };
 }

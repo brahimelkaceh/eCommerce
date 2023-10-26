@@ -179,7 +179,7 @@ exports.getCustomerById = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.search4Customer = catchAsync(async (req, res, next) => {
+exports.searchForCustomer = catchAsync(async (req, res, next) => {
   const searchParams = req.query;
   console.log(searchParams);
   const customers = await Customer.find(searchParams);
