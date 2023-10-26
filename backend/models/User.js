@@ -1,48 +1,35 @@
 //  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, "please enter a first name"],
+    required: true,
   },
   lastName: {
     type: String,
-    required: [true, "please enter a last name"],
+    required: true,
   },
 
   email: {
     type: String,
-    required: [true, "please enter a email address"],
+    required: true,
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "plaese provide a valid email address"],
   },
   role: {
     type: String,
-    required: [true, "please enter a role "],
+    required: true,
     trim: true,
-    enum: ["admin", "manager"],
+    enum: ["admin", "manager", "customer"],
   },
   userName: {
     type: String,
-    required: [true, "please enter a user name"],
+    required: true,
   },
   password: {
     type: String,
-    required: [true, "please enter a password"],
+    required: true,
     minLength: 10,
-  },
-  confirmPassword: {
-    type: String,
-    required: [true, "please enter a password to confirm"],
-    validate: {
-      validator: function (e) {
-        return e === this.password; // abc === abc
-      },
-      message: "passwords must be the same",
-    },
   },
   creationDate: {
     type: Date,
@@ -61,13 +48,5 @@ const userSchema = new mongoose.Schema({
     default: true,
   },
 });
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
 
-  this.password = await bcrypt.hash(this.password, 12);
-
-  this.confirmPassword = undefined;
-  next();
-});
-
-module.exports = mongoose.model("Usermodel", userSchema);
+module.exports = mongoose.model("UserModel", userSchema);
