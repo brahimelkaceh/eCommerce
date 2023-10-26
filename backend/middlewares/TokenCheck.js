@@ -1,30 +1,36 @@
-
-const CONSTANTS = require('../config/constants.js');
-const jwt = require('jsonwebtoken');
+const CONSTANTS = require("../config/constants.js");
+const jwt = require("jsonwebtoken");
 exports.TokenCheck = (req, res, next) => {
-    // retrieve the authorization header from from the request 
+  try {
+    // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;
-    const token = authHeader && authHeader.split(' ')[1];
+    const token = authHeader && authHeader.split(" ")[1];
+    console.log("======================================");
+    console.log(token);
     if (!token) {
-        return res.json({
-            message: CONSTANTS.ROUTE_NOT_FOUND,
-            status: CONSTANTS.SERVER_ERROR_HTTP_CODE
-        })
+      throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }
-    const userData = jwt.verify(token, process.env.SECRET_KEY)
+    console.log(process.env.SECRET_KEY);
+    const userData = jwt.verify(token, process.env.SECRET_KEY);
+    console.log(userData);
     if (!userData) {
-        return res.json({
-            message: "error while verifying the token ",
-            status: 404
-        })
+      throw new Error("Error while verifying the token");
     }
+
     req.username = userData.username;
     req._id = userData._id;
     req.role = userData.role;
     req.email = userData.email;
+
     if (req.role === "admin") {
-           next();
-       
+      next();
+    } else {
+      throw new Error("Access denied. User is not an admin.");
     }
- 
-}
+  } catch (error) {
+    return res.status(401).json({
+      message: error.message || "Unauthorized",
+      status: CONSTANTS.UNAUTHORIZED_HTTP_CODE,
+    });
+  }
+};

@@ -25,9 +25,14 @@ exports.login = catchAsync(async (req, res) => {
 
   if (user.role === "admin") {
     // Admins can log in directly
+
     const token = jwt.sign(
       { _id: user._id, email: user.email, role: user.role },
-      "your-secret-key"
+      process.env.SECRET_KEY
+    );
+    console.log(token);
+    console.log(
+      "================================================================"
     );
     return res.status(200).json({ token });
   }
@@ -44,8 +49,9 @@ exports.login = catchAsync(async (req, res) => {
   // Create and send the JWT token for managers
   const token = jwt.sign(
     { userId: user._id, email: user.email, role: user.role },
-    "your-secret-key"
+    process.env.SECRET_KEY
   );
+  console.log(token);
 
   res.status(200).json({ token });
 });
@@ -94,26 +100,28 @@ exports.updateUser = catchAsync(async (req, res) => {
   try {
     const id = req.params.id;
     const newUserData = req.body;
-      if ((newUserData.password && !newUserData.confirmPassword) || (!newUserData.password && newUserData.confirmPassword)) {
-         response.message = "password and confirm Password are required";
-       response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
-       return res.json({ response });
+    if (
+      (newUserData.password && !newUserData.confirmPassword) ||
+      (!newUserData.password && newUserData.confirmPassword)
+    ) {
+      response.message = "password and confirm Password are required";
+      response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
+      return res.json({ response });
+    }
+    if (newUserData.password && newUserData.confirmPassword) {
+      if (newUserData.password === newUserData.confirmPassword) {
+        const hashedPassword = await bcrypt.hash(newUserData.password, 12);
+        newUserData.password = hashedPassword;
+      } else {
+        response.message = "password doesn't match";
+        response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
+        return res.json({ response });
       }
-      if (newUserData.password && newUserData.confirmPassword) {
-              if (newUserData.password === newUserData.confirmPassword) {
-          const hashedPassword = await bcrypt.hash(newUserData.password, 12);
-          newUserData.password = hashedPassword;
-      } else { 
-           response.message = "password doesn't match";
-             response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
-            return res.json({ response });
-      }
-      }
-  
+    }
 
-        const updateData = { lastUpdate: Date.now(),...newUserData };
-      console.log(updateData)
-      await User.updateOne({ _id: id }, { $set: updateData });
+    const updateData = { lastUpdate: Date.now(), ...newUserData };
+    console.log(updateData);
+    await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
   } catch (err) {

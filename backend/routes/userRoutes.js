@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const validatorSanitizer = require("../middlewares/validator");
+const { TokenCheck } = require("../middlewares/TokenCheck");
 const ValidatorSanitizer = new validatorSanitizer();
 const {
   login,
@@ -11,24 +12,11 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
-const userRole = "admin";
-function checkAdminAuthorization(req, res, next) {
-  if (userRole === "admin") {
-    // User is an admin, proceed to the next middleware
-    next();
-  } else {
-    // User is not authorized
-    res
-      .status(403)
-      .json({ message: "Access denied. Admin authorization required." });
-  }
-}
-
 Router.post("/users/login", login);
-Router.post("/users", createUser);
-Router.patch("/users/:id", ValidatorSanitizer.validate, updateUser);
-Router.get("/users/", searchUser);
-Router.get("/users/:id", getUserById);
-Router.delete("/users/:id", checkAdminAuthorization, deleteUser);
+Router.post("/users", TokenCheck, createUser);
+Router.patch("/users/:id", TokenCheck, ValidatorSanitizer.validate, updateUser);
+Router.delete("/users/:id", TokenCheck, deleteUser);
+Router.get("/users/", TokenCheck, searchUser);
+Router.get("/users/:id", TokenCheck, getUserById);
 
 module.exports = Router;
