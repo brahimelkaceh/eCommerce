@@ -1,3 +1,5 @@
+
+/* use another schema */
 //  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
@@ -25,6 +27,13 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
+  role: {
+     type: String,
+     required: true,
+     trim: true,
+    enum: ["admin", "manager"],
+     default : "manager"
+   },
   userName: {
     type: String,
     required: true,
@@ -54,4 +63,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Usermodel", userSchema);
+module.exports = mongoose.model("UserModel", userSchema);

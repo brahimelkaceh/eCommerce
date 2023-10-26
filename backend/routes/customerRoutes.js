@@ -4,8 +4,9 @@ const express = require("express");
 const Router = express.Router();
 
 const {
-  AddNewCustomer
-  ,search,getbyid,
+  AddNewCustomer,
+  search,
+  getbyid,
   CustomerProfile,
 } = require("../controllers/customerController");
 const { authenticateCustomer } = require("../middlewares/authenticateCustomer");
@@ -13,14 +14,7 @@ const { authenticateCustomer } = require("../middlewares/authenticateCustomer");
 Router.post("/customers", AddNewCustomer);
 Router.post("/customers/profile", authenticateCustomer, CustomerProfile);
 
-
-
-
-
-Router.get("/customers/",search);
-Router.get("/customers/:id",getbyid)
+Router.get("/customers/", search);
+Router.get("/customers/:id", getbyid);
 
 module.exports = Router;
-
-
-
