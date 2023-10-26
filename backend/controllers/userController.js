@@ -1,5 +1,4 @@
 // ! Controller handling user-related logic
-// ! Controller handling user-related logic
 const User = require("../models/User");
 const Customer = require("../models/Customer");
 const catchAsync = require("../helpers/catchAsync");
@@ -12,6 +11,7 @@ exports.login = catchAsync(async (req, res) => {
   
   // Find the user by their email
   const user = await User.findOne({ email });
+  
  // Verify the hashed entered password with the hashed password stored in the database
  const isPasswordValid = await bcrypt.compare(password, user.password);
  
