@@ -43,8 +43,9 @@ const customerSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true,
+    default: false,
   },
+  activationToken: { type: String },
 });
 
 module.exports = mongoose.model("CustomerModel", customerSchema);

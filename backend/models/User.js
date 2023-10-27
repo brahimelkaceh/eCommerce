@@ -1,4 +1,3 @@
-
 /* use another schema */
 //  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
