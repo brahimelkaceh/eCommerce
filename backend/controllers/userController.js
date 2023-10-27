@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const mailSender = require("../helpers/mailSender");
 
 exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
@@ -57,6 +58,9 @@ exports.login = catchAsync(async (req, res) => {
 });
 
 exports.createUser = catchAsync(async (req, res) => {
+  const authHeader = req.headers.authorization || null;
+  const activationToken = authHeader && authHeader.split(" ")[1];
+
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
   const existingUser = await User.findOne({ email: email });
