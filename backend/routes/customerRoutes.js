@@ -21,9 +21,24 @@ Router.post("/customers", AddNewCustomer);
 Router.post("/customers/signup", signup);
 Router.post("/customers/login", login);
 Router.get("/customers/activate", activate);
-Router.get("/customers/", getAllCustomers);
-Router.get("/customers/search", searchForCustomer);
-Router.get("/customers/:cid", getCustomerById);
+Router.get(
+  "/customers/",
+  Auth.authenticateJWT,
+  Auth.restrictTo(["admin", "manager"]),
+  getAllCustomers,
+);
+Router.get(
+  "/customers/search",
+  Auth.authenticateJWT,
+  Auth.restrictTo(["admin", "manager"]),
+  searchForCustomer,
+);
+Router.get(
+  "/customers/:cid",
+  Auth.authenticateJWT,
+  Auth.restrictTo(["admin", "manager"]),
+  getCustomerById,
+);
 Router.put(
   "/customers/update/:cid",
   Auth.authenticateJWT,
