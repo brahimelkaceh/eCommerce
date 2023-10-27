@@ -1,5 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const AppError = require("../helpers/AppError");
 function authenticateJWT(req, res, next) {
   const authHeader = req.header("Authorization");
   if (!authHeader) {
@@ -17,7 +18,9 @@ function authenticateJWT(req, res, next) {
 
   jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return res.status(403).json({ status: "fail", message: "Forbidden" });
+      return res
+        .status(403)
+        .json({ status: "fail", message: "Not Authenticated" });
     }
 
     req.user = user; // Attach user information to the request object
@@ -27,12 +30,12 @@ function authenticateJWT(req, res, next) {
 
 function restrictTo(roles) {
   return (req, res, next) => {
-    const user = req.user;
-    console.log(user);
-    console.log("User role:", user.customer.role);
+    const user = req.user.customer || req.user.manager || req.user.admin;
+    // console.log(user);
+    console.log("User role:", user.role);
     console.log("Allowed roles:", roles);
 
-    if (user && roles.includes(user.customer.role)) {
+    if (user && roles.includes(user.role)) {
       next();
     } else {
       console.log("Access denied");

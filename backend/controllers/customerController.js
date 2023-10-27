@@ -16,9 +16,7 @@ exports.AddNewCustomer = catchAsync(async (req, res) => {
 
   res.status(201).json({
     status: "success",
-    data: {
-      Customer: newCustomer,
-    },
+    data: newCustomer,
   });
 });
 
@@ -66,6 +64,9 @@ exports.login = catchAsync(async (req, res, next) => {
   ) {
     return next(new AppError("Incorrect email or password", 401));
   }
+  if (customer.active === false) {
+    return next(new AppError("Please activate your account to login in", 401));
+  }
 
   const token = jwt.sign({ customer }, process.env.SECRET_KEY, {
     expiresIn: "1h",
@@ -75,7 +76,7 @@ exports.login = catchAsync(async (req, res, next) => {
   // createSendToken(user, 200, req, res);
   res.status(200).json({
     status: "success",
-    data: { customer },
+    data: customer,
     token,
   });
 });
@@ -121,7 +122,7 @@ exports.getAllCustomers = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    data: { customers },
+    data: customers,
   });
 });
 
@@ -160,7 +161,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    data: { customer2update },
+    data: customer2update,
   });
 });
 
@@ -175,7 +176,7 @@ exports.getCustomerById = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    data: { customer },
+    data: customer,
   });
 });
 
@@ -193,6 +194,6 @@ exports.searchForCustomer = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { customers },
+    data: customers,
   });
 });

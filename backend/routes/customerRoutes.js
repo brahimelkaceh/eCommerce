@@ -33,7 +33,7 @@ Router.put(
 Router.delete(
   "/customers/delete/:cid",
   Auth.authenticateJWT,
-  Auth.restrictTo(["customer", "manager", "admin"]),
+  Auth.restrictTo(["admin", "manager"]),
   deleteCustomer,
 );
 
