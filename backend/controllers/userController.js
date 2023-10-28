@@ -13,14 +13,13 @@ exports.login = catchAsync(async (req, res) => {
 
   // Find the user by their email
   const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(401).json({ message: "User not found" });
+  }
 
-  // Verify the hashed entered password with the hashed password stored in the database
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    return res.status(401).json({ message: "Invalid email or password" });
-  }
-  if (!user) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
@@ -31,10 +30,7 @@ exports.login = catchAsync(async (req, res) => {
       { _id: user._id, email: user.email, role: user.role },
       process.env.SECRET_KEY
     );
-    console.log(token);
-    console.log(
-      "================================================================"
-    );
+
     return res.status(200).json({ token });
   }
 
@@ -59,7 +55,6 @@ exports.login = catchAsync(async (req, res) => {
 
 exports.createUser = catchAsync(async (req, res) => {
   const authHeader = req.headers.authorization || null;
-  const activationToken = authHeader && authHeader.split(" ")[1];
 
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
