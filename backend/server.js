@@ -25,9 +25,9 @@ server.use(morgan("dev"));
 server.use("/", userRouter);
 server.use("/", customerRouter);
 
-server.use('/categories', categoriesRouter);
-server.use('/subcategories', subCategoriesRouter);
-server.use('/products', productsRouter);
+server.use("/categories", categoriesRouter);
+server.use("/subcategories", subCategoriesRouter);
+server.use("/products", productsRouter);
 
 db.connectToMongo();
 

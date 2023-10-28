@@ -1,6 +1,6 @@
 // ! Controller handling products-related logic
-const catchAsync = require('../path/to/catchAsync'); // Adjust the path to the catchAsync.js file
-const Product = require('../models/ProductModel');
+const catchAsync = require("../helpers/catchAsync");
+const Product = require('../models/Products');
 
 // Get product by ID
 exports.getProductById = catchAsync(async (req, res) => {
