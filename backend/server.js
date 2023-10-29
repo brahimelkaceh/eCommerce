@@ -6,6 +6,8 @@ const server = express();
 const { connection } = require("./config/db");
 const userRouter = require("./routes/userRoutes");
 const customerRouter = require("./routes/customerRoutes");
+const categoryRouter = require("./routes/categoriesRoutes");
+const subcategoriesRouter = require("./routes/subCategoriesRoutes");
 // !this is a comment
 
 const db = connection();
@@ -19,6 +21,8 @@ server.use(morgan("dev"));
 
 server.use("/", userRouter);
 server.use("/", customerRouter);
+server.use("/", categoryRouter);
+server.use("/", subcategoriesRouter);
 
 db.connectToMongo();
 

@@ -28,7 +28,6 @@ function authenticateJWT(req, res, next) {
 function restrictTo(roles) {
   return (req, res, next) => {
     const user = req.user;
-    console.log(user);
     console.log("User role:", user.customer.role);
     console.log("Allowed roles:", roles);
 

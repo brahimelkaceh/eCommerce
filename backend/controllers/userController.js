@@ -48,7 +48,6 @@ exports.login = catchAsync(async (req, res) => {
     { userId: user._id, email: user.email, role: user.role },
     process.env.SECRET_KEY
   );
-  console.log(token);
 
   res.status(200).json({ token });
 });
@@ -119,7 +118,6 @@ exports.updateUser = catchAsync(async (req, res) => {
     }
 
     const updateData = { lastUpdate: Date.now(), ...newUserData };
-    console.log(updateData);
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
@@ -140,7 +138,6 @@ exports.searchUser = async (req, res) => {
       res.json("User not found"); // change this with constants
     } else {
       res.json({ data: allusers });
-      console.log(allusers);
     }
   } catch (err) {
     throw err;
@@ -149,12 +146,10 @@ exports.searchUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.json("User not found");
   } else {
     const user = await User.findOne({ _id: id });
-    console.log(user);
     res.json({ data: user });
   }
 };
