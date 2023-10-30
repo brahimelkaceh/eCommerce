@@ -1,46 +1,34 @@
-require("dotenv").config();
+const CONSTANTS = require("../config/constants.js");
 const jwt = require("jsonwebtoken");
-function authenticateJWT(req, res, next) {
-  const authHeader = req.header("Authorization");
-  if (!authHeader) {
-    return res.status(401).json({ status: "fail", message: "Unauthorized" });
+exports.TokenCheck = (req, res, next) => {
+  // retrieve the authorization header from from the request
+  const authHeader = req.headers.authorization || null;
+  const token = authHeader && authHeader.split(" ")[1];
+  // console.log(token);
+  if (!token) {
+    return res.json({
+      message: CONSTANTS.ROUTE_NOT_FOUND,
+      status: CONSTANTS.SERVER_ERROR_HTTP_CODE,
+    });
   }
-
-  const tokenParts = authHeader.split(" ");
-  if (tokenParts.length !== 2 || tokenParts[0].toLowerCase() !== "bearer") {
-    return res
-      .status(401)
-      .json({ status: "fail", message: "Invalid Authorization header format" });
+  const userData = jwt.verify(token, process.env.SECRET_KEY);
+  console.log(userData);
+  if (!userData) {
+    return res.json({
+      message: "error while verifying the token ",
+      status: 404,
+    });
   }
-
-  const token = tokenParts[1];
-
-  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-    if (err) {
-      return res.status(403).json({ status: "fail", message: "Forbidden" });
-    }
-
-    req.user = user; // Attach user information to the request object
+  req.username = userData.username;
+  req._id = userData._id;
+  req.role = userData.role;
+  req.email = userData.email;
+  if (req.role === "admin") {
     next();
-  });
-}
-
-function restrictTo(roles) {
-  return (req, res, next) => {
-    const user = req.user;
-    console.log("User role:", user.customer.role);
-    console.log("Allowed roles:", roles);
-
-    if (user && roles.includes(user.customer.role)) {
-      next();
-    } else {
-      console.log("Access denied");
-      res.status(403).json({ status: "fail", data: "Access denied" });
-    }
-  };
-}
-
-module.exports = {
-  authenticateJWT,
-  restrictTo,
+  } else {
+    return res.json({
+      message: "error while decoding the token ",
+      status: 404,
+    });
+  }
 };

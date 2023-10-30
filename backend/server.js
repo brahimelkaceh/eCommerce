@@ -12,6 +12,8 @@ const categoriesRouter = require("./routes/categoriesRoutes");
 const subCategoriesRouter = require("./routes/subCategoriesRoutes");
 const productsRouter = require("./routes/productsRoutes");
 
+const AppError = require("./helpers/AppError");
+const globalErrorHandler = require("./controllers/errorController");
 // !this is a comment
 
 const db = connection();
@@ -27,10 +29,13 @@ server.use("/", userRouter);
 server.use("/", customerRouter);
 server.use("/", categoryRouter);
 server.use("/", subcategoriesRouter);
+server.use("/", productsRouter);
 
-server.use("/categories", categoriesRouter);
-server.use("/subcategories", subCategoriesRouter);
-server.use("/products", productsRouter);
+server.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+server.use(globalErrorHandler);
 
 db.connectToMongo();
 

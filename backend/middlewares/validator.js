@@ -1,6 +1,5 @@
-
-const { body, validationResult } = require('express-validator');
-const xss = require('xss');
+const { body, validationResult } = require("express-validator");
+const xss = require("xss");
 
 class ValidatorSanitizer {
   constructor() {
@@ -12,35 +11,34 @@ class ValidatorSanitizer {
 
   validate(req, res, next) {
     // Apply validation rules
-      for (const input of Object.keys(req.body)) {
-          if ('role' in req.body) {
-            if (input === 'role') {
+    for (const input of Object.keys(req.body)) {
+      if ("role" in req.body) {
+        if (input === "role") {
+          this.validationRules.push(
+            body("role")
+              .notEmpty()
+              .withMessage("Role is required.")
+              .isIn(["admin", "manager", "customer"])
+              .withMessage("Invalid role"),
+          );
+          this.sanitizeFields.push("role");
+        }
+      }
+      if ("email" in req.body) {
+        if (input === "email") {
+          this.validationRules.push(
+            body("email").isEmail().withMessage("Valid email is required."),
+          );
+          this.sanitizeFields.push("email");
+        }
+      }
+      if (`${input}` in req.body) {
         this.validationRules.push(
-          body('role')
-            .notEmpty()
-            .withMessage('Role is required.')
-            .isIn(['admin', 'manager', 'customer'])
-            .withMessage('Invalid role')
-        );
-        this.sanitizeFields.push('role');        
-          }
-      
-          }
-          if ('email' in req.body) {
-              if (input === 'email') {
-                          this.validationRules.push(
-          body('email').isEmail().withMessage('Valid email is required.')
-        );
-        this.sanitizeFields.push('email');
-              }
-          }
-          if (`${input}` in req.body) {
-        this.validationRules.push(
-          body(input).notEmpty().withMessage(`${input} is required`)
+          body(input).notEmpty().withMessage(`${input} is required`),
         );
         this.sanitizeFields.push(input);
       }
-      }
+    }
     Promise.all(this.validationRules.map((rule) => rule.run(req)))
       .then(() => {
         // Check for validation errors

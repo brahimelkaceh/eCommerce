@@ -13,13 +13,13 @@ const { validationResult } = require("express-validator");
 
 exports.signup = catchAsync(async (req, res, next) => {
   // Check if password and confirm password match
-  if (req.body.password !== req.body.confirmPassword) {
+  if (req.body.password !== req.body.passwordConfirm) {
     return res.status(400).json({
       status: "error",
       message: "Password and confirm password do not match.",
     });
   }
-
+  const hashedPassword = await bcrypt.hash(req.body.password, 12);
   const activationToken = crypto.randomBytes(32).toString("hex");
 
   // Create new customer without saving passwordConfirm in the database
@@ -27,16 +27,17 @@ exports.signup = catchAsync(async (req, res, next) => {
     userName: req.body.userName,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    role: req.body.role,
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
     activationToken: activationToken,
   });
 
   // Construct the activation URL with the token
   const activationURL = `${req.protocol}://${req.get(
-    "host"
+    "host",
   )}/customers/activate?token=${activationToken}`;
-  console.log("activation url : " + activationURL);
+  // console.log("activation url : " + activationURL);
   // Send the activation email
   await new Email(newCustomer, activationURL).sendWelcome();
 
@@ -47,35 +48,42 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  // Validate user input
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(new AppError("Validation failed", 422, errors.array()));
-  }
-
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
   if (!email || !password) {
     return next(new AppError("Please provide email and password!", 400));
   }
-
   // 2) Check if user exists && password is correct
-  const customer = await Customer.findOne({ email });
-
+  const customer = await Customer.findOne({ email }).select("+password");
+  // console.log(customer.password);
   if (!customer || !(await bcrypt.compare(password, customer.password))) {
-    return next(new AppError("Incorrect email or password", 401));
+    const error = new AppError("Incorrect email or password", 401);
+    return next(error);
   }
 
-  // 3) Generate JWT token
-  const token = jwt.sign({ id: customer._id }, process.env.SECRET_KEY, {
-    expiresIn: "1h",
-  });
+  if (customer.active === false) {
+    return next(new AppError("Please activate your account to login in", 401));
+  }
+  console.log(customer._id, customer.userName, customer.role, customer.email);
+  const token = jwt.sign(
+    {
+      _id: customer._id,
+      username: customer.userName,
+      role: customer.role,
+      email: customer.email,
+    },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: "1h",
+    },
+  );
 
-  // 4) If everything is OK, send token to the client
+  // 3) If everything ok, send token to client
+  // createSendToken(user, 200, req, res);
   res.status(200).json({
     status: "success",
-    data: { customer },
+    data: customer,
     token,
   });
 });
@@ -113,12 +121,12 @@ exports.activate = catchAsync(async (req, res) => {
 
 exports.getAllCustomers = catchAsync(async (req, res, next) => {
   const customers = await Customer.find({});
-  if (!customers) {
-    return res.status(404).json({
-      status: "fail",
-      data: "No customers",
-    });
-  }
+  // if (!customers) {
+  //   return res.status(404).json({
+  //     status: "fail",
+  //     data: "No customers",
+  //   });
+  // }
 
   res.status(200).json({
     status: "success",
@@ -127,24 +135,14 @@ exports.getAllCustomers = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteCustomer = catchAsync(async (req, res, next) => {
-  const customerId = req.params.id;
-
-  // 1) Validate customer ID
-  if (!mongoose.Types.ObjectId.isValid(customerId)) {
-    return next(new AppError("Invalid customer ID", 400));
-  }
-
-  // 2) Find and delete customer
-  const customer2delete = await Customer.findByIdAndDelete(customerId);
-
-  // 3) Handle customer not found
+  const cid = req.params.id;
+  const customer2delete = await Customer.findByIdAndDelete(cid);
   if (!customer2delete) {
-    return next(new AppError("Customer not found", 404));
+    res.status(404).json({
+      status: "fail",
+      data: "Customer not found",
+    });
   }
-
-  // 4) Log customer deletion (implement logging mechanism)
-
-  // 5) Send success response
   res.status(204).json({
     status: "success",
     data: null,
@@ -162,7 +160,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       lastName,
       email,
     },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
   if (!updatedCustomer) {
     res.status(404).json({
@@ -187,7 +185,7 @@ exports.getCustomerById = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    data: { customer },
+    data: customer,
   });
 });
 
@@ -205,6 +203,6 @@ exports.searchForCustomer = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { customers },
+    data: customers,
   });
 });

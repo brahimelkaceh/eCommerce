@@ -2,59 +2,117 @@
 const catchAsync = require("../helpers/catchAsync");
 const Subcategory = require("../models/SubCategories");
 const Category = require("../models/Categories");
+const AppError = require("../helpers/AppError");
+const mongoose = require("mongoose");
 
-exports.createSubCategory = catchAsync(async (req, res) => {
+exports.createSubCategory = catchAsync(async (req, res, next) => {
   const { subCategoryName, categoryId, active } = req.body;
-  const existingSubcategory = await Subcategory.findOne({
-    subCategoryName,
-    categoryId,
-  });
-  if (existingSubcategory) {
-    return res.status(400).json({
-      error: "Subcategory with this name already exists in the category.",
-    });
-  }
-  const newSubcategory = new Subcategory({
-    subCategoryName,
-    categoryId,
-    active,
-  });
-  await newSubcategory.save();
 
-  res.status(201).json({
-    status: "success",
-    data: newSubcategory,
-  });
-});
-
-exports.getAllSubcategories = catchAsync(async (req, res) => {
-  const { categoryName } = req.params;
-
-  // Find the category document by name
-  const category = await Category.findOne({ categoryName });
+  // 1. Check if the specified category exists
+  const category = await Category.findById(categoryId);
 
   if (!category) {
-    return res.status(404).json({ error: "Category not found." });
+    return next(new AppError("Can't find this category", 404));
   }
 
-  // Find all subcategories for the found category ID
-  const subcategories = await Subcategory.find({ categoryId: category._id });
+  // 2. Create a new subcategory
+  const createdSubcategory = new Subcategory({
+    subCategoryName,
+    categoryId, // Associate the subcategory with the category
+    active,
+  });
 
-  if (subcategories.length == 0) {
-    return res.json({ error: "Category is empty." });
+  // 3. Start a MongoDB session to ensure data consistency
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    // 4. Save the subcategory within the session
+    await createdSubcategory.save({ session });
+
+    // 5. Commit the transaction to save the subcategory and end the session
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(201).json({
+      status: "success",
+      data: { createdSubcategory },
+    });
+  } catch (error) {
+    // Handle any errors that may occur during subcategory creation
+    console.error(error);
+    session.endSession(); // Roll back the transaction and end the session
+    return next(new AppError("Can't add subcategory due to an error", 500));
+  }
+});
+
+exports.getAllSubcategories = async (req, res) => {
+  const subcategories = await Subcategory.find({});
+  res.json({
+    status: "success",
+    data: subcategories.map((sub) => sub.toObject({ getters: true })),
+  });
+};
+
+exports.getSubCategoryById = catchAsync(async (req, res, next) => {
+  const subcategoryId = req.params.id;
+
+  // Find the subcategory by its ID
+  const subcategory = await Subcategory.findById(subcategoryId).populate(
+    "categoryId"
+  );
+
+  if (!subcategory) {
+    return next(new AppError("Can't find the specified subcategory", 404));
   }
 
   res.status(200).json({
     status: "success",
-    data: subcategories,
+    data: { subcategory },
   });
 });
-// Get subcategory by ID
-exports.getSubcategoryById = catchAsync(async (req, res) => {
+
+exports.updateSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-  const subcategory = await Subcategory.findById(subcategoryId);
-  if (!subcategory) {
-    return res.status(404).json({ message: "Subcategory not found" });
+  const { subCategoryName, active } = req.body;
+
+  // Validate the request body
+  if (!subCategoryName) {
+    return next(new AppError("Please provide subcategory name", 400));
   }
-  res.json(subcategory);
+
+  // Find the subcategory by its ID
+  const subcategory = await Subcategory.findById(subcategoryId);
+
+  if (!subcategory) {
+    return next(new AppError("Can't find the specified subcategory", 404));
+  }
+
+  // Update the subcategory properties
+  subcategory.subCategoryName = subCategoryName;
+  subcategory.active = active || false; // Set to false if not provided
+
+  // Save the updated subcategory
+  await subcategory.save();
+
+  res.status(200).json({
+    status: "success",
+    data: { subcategory },
+  });
+});
+
+exports.deleteSubCategory = catchAsync(async (req, res, next) => {
+  const subcategoryId = req.params.id;
+
+  // Find the subcategory by its ID and remove it
+  const result = await Subcategory.deleteOne({ _id: subcategoryId });
+
+  if (result.deletedCount === 0) {
+    return next(new AppError("Can't find the specified subcategory", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
 });

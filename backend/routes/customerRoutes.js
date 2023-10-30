@@ -4,6 +4,8 @@ const express = require("express");
 const Router = express.Router();
 
 const Auth = require("../middlewares/Auth");
+const validatorSanitizer = require("../middlewares/validator");
+const ValidatorSanitizer = new validatorSanitizer();
 
 const {
   signup,
@@ -16,23 +18,18 @@ const {
   deleteCustomer,
 } = require("../controllers/customerController");
 
-Router.post("/customers/signup", signup);
-Router.post("/customers/login", login);
+Router.post("/customers/signup", ValidatorSanitizer.validate, signup);
+Router.post("/customers/login", ValidatorSanitizer.validate, login);
 Router.get("/customers/activate", activate);
-Router.get("/customers/search", searchForCustomer);
-Router.get("/customers/", getAllCustomers);
+Router.get("/customers/", Auth.TokenCheck, getAllCustomers);
+Router.get("/customers/search", Auth.TokenCheck, searchForCustomer);
 Router.get("/customers/:id", getCustomerById);
 Router.put(
   "/customers/:id",
-  Auth.authenticateJWT,
-  // Auth.restrictTo(["customer", "manager", "admin"]),
+  ValidatorSanitizer.validate,
+  Auth.TokenCheck,
   updateCustomer
 );
-Router.delete(
-  "/customers/:id",
-  Auth.authenticateJWT,
-  // Auth.restrictTo(["customer", "manager", "admin"]),
-  deleteCustomer
-);
+Router.delete("/customers/:id", Auth.TokenCheck, deleteCustomer);
 
 module.exports = Router;
