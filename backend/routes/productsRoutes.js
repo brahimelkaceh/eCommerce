@@ -1,8 +1,33 @@
 // ! Express.js routes for products
 const express = require("express");
-const router = express.Router();
-const productsController = require("../controllers/productsController");
+const Router = express.Router();
+const {
+  createProduct,
+  getAllProducts,
+  searchProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+} = require("../controllers/productsController");
+const validatorSanitizer = require("../middlewares/validator");
+const ValidatorSanitizer = new validatorSanitizer();
+const { TokenCheck } = require("../middlewares/TokenCheck");
 
-router.get("/products/:productId", productsController.getProductById);
+Router.post(
+  "/products",
+  TokenCheck,
+  ValidatorSanitizer.validate,
+  createProduct
+);
+Router.get("/products", TokenCheck, getAllProducts);
+Router.get("/products/search", TokenCheck, searchProducts);
+Router.get("/products/:id", TokenCheck, getProductById);
+Router.patch(
+  "/products/:id",
+  TokenCheck,
+  ValidatorSanitizer.validate,
+  updateProduct
+);
+Router.delete("/products/:id", TokenCheck, deleteProduct);
 
-module.exports = router;
+module.exports = Router;
