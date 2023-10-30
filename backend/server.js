@@ -8,6 +8,10 @@ const userRouter = require("./routes/userRoutes");
 const customerRouter = require("./routes/customerRoutes");
 const categoryRouter = require("./routes/categoriesRoutes");
 const subcategoriesRouter = require("./routes/subCategoriesRoutes");
+const categoriesRouter = require("./routes/categoriesRoutes");
+const subCategoriesRouter = require("./routes/subCategoriesRoutes");
+const productsRouter = require("./routes/productsRoutes");
+
 // !this is a comment
 
 const db = connection();
@@ -23,6 +27,10 @@ server.use("/", userRouter);
 server.use("/", customerRouter);
 server.use("/", categoryRouter);
 server.use("/", subcategoriesRouter);
+
+server.use("/categories", categoriesRouter);
+server.use("/subcategories", subCategoriesRouter);
+server.use("/products", productsRouter);
 
 db.connectToMongo();
 

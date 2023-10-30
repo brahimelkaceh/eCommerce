@@ -1,7 +1,7 @@
 // ! Controller handling subcategories-related logic
 const catchAsync = require("../helpers/catchAsync");
 const Subcategory = require("../models/SubCategories");
-const Categories = require("../models/Categories");
+const Category = require("../models/Categories");
 
 exports.createSubCategory = catchAsync(async (req, res) => {
   const { subCategoryName, categoryId, active } = req.body;
@@ -31,7 +31,7 @@ exports.getAllSubcategories = catchAsync(async (req, res) => {
   const { categoryName } = req.params;
 
   // Find the category document by name
-  const category = await Categories.findOne({ categoryName });
+  const category = await Category.findOne({ categoryName });
 
   if (!category) {
     return res.status(404).json({ error: "Category not found." });
@@ -48,4 +48,13 @@ exports.getAllSubcategories = catchAsync(async (req, res) => {
     status: "success",
     data: subcategories,
   });
+});
+// Get subcategory by ID
+exports.getSubcategoryById = catchAsync(async (req, res) => {
+  const subcategoryId = req.params.id;
+  const subcategory = await Subcategory.findById(subcategoryId);
+  if (!subcategory) {
+    return res.status(404).json({ message: "Subcategory not found" });
+  }
+  res.json(subcategory);
 });

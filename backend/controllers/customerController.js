@@ -195,7 +195,7 @@ exports.searchForCustomer = catchAsync(async (req, res, next) => {
   const searchParams = req.query;
   console.log(searchParams);
   const customers = await Customer.find(searchParams);
-  // console.log(customers);
+  console.log(customers);
   if (!customers || customers.length === 0) {
     return res.status(404).json({
       status: "fail",

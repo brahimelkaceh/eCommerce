@@ -19,8 +19,8 @@ const {
 Router.post("/customers/signup", signup);
 Router.post("/customers/login", login);
 Router.get("/customers/activate", activate);
+Router.get("/customers/search", searchForCustomer);
 Router.get("/customers/", getAllCustomers);
-Router.get("/customers/", searchForCustomer);
 Router.get("/customers/:id", getCustomerById);
 Router.put(
   "/customers/:id",
