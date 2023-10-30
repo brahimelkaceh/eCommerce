@@ -61,3 +61,12 @@ module.exports.FIELD_EMPTY = 'All fields are required.';
 /* General Errors  constants start */
 module.exports.ROUTE_NOT_FOUND = 'You are at wrong place. Shhoooo...';
 module.exports.SERVER_ERROR_MESSAGE = 'Something bad happend. It\'s not you, it\'s me.';
+
+module.exports.SUB_CATEGORY_CREATED = "SubCategory created successfully";
+module.exports.SUB_CATEGORY_UPDATED = "SubCategory updated successfully";
+module.exports.SUB_CATEGORY_DELETED = "SubCategory deleted successfully";
+module.exports.SUB_CATEGORY_FOUND = "SubCategory  found";
+module.exports.SUB_CATEGORY_CREATED_FAILED = "SubCategory creation failed";
+module.exports.SUB_CATEGORY_UPDATED_FAILED = "SubCategory update failed";
+module.exports.SUB_CATEGORY_DELETE_FAILED = "SubCategory deletion failed , check if Category has no subCategories ";
+module.exports.SUB_CATEGORY_NOT_FOUND = "SubCategory not found";

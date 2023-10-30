@@ -10,13 +10,15 @@ const mailSender = require("../helpers/mailSender");
 
 exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
+  console.log(email , password)
+  
 
   // Find the user by their email
   const user = await User.findOne({ email });
 
   // Verify the hashed entered password with the hashed password stored in the database
   const isPasswordValid = await bcrypt.compare(password, user.password);
-
+console.log(isPasswordValid)
   if (!isPasswordValid) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
@@ -63,6 +65,7 @@ exports.createUser = catchAsync(async (req, res) => {
 
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
+    console.log(userData)
   const existingUser = await User.findOne({ email: email });
   const existingCustomer = await Customer.findOne({ email: email });
   if (existingUser || existingCustomer) {
