@@ -1,37 +1,103 @@
 // ! Controller handling Categories-related logic
-const catchAsync = require("../helpers/catchAsync");
 const Category = require("../models/Categories");
+const catchAsync = require("../helpers/catchAsync");
+const SubCategory = require("../models/SubCategories");
+const mongoose = require("mongoose");
 
 exports.createCategory = catchAsync(async (req, res) => {
-  const { categoryName, active } = req.body;
+  try {
+    const { categoryName, ...categoryData } = req.body;
+    const CategoryData = await Category.findOne({ categoryName: categoryName });
+    if (CategoryData) {
+      res.json("category already exists");
+    } else {
+      const newCategory = new Category({
+        ...categoryData,
+        categoryName: categoryName.toLowerCase(),
+      });
+      console.log(newCategory);
 
-  // Check if a category with the same name already exists
-  const existingCategory = await Category.findOne({ categoryName });
-
-  if (existingCategory) {
-    // If category with the same name exists, send a response indicating duplication
-    return res
-      .status(400)
-      .json({ error: "Category with this name already exists." });
+      await newCategory.save();
+      res.json("category created successfully");
+    }
+  } catch (err) {
+    throw err;
   }
-
-  // If category with the same name doesn't exist, create and save the new category
-  const newCategory = new Category({ categoryName, active });
-  await newCategory.save();
-  res.status(201).json(newCategory);
 });
 
-exports.getAllCategories = catchAsync(async (req, res) => {
-  const myCategory = await Category.find({ active: true });
-  res.status(200).json(myCategory);
-});
-// Get category by ID
-exports.getCategoryById = catchAsync(async (req, res) => {
-  const categoryId = req.params.id;
-  console.log(categoryId);
-  const category = await Category.findById(categoryId);
-  if (!category) {
-    return res.status(404).json({ message: "Category not found" });
+exports.updateCategory = catchAsync(async (req, res) => {
+  try {
+    const id = req.params.id;
+    const newUserData = req.body;
+    console.log(req.body);
+
+    // const updateData = { ...newUserData };
+    // console.log(updateData);
+    await Category.updateOne({ _id: id }, { $set: newUserData });
+    res.json("user updated");
+  } catch (err) {
+    throw err;
   }
-  res.json(category);
 });
+
+exports.deleteCategory = async (req, res) => {
+  const id = req.params.id;
+  const subCategory = await SubCategory.find({ categoryID: id });
+
+  if (!subCategory.length) {
+    try {
+      const category = await Category.findByIdAndRemove(id);
+
+      if (category) {
+        res.json({ message: "Category deleted successfully" });
+      } else {
+        res.status(404).json({ message: "Category not found" });
+      }
+    } catch (err) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  } else {
+    res.json("there is a subcategory for this category");
+  }
+};
+exports.getCategoryById = async (req, res) => {
+  const id = req.params.id;
+  //console.log(id);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.json("User not found");
+  } else {
+    const category = await Category.findOne({ _id: id });
+    res.json({ data: category });
+  }
+};
+
+exports.searchCategory = async (req, res) => {
+  try {
+    const categoryName = req.query.query;
+    const allCategories = await Category.find({
+      categoryName: categoryName.toLowerCase(),
+    })
+      .sort({ _id: "descending" })
+      .limit(10);
+    if (!allCategories.length) {
+      res.json("Category not found"); // change this with constants
+    } else {
+      res.json({ data: allCategories });
+      console.log(allCategories);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.showAllCategories = async (req, res) => {
+  try {
+    const Categories = await Category.find()
+      .sort({ _id: "descending" })
+      .limit(10); // This assumes you have a User model defined
+    res.json(Categories);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};

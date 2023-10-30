@@ -8,12 +8,10 @@ const userRouter = require("./routes/userRoutes");
 const customerRouter = require("./routes/customerRoutes");
 const categoryRouter = require("./routes/categoriesRoutes");
 const subcategoriesRouter = require("./routes/subCategoriesRoutes");
-const categoriesRouter = require("./routes/categoriesRoutes");
-const subCategoriesRouter = require("./routes/subCategoriesRoutes");
 const productsRouter = require("./routes/productsRoutes");
 
-const AppError = require("./helpers/AppError");
 const globalErrorHandler = require("./controllers/errorController");
+const AppError = require("./helpers/AppError");
 // !this is a comment
 
 const db = connection();
