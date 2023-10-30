@@ -129,8 +129,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+    
   }
   return res.json({ response });
 });

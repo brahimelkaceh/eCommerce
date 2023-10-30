@@ -42,8 +42,36 @@ module.exports.CUSTOMER_CREATED_FAILED = "Customer creation failed";
 module.exports.CUSTOMER_UPDATED_FAILED = "Customer Update failed";
 module.exports.CUSTOMER_DELETED_FAILED = "Customer deletion failed";
 module.exports.CUSTOMER_NOT_FOUND = "Customer not found";
-
-
+/*Category constants */
+module.exports.CATEGORY_CREATED = "Category created successfully";
+module.exports.CATEGORY_UPDATED = "Category updated successfully";
+module.exports.CATEGORY_DELETED = "Category deleted successfully";
+module.exports.CATEGORY_FOUND = "Category  found";
+module.exports.CATEGORY_CREATED_FAILED = "Category creation failed";
+module.exports.CATEGORY_UPDATED_FAILED = "Category update failed";
+module.exports.CATEGORY_DELETE_FAILED = "Category deletion failed , check if Category has no subCategories ";
+module.exports.CATEGORY_NOT_FOUND = "Category not found";
+/* SubCategory constants*/
+module.exports.SUB_CATEGORY_CREATED = "SubCategory created successfully";
+module.exports.SUB_CATEGORY_UPDATED = "SubCategory updated successfully";
+module.exports.SUB_CATEGORY_DELETED = "SubCategory deleted successfully";
+module.exports.SUB_CATEGORY_FOUND = "SubCategory  found";
+module.exports.SUB_CATEGORY_CREATED_FAILED = "SubCategory creation failed";
+module.exports.SUB_CATEGORY_UPDATED_FAILED = "SubCategory update failed";
+module.exports.SUB_CATEGORY_DELETE_FAILED = "SubCategory deletion failed , check if Category has no subCategories ";
+module.exports.SUB_CATEGORY_NOT_FOUND = "SubCategory not found";
+/*Products constants*/
+module.exports.PRODUCT_CREATED = "  Product created successfully";
+module.exports.PRODUCTS_FOUND = "All products found";
+module.exports.PRODUCTS_NOT_FOUND = "we didn't find the products"
+module.exports.PRODUCT_UPDATED = "Product updated successfully";
+module.exports.PRODUCT_DELETED = "Product deleted successfully";
+module.exports.PRODUCT_FOUND = "Product  found";
+module.exports.PRODUCT_CREATED_FAILED = "Product creation failed";
+module.exports.PRODUCT_UPDATED_FAILED = "Product update failed";
+module.exports.PRODUCT_DELETE_FAILED = "Product deletion failed , check if Category has no subCategories ";
+module.exports.PRODUCT_NOT_FOUND = "Product not found";
+module.exports.PRODUCT_NAME_EXISTED = "This product name already exists";
 /* Validation related  constants starts */
 module.exports.PASSWORD_NOT_FOUND = 'password can\'t be empty.';
 module.exports.USERNAME_NOT_FOUND = 'User name can\'t be empty.';
