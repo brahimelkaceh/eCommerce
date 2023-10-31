@@ -7,7 +7,7 @@ exports.createProduct = catchAsync(async (req, res) => {
   // you should to know how to  handle multer in product
   const response = {};
   try {
-    const { subCategoryName, categoryName, productName } = req.body;
+    const { subCategoryID, categoryId, productName } = req.body;
     const Product = await Products.findOne({ productName: productName });
     if (Product) {
       response.message = CONSTANTS.PRODUCT_NAME_EXISTED;
@@ -21,8 +21,8 @@ exports.createProduct = catchAsync(async (req, res) => {
     }
 
     const NewProduct = await Products.create({
-      categoryID: categoryName,
-      subCategoryID: subCategoryName,
+      categoryID: categoryId,
+      subCategoryID: subCategoryID,
       ...req.body,
     });
     if (NewProduct) {
@@ -42,6 +42,7 @@ exports.getAllProducts = catchAsync(async (req, res) => {
   const response = {};
   try {
     const products = await Products.find().limit(10);
+    console.log(products);
     if (products) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -56,13 +57,15 @@ exports.getAllProducts = catchAsync(async (req, res) => {
   }
   return res.json({ response });
 });
+
+// ! Search for Products
 exports.searchProducts = catchAsync(async (req, res) => {
   const response = {};
-  const { Product_Name } = req.query;
-  console.log(Product_Name);
+  const { productName } = req.query;
+
   try {
     const product = await Products.findOne({
-      productName: Product_Name.toLowerCase(),
+      productName: productName.toLowerCase(),
     });
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
@@ -78,6 +81,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   }
   res.json({ response });
 });
+// ! Get The Product by id
 exports.getProductById = catchAsync(async (req, res) => {
   const { id } = req.params;
   const response = {};
