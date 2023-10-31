@@ -61,10 +61,10 @@ exports.getAllProducts = catchAsync(async (req, res) => {
 })
 exports.searchProducts = catchAsync(async (req, res) => {
     const response = {};
-    const { Product_Name } = req.query;
-    console.log(Product_Name);
+    const { productName } = req.query;
+    console.log(productName);
     try {
-        const product = await Products.findOne({ productName: Product_Name.toLowerCase() });
+        const product = await Products.findOne({ productName: productName.toLowerCase() });
         if (product) {
             response.message = CONSTANTS.PRODUCTS_FOUND;
             response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
