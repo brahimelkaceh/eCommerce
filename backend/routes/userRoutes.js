@@ -14,8 +14,8 @@ const {
 } = require("../controllers/userController");
 
 Router.post("/users/login", login);
-Router.post("/users", TokenCheck,createUser);
-Router.patch("/users/:id", TokenCheck, ValidatorSanitizer.validate, updateUser);
+Router.post("/users", TokenCheck, createUser);
+Router.put("/users/:id", TokenCheck, ValidatorSanitizer.validate, updateUser);
 Router.delete("/users/:id", TokenCheck, deleteUser);
 Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);

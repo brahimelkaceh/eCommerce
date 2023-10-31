@@ -1,5 +1,6 @@
 const CONSTANTS = require("../config/constants.js");
 const jwt = require("jsonwebtoken");
+const AppError = require("../helpers/appError");
 exports.TokenCheck = (req, res, next) => {
   try {
     // retrieve the authorization header from the request
@@ -21,12 +22,9 @@ exports.TokenCheck = (req, res, next) => {
     if (req.role === "admin") {
       next();
     } else {
-      throw new Error("Access denied. User is not an admin.");
+      next(new AppError("You don't have the permission, must be admin", 404));
     }
   } catch (error) {
-    return res.status(401).json({
-      message: error.message || "Unauthorized",
-      status: CONSTANTS.UNAUTHORIZED_HTTP_CODE,
-    });
+    return next(new AppError("Couldn't verify the token", 404));
   }
 };

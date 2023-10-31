@@ -17,8 +17,8 @@ const {
 
 Router.get("/categories", TokenCheck, searchCategory);
 Router.post("/categories", TokenCheck, createCategory);
-Router.patch("/categories/:id", TokenCheck, updateCategory);
+Router.put("/categories/:id", TokenCheck, updateCategory);
 Router.delete("/categories/:id", TokenCheck, deleteCategory);
-Router.get("/categories/allCategories", TokenCheck, showAllCategories);
+Router.get("/categories/", TokenCheck, showAllCategories);
 Router.get("/categories/:id", TokenCheck, getCategoryById);
 module.exports = Router;

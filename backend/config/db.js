@@ -12,7 +12,7 @@ exports.connection = () => {
         () => {},
         (err) => {
           console.info(color.red, "Mongodb error", err);
-        }
+        },
       )
       .catch((err) => {
         console.log(color.red, "ERROR:", err);
@@ -34,7 +34,7 @@ exports.connection = () => {
   mongoose.connection.on("disconnected", () => {
     console.error(
       color.red,
-      `MongoDB disconnected! Reconnecting in ${2000 / 1000}s...`
+      `MongoDB disconnected! Reconnecting in ${2000 / 1000}s...`,
     );
     setTimeout(() => connectToMongo(), 2000);
   });

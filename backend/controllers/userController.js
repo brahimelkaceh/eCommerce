@@ -6,67 +6,81 @@ const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const AppError = require("../helpers/appError");
 const mailSender = require("../helpers/mailSender");
 
-exports.login = catchAsync(async (req, res) => {
+exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email , password)
-  
+  // console.log(email , password)
 
   // Find the user by their email
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(401).json({ message: "User not found" });
+    return next(new AppError("User not found!", 404));
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
-console.log(isPasswordValid)
+  // console.log(isPasswordValid)
   if (!isPasswordValid) {
-    return res.status(401).json({ message: "Invalid email or password" });
+    return next(new AppError("Invalid password", 404));
   }
 
   if (user.role === "admin") {
     // Admins can log in directly
 
     const token = jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
-      process.env.SECRET_KEY
+      {
+        _id: user._id,
+        email: user.email,
+        role: user.role,
+        username: user.userName,
+      },
+      process.env.SECRET_KEY,
     );
+    user.lastLogin = new Date();
+    // console.log(user.lastLogin);
+    await user.save();
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ status: "success", data: token });
   }
 
   // For managers, check if the user is active
   if (!user.active) {
-    return res.status(401).json({ message: "User is not active" });
+    return next(new AppError("Inactive account!", 404));
   }
 
   // Update the last login date
-  user.lastLogin = new Date();
+  user.lastLogin = new Date.now();
+  console.log(user.lastLogin);
   await user.save();
 
   // Create and send the JWT token for managers
   const token = jwt.sign(
-    { userId: user._id, email: user.email, role: user.role },
-    process.env.SECRET_KEY
+    {
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+      username: user.userName,
+    },
+    process.env.SECRET_KEY,
   );
 
-  res.status(200).json({ token });
+  res.status(200).json({ status: "success", data: token });
 });
 
-exports.createUser = catchAsync(async (req, res) => {
+exports.createUser = catchAsync(async (req, res, next) => {
   const authHeader = req.headers.authorization || null;
 
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
-    console.log(userData)
+  console.log(userData);
   const existingUser = await User.findOne({ email: email });
   const existingCustomer = await Customer.findOne({ email: email });
   if (existingUser || existingCustomer) {
-    return res.status(400).json({ error: "Email is already in use." });
+    return next(new AppError("Email already in use", 404));
   }
   if (password !== confirmPassword) {
-    return res.status(400).json({ error: "Passwords do not match." });
+    return next(new AppError("Invalid password", 404));
   }
   const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -87,13 +101,13 @@ exports.createUser = catchAsync(async (req, res) => {
       password: hashedPassword,
     });
   } else {
-    return res
-      .status(400)
-      .json({ error: "Invalid role. Role must be manager or customer." });
+    return next(new AppError("Invalid role, must be Manager or Customer"));
   }
   // Save the user to the database
   await newUser.save();
-  res.status(201).json({ message: `${role} user created successfully.` });
+  res
+    .status(201)
+    .json({ status: "success", data: `${role} user created successfully.` });
 });
 
 exports.updateUser = catchAsync(async (req, res) => {
@@ -124,51 +138,50 @@ exports.updateUser = catchAsync(async (req, res) => {
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
-  } catch (err) {
-    
-  }
+  } catch (err) {}
   return res.json({ response });
 });
 
-exports.searchUser = async (req, res) => {
+exports.searchUser = async (req, res, next) => {
   try {
-    const namee = req.query.query;
-    const allusers = await User.find({ userName: namee })
+    const searchParams = req.query;
+    console.log(searchParams);
+    const allUsers = await User.find(searchParams)
       .sort({ _id: "descending" })
       .limit(10);
-    if (!allusers.length) {
-      res.json("User not found"); // change this with constants
+    if (!allUsers.length) {
+      return next(new AppError("User not found", 404));
     } else {
-      res.json({ data: allusers });
+      res.json({ status: "success", data: allUsers });
     }
   } catch (err) {
     throw err;
   }
 };
 
-exports.getUserById = async (req, res) => {
+exports.getUserById = async (req, res, next) => {
   const id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.json("User not found");
+    return next(new AppError("User not found", 404));
   } else {
     const user = await User.findOne({ _id: id });
-    res.json({ data: user });
+    res.json({ status: "success", data: user });
   }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
 
     const user = await User.findByIdAndRemove(userId);
 
     if (user) {
-      res.json({ message: "User deleted successfully" });
+      res.json({ status: "success", message: "User deleted successfully" });
     } else {
-      res.status(404).json({ message: "User not found" });
+      return next(new AppError("User not found", 404));
     }
   } catch (err) {
-    res.status(500).json({ message: "Internal server error" });
+    next(new AppError(err.message, 500));
   }
 };
 

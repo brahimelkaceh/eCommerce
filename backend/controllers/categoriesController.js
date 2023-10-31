@@ -2,9 +2,10 @@
 const Category = require("../models/Categories");
 const catchAsync = require("../helpers/catchAsync");
 const SubCategory = require("../models/SubCategories");
+const AppError = require("../helpers/appError");
 const mongoose = require("mongoose");
 
-exports.createCategory = catchAsync(async (req, res) => {
+exports.createCategory = catchAsync(async (req, res, next) => {
   try {
     const { categoryName, ...categoryData } = req.body;
     const CategoryData = await Category.findOne({ categoryName: categoryName });
@@ -18,7 +19,7 @@ exports.createCategory = catchAsync(async (req, res) => {
       console.log(newCategory);
 
       await newCategory.save();
-      res.json("category created successfully");
+      res.json({ status: "success", data: "category created successfully" });
     }
   } catch (err) {
     throw err;
@@ -34,7 +35,7 @@ exports.updateCategory = catchAsync(async (req, res) => {
     // const updateData = { ...newUserData };
     // console.log(updateData);
     await Category.updateOne({ _id: id }, { $set: newUserData });
-    res.json("user updated");
+    res.json({ status: "success", data: "category updated" });
   } catch (err) {
     throw err;
   }
@@ -60,33 +61,32 @@ exports.deleteCategory = async (req, res) => {
     res.json("there is a subcategory for this category");
   }
 };
-exports.getCategoryById = async (req, res) => {
+exports.getCategoryById = async (req, res, next) => {
   const id = req.params.id;
   //console.log(id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.json("User not found");
+    return next(new AppError("Category not found", 404));
   } else {
     const category = await Category.findOne({ _id: id });
-    res.json({ data: category });
+    res.json({ status: "success", data: category });
   }
 };
 
-exports.searchCategory = async (req, res) => {
+exports.searchCategory = async (req, res, next) => {
+  const searchParams = req.query;
+  console.log(searchParams);
   try {
-    const categoryName = req.query.query;
-    const allCategories = await Category.find({
-      categoryName: categoryName.toLowerCase(),
-    })
+    const allCategories = await Category.find(searchParams)
       .sort({ _id: "descending" })
       .limit(10);
     if (!allCategories.length) {
-      res.json("Category not found"); // change this with constants
+      return next(new AppError("Category not found", 404)); // change this with constants
     } else {
-      res.json({ data: allCategories });
+      res.json({ status: "success", data: allCategories });
       console.log(allCategories);
     }
   } catch (err) {
-    throw err;
+    next(new AppError(err.message, 404));
   }
 };
 

@@ -1,13 +1,36 @@
 // ! MongoDB schema/model for products
 const mongoose = require("mongoose");
+// Define the ProductOptions schema for size and color
+const productOptionsSchema = new mongoose.Schema({
+  size: {
+    type: String,
+    required: true,
+  },
+  color: {
+    type: String,
+    required: true,
+  },
+  availability: {
+    type: String,
+    enum: ["In Stock", "Out of Stock"],
+    required: true,
+  },
+});
 
 // Define the Product schema
 const productSchema = new mongoose.Schema(
   {
-    productImage: {
+    sku: {
       type: String,
+      unique: true, // Ensures SKU is unique for each product
       required: true,
     },
+
+    productImage: {
+      type: String,
+      required: [true, "please enter this field"],
+    },
+
     productName: {
       type: String,
       required: true,
@@ -44,6 +67,8 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    options: [productOptionsSchema], // Array of product options
     size: {
       type: String,
     },
@@ -59,7 +84,7 @@ const productSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false },
 );
 
 module.exports = mongoose.model("ProductModel", productSchema);
