@@ -1,11 +1,12 @@
-
 // ! MongoDB schema/model for categories
 
 const mongoose = require("mongoose");
 const categorySchema = new mongoose.Schema({
-   categoryName: {
+  categoryName: {
     type: String,
     required: true,
+    unique: true,
+    trim: true,
   },
   active: {
     type: Boolean,
@@ -13,4 +14,4 @@ const categorySchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("categoryModel", categorySchema);
+module.exports = mongoose.model("CategoryModel", categorySchema);

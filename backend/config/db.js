@@ -1,4 +1,5 @@
 // ! database configuration file
+require("dotenv").config();
 const { color, database } = require("./config");
 
 const mongoose = require("mongoose");
@@ -6,12 +7,12 @@ const mongoose = require("mongoose");
 exports.connection = () => {
   const connectToMongo = () => {
     mongoose
-      .connect("mongodb://0.0.0.0:27017")
+      .connect(process.env.DB_CONNECTION_STRING)
       .then(
         () => {},
         (err) => {
           console.info(color.red, "Mongodb error", err);
-        }
+        },
       )
       .catch((err) => {
         console.log(color.red, "ERROR:", err);
@@ -33,7 +34,7 @@ exports.connection = () => {
   mongoose.connection.on("disconnected", () => {
     console.error(
       color.red,
-      `MongoDB disconnected! Reconnecting in ${2000 / 1000}s...`
+      `MongoDB disconnected! Reconnecting in ${2000 / 1000}s...`,
     );
     setTimeout(() => connectToMongo(), 2000);
   });

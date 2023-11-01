@@ -1,7 +1,8 @@
 // ! MongoDB schema/model for subcategories
+
 const mongoose = require("mongoose");
 const subCategorySchema = new mongoose.Schema({
-   subCategoryName: {
+  subCategoryName: {
     type: String,
     required: true,
   },
@@ -14,6 +15,6 @@ const subCategorySchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-},{timestamps:true,versionKey:false});
+});
 
 module.exports = mongoose.model("SubCategoryModel", subCategorySchema);

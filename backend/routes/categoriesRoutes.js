@@ -1,23 +1,24 @@
 // ! Express.js routes for categories
-const express = require('express');
+const express = require("express");
 const Router = express.Router();
-const { createCategory } = require('../controllers/categoriesController');
+
 const validatorSanitizer = require("../middlewares/validator");
+const { TokenCheck } = require("../middlewares/TokenCheck");
+
 const ValidatorSanitizer = new validatorSanitizer();
-//const { TokenCheck } = require('../middlewares/TokenCheck');
+const {
+  searchCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  showAllCategories,
+  getCategoryById,
+} = require("../controllers/categoriesController");
 
-Router.post('/categories',ValidatorSanitizer.validate,createCategory);
-
-
-
-
-
-
-
-
-
-
-
-
-
+Router.get("/categories", TokenCheck, searchCategory);
+Router.post("/categories", TokenCheck, createCategory);
+Router.put("/categories/:id", TokenCheck, updateCategory);
+Router.delete("/categories/:id", TokenCheck, deleteCategory);
+Router.get("/categories/", TokenCheck, showAllCategories);
+Router.get("/categories/:id", TokenCheck, getCategoryById);
 module.exports = Router;

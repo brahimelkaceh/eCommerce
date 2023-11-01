@@ -1,23 +1,19 @@
 // ! Express.js routes for subcategories
-const express = require('express');
+const express = require("express");
 const Router = express.Router();
-const { createSubCategory } = require('../controllers/subCategoriesController');
-const validatorSanitizer = require("../middlewares/validator");
-const ValidatorSanitizer = new validatorSanitizer();
-//const { TokenCheck } = require('../middlewares/TokenCheck');
+const { TokenCheck } = require("../middlewares/TokenCheck");
+const {
+  createSubCategory,
+  getAllSubcategories,
+  updateSubCategory,
+  deleteSubCategory,
+  getSubCategoryById,
+} = require("../controllers/subCategoriesController");
 
-Router.post('/subcategories',ValidatorSanitizer.validate,createSubCategory);
-
-
-
-
-
-
-
-
-
-
-
-
+Router.post("/subcategories/", TokenCheck, createSubCategory);
+Router.get("/subcategories/", TokenCheck, getAllSubcategories);
+Router.get("/subcategories/:id", TokenCheck, getSubCategoryById);
+Router.put("/subcategories/:id", TokenCheck, updateSubCategory);
+Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
 
 module.exports = Router;

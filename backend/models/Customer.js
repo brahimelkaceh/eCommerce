@@ -1,4 +1,5 @@
 // ! MongoDB schema/model for customers
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const customerSchema = new mongoose.Schema({
   firstName: {
@@ -18,10 +19,14 @@ const customerSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
-   userName: {
+  userName: {
     type: String,
     required: true,
     trim: true,
+  },
+  role: {
+    type: String,
+    default: "customer",
   },
   password: {
     type: String,
@@ -46,5 +51,21 @@ const customerSchema = new mongoose.Schema({
     default: true,
   },
 });
+
+// customerSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) return next();
+//
+//   this.password = await bcrypt.hash(this.password, 12);
+//
+//   this.confirmPassword = undefined;
+//   next();
+// });
+//
+// customerSchema.methods.correctPassword = async function (
+//   candidatePassword,
+//   userPassword,
+// ) {
+//   return await bcrypt.compare(candidatePassword, userPassword);
+// };
 
 module.exports = mongoose.model("CustomerModel", customerSchema);

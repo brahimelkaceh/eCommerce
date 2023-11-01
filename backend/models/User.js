@@ -1,4 +1,3 @@
-
 /* use another schema */
 //  ! MongoDB schema/model for users
 const mongoose = require("mongoose");
@@ -36,7 +35,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    minLength: 10,
+    minLength: 4,
   },
   creationDate: {
     type: Date,
