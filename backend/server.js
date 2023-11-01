@@ -9,7 +9,7 @@ const customerRouter = require("./routes/customerRoutes");
 const categoryRouter = require("./routes/categoriesRoutes");
 const subcategoriesRouter = require("./routes/subCategoriesRoutes");
 const productsRouter = require("./routes/productsRoutes");
-
+const ordersRouter = require("./routes/ordersRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./helpers/AppError");
 // !this is a comment
@@ -28,7 +28,7 @@ server.use("/", customerRouter);
 server.use("/", categoryRouter);
 server.use("/", subcategoriesRouter);
 server.use("/", productsRouter);
-
+server.use("/", ordersRouter);
 server.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

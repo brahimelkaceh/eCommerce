@@ -1,34 +1,34 @@
 // ! MongoDB schema/model for products
 const mongoose = require("mongoose");
 // Define the ProductOptions schema for size and color
-const productOptionsSchema = new mongoose.Schema({
-  size: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    required: true,
-  },
-  availability: {
-    type: String,
-    enum: ["In Stock", "Out of Stock"],
-    required: true,
-  },
-});
-
+// const productOptionsSchema = new mongoose.Schema({
+//   size: {
+//     type: String,
+//     required: true,
+//   },
+//   color: {
+//     type: String,
+//     required: true,
+//   },
+//   availability: {
+//     type: String,
+//     enum: ["In Stock", "Out of Stock"],
+//     required: true,
+//   },
+// });
+// const productOptions = mongoose.model("ProductOptions", productOptionsSchema);
 // Define the Product schema
 const productSchema = new mongoose.Schema(
   {
     sku: {
       type: String,
       unique: true, // Ensures SKU is unique for each product
-      required: true,
+      // required: true,
     },
 
     productImage: {
       type: String,
-      required: [true, "please enter this field"],
+      // required: [true, "please enter this field"],
     },
 
     productName: {
@@ -49,26 +49,25 @@ const productSchema = new mongoose.Schema(
 
     shortDescription: {
       type: String,
-      required: true,
+      // required: true,
     },
     longDescription: {
       type: String,
-      required: true,
+      // required: true,
     },
     price: {
       type: Number,
-      required: true,
+      // required: true,
     },
     discountPrice: {
       type: Number,
-      required: true,
+      // required: true,
+      default: 0,
     },
     quantity: {
       type: Number,
       default: 0,
     },
-
-    options: [productOptionsSchema], // Array of product options
     size: {
       type: String,
     },
@@ -77,6 +76,7 @@ const productSchema = new mongoose.Schema(
     },
     availability: {
       type: String,
+      default: "In Stock",
       enum: ["In Stock", "Out of Stock"],
     },
     active: {

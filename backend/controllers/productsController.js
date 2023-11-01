@@ -1,10 +1,9 @@
 const Products = require("../models/Products");
 const catchAsync = require("../helpers/catchAsync");
 const CONSTANTS = require("../config/constants");
+const AppError = require("../helpers/appError");
 
-exports.createProduct = catchAsync(async (req, res) => {
-  // This isn't finished yet because you need options in database instead of color and size
-  // you should to know how to  handle multer in product
+exports.createProduct = catchAsync(async (req, res, next) => {
   const response = {};
   try {
     const { subCategoryID, categoryId, productName } = req.body;
@@ -32,17 +31,16 @@ exports.createProduct = catchAsync(async (req, res) => {
       response.message = CONSTANTS.PRODUCT_CREATED_FAILED;
       response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
     }
-    return res.json({ response });
+    return res.json({ status: "success", data: NewProduct });
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+    next(new AppError(err.message, 404));
   }
 });
 exports.getAllProducts = catchAsync(async (req, res) => {
   const response = {};
   try {
     const products = await Products.find().limit(10);
-    console.log(products);
+    // console.log(products);
     if (products) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -61,12 +59,10 @@ exports.getAllProducts = catchAsync(async (req, res) => {
 // ! Search for Products
 exports.searchProducts = catchAsync(async (req, res) => {
   const response = {};
-  const { productName } = req.query;
-
+  const searchParams = req.query;
+  console.log(searchParams);
   try {
-    const product = await Products.findOne({
-      productName: productName.toLowerCase(),
-    });
+    const product = await Products.findOne(searchParams);
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -82,7 +78,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   res.json({ response });
 });
 // ! Get The Product by id
-exports.getProductById = catchAsync(async (req, res) => {
+exports.getProductById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const response = {};
   try {
@@ -95,23 +91,29 @@ exports.getProductById = catchAsync(async (req, res) => {
       response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
     }
+    return res.json({ status: "success", data: product });
   } catch (err) {
     response.message = err.message;
     response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+    next(new AppError(err.message, 404));
   }
-  return res.json({ response });
 });
-exports.updateProduct = catchAsync(async (req, res) => {
+exports.updateProduct = catchAsync(async (req, res, next) => {
   const response = {};
   try {
     const id = req.params.id;
     const newProductData = req.body;
-    await Products.updateOne({ _id: id }, { $set: newProductData });
+    const newProduct = await Products.updateOne(
+      { _id: id },
+      { $set: newProductData },
+    );
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
+    return res.json({ response });
   } catch (err) {
     response.message = err.message;
     response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+    next(new AppError(err.message, 404));
   }
   return res.json({ response });
 });
