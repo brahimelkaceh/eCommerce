@@ -6,6 +6,7 @@ const userRouter = require("./routes/userRoutes");
 const CategoriesRouter = require('./routes/categoriesRoutes');
 const SubCategoriesRouter = require('./routes/subCategoriesRoutes');
 const ProductsRouter = require('./routes/productsRoutes');
+const OrderRouter = require("./routes/ordersRoutes");
 // !this is a comment
 
 const db = connection();
@@ -19,6 +20,7 @@ server.use("/", userRouter);
 server.use("/", CategoriesRouter);
 server.use("/", SubCategoriesRouter);
 server.use("/", ProductsRouter);
+server.use("/", OrderRouter);
 db.connectToMongo();
 
 server.listen(5000, () => {

@@ -73,6 +73,21 @@ module.exports.PRODUCT_DELETE_FAILED = "Product deletion failed , check if Categ
 module.exports.PRODUCT_NOT_FOUND = "Product not found";
 module.exports.PRODUCT_NAME_EXISTED = "This product name already exists";
 /* Validation related  constants starts */
+/* orders constants*/
+module.exports.ORDER_CREATED = "  order created successfully";
+module.exports.ORDER_FOUND = "All orders found";
+module.exports.ORDER_NOT_FOUND = "we didn't find the orders"
+module.exports.ORDER_UPDATED = "order updated successfully";
+module.exports.ORDER_CANCELED = "order canceled successfully";
+module.exports.ORDER_FOUND = "order  found";
+module.exports.ORDER_CREATED_FAILED = "order creation failed";
+module.exports.ORDER_UPDATED_FAILED = "order update failed";
+module.exports.ORDER_CANCELED_FAILED = "order cancel failed , check if Category has no subCategories ";
+module.exports.ORDER_NOT_FOUND = "order not found";
+
+
+
+/* Password  */
 module.exports.PASSWORD_NOT_FOUND = 'password can\'t be empty.';
 module.exports.USERNAME_NOT_FOUND = 'User name can\'t be empty.';
 module.exports.USERLASTNAME_NOT_FOUND = 'User last name can\'t be empty.';

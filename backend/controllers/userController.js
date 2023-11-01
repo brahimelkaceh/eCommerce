@@ -153,7 +153,6 @@ exports.searchUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.json("User not found");
   } else {
