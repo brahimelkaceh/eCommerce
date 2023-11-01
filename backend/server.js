@@ -12,7 +12,7 @@ const subcategoriesRouter = require("./routes/subCategoriesRoutes");
 const productsRouter = require("./routes/productsRoutes");
 
 const globalErrorHandler = require("./controllers/errorController");
-const AppError = require("../helpers/AppError");
+const AppError = require("./helpers/AppError");
 // !this is a comment
 
 const db = connection();
