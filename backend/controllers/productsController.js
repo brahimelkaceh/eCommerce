@@ -2,6 +2,7 @@ const Products = require("../models/Products");
 const catchAsync = require("../helpers/catchAsync");
 const CONSTANTS = require("../config/constants");
 const AppError = require("../helpers/appError");
+const APIFeatures = require("./../helpers/apiFeatures");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
   const response = {};
@@ -36,25 +37,28 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     next(new AppError(err.message, 404));
   }
 });
-exports.getAllProducts = catchAsync(async (req, res) => {
-  const response = {};
+exports.getAllProducts = async (req, res, next) => {
   try {
-    const products = await Products.find().limit(10);
-    // console.log(products);
-    if (products) {
-      response.message = CONSTANTS.PRODUCTS_FOUND;
-      response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
-      response.data = products;
-    } else {
-      response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
-      response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
-    }
+    // EXECUTE QUERY
+    const features = new APIFeatures(Products.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const products = await features.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+      status: "success",
+      results: products.length,
+      data: {
+        products,
+      },
+    });
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+    next(new AppError(err.message, 404));
   }
-  return res.json({ response });
-});
+};
 
 // ! Search for Products
 exports.searchProducts = catchAsync(async (req, res) => {
