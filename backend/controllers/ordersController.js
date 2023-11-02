@@ -1,5 +1,6 @@
 //  ! Controller handling orders-related logic
 const Category = require('../models/Categories');
+const Customer = require('../models/Customer')
 const subCategory = require('../models/SubCategories');
 const catchAsync = require("../helpers/catchAsync");
 const orders = require('../models/Order');
@@ -9,8 +10,23 @@ const Products = require('../models/Products');
 exports.createOrder = catchAsync(async (req, res) => {
     const response = {};
     try {
-         const OrderData = req.body;
-    const newOrder = await orders.create(req.body);
+        const { customerID, orderItems } = req.body;
+        const customer = await Customer.findOne({ _id: customerID });
+        if (!customer) {
+        response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
+            response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+            return res.json({ response });
+        }
+        for (let i = 0; i < orderItems.length; i++) {
+            const element = orderItems[i];
+            const product = await Products.findOne({ _id: element.product })
+            if (!product) {
+                 response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
+            response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+            return res.json({ response });
+            }
+        }
+   // const newOrder = await orders.create(req.body);
     if (newOrder) {
         response.message = CONSTANTS.ORDER_CREATED;
         response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
@@ -49,8 +65,25 @@ exports.getOrderById = catchAsync(async (req, res) => {
 exports.updateOrder = catchAsync(async (req, res) => {
     const response = {}
     try {
+        const { customerID, orderItems } = req.body;
+        const customer = await Customer.findOne({ _id: customerID });
+        if (!customer) {
+        response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
+            response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+            return res.json({ response });
+        }
+        for (let i = 0; i < orderItems.length; i++) {
+            const element = orderItems[i];
+            const product = await Products.findOne({ _id: element.product })
+            if (!product) {
+                 response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
+            response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+            return res.json({ response });
+            }
+        }
         const id = req.params.id;
         const newOrderData = req.body;
+
         await orders.updateOne({ _id: id }, { $set: newOrderData });
            response.message = CONSTANTS.ORDER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;

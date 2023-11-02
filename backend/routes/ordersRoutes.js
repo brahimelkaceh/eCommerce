@@ -5,7 +5,7 @@ const { createOrder,getOrderById,updateOrder,listOrders } = require('../controll
 //const validatorSanitizer = require("../middlewares/validator");
 //const ValidatorSanitizer = new validatorSanitizer();
 //const { TokenCheck } = require('../middlewares/TokenCheck');
-
+// add tokencheckCustomer , productId and customerID should exist before creating the order 
 Router.post('/requests',createOrder);
 Router.get('/requests/:id', getOrderById); 
 Router.put('/requests/:id',updateOrder)

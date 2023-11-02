@@ -16,7 +16,7 @@ exports.createProduct = catchAsync(async (req, res) => {
     }
     if (req.body.quantity) {
       req.body.availability = "In Stock";
-    } else {
+    } else if(!req.body.quantity) {
       req.body.availability = "Out of Stock";
     }
 
