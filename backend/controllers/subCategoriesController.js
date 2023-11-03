@@ -15,24 +15,15 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
     return next(new AppError("Can't find this category", 404));
   }
 
-  // 2. Create a new subcategory
-  const createdSubcategory = new Subcategory({
-    subCategoryName,
-    categoryId,
-    active,
-  });
-
-  // 3. Start a MongoDB session to ensure data consistency
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
-    // 4. Save the subcategory within the session
-    await createdSubcategory.save({ session });
+    // 2. Create a new subcategory and save it
+    const createdSubcategory = new Subcategory({
+      subCategoryName,
+      categoryId,
+      active,
+    });
 
-    // 5. Commit the transaction to save the subcategory and end the session
-    await session.commitTransaction();
-    session.endSession();
+    await createdSubcategory.save();
 
     res.status(201).json({
       status: "success",
@@ -40,10 +31,10 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    session.endSession();
     return next(new AppError(error.message, 500));
   }
 });
+
 
 exports.getAllSubcategories = async (req, res) => {
   const subcategories = await Subcategory.find({});
