@@ -21,7 +21,7 @@ const {
 
 Router.post(
   "/customers/signup",
-    upload.array("images", 5),
+  upload.array("images", 5),
   ValidatorSanitizer.validate,
   signup,
 );
@@ -32,9 +32,9 @@ Router.get("/customers/search", Auth.TokenCheck, searchForCustomer);
 Router.get("/customers/:id", getCustomerById);
 Router.put(
   "/customers/:id",
-    Auth.TokenCheck,
-    upload.array("images", 5),
+  upload.array("images", 5),
   ValidatorSanitizer.validate,
+  Auth.TokenCheck,
   updateCustomer,
 );
 Router.delete("/customers/:id", Auth.TokenCheck, deleteCustomer);

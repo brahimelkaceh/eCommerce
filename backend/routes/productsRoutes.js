@@ -15,13 +15,14 @@ const ValidatorSanitizer = new validatorSanitizer();
 const { TokenCheck } = require("../middlewares/TokenCheck");
 Router.post(
   "/products",
-  TokenCheck,
   upload.array("images", 5),
-   ValidatorSanitizer.validate,
+  TokenCheck,
+  ValidatorSanitizer.validate,
   createProduct,
 );
 Router.put(
   "/products/:id",
+  upload.array("images", 5),
   TokenCheck,
   upload.array("images", 5),
   ValidatorSanitizer.validate,
