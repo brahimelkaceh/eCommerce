@@ -119,6 +119,8 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
 exports.updateUser = catchAsync(async (req, res) => {
   const response = {};
+  const images = req.files;
+  const uploadedImages = await addImages(images);
   try {
     const id = req.params.id;
     const newUserData = req.body;
@@ -141,7 +143,11 @@ exports.updateUser = catchAsync(async (req, res) => {
       }
     }
 
-    const updateData = { lastUpdate: Date.now(), ...newUserData };
+    const updateData = {
+      lastUpdate: Date.now(),
+      ...newUserData,
+      images: uploadedImages.map((image) => image.imageUrl),
+    };
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;

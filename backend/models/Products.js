@@ -49,6 +49,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true, // Price should probably always be required.
     },
+    images: {
+      type: [String],
+    },
     discountPrice: {
       type: Number,
       default: 0,

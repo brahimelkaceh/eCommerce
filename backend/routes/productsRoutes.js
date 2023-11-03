@@ -1,5 +1,6 @@
 // ! Express.js routes for products
 const express = require("express");
+const upload = require("../middlewares/multer");
 const Router = express.Router();
 const {
   createProduct,
@@ -16,6 +17,7 @@ Router.post(
   "/products",
   TokenCheck,
   // ValidatorSanitizer.validate,
+  upload.array("images", 5),
   createProduct,
 );
 Router.put(

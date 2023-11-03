@@ -8,8 +8,11 @@ const mongoose = require("mongoose");
 
 const Category = require("../models/Categories");
 const SubCategory = require("../models/SubCategories");
+const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  const images = req.files;
+  const uploadedImages = await addImages(images);
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -32,6 +35,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         new AppError("Can't find the corresponding subcategory", 404),
       );
     }
+    const images = req.files;
     const newProduct = new Products({
       sku,
       productImage,
@@ -40,6 +44,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       shortDescription,
       longDescription,
       price,
+      images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,
       options, // Pass the array of product options
@@ -131,6 +136,8 @@ exports.getProductById = catchAsync(async (req, res, next) => {
 
 exports.updateProduct = catchAsync(async (req, res, next) => {
   try {
+    const images = req.files;
+    const uploadedImages = await addImages(images);
     const id = req.params.id;
     const newProductData = req.body;
     console.log("newProductData.options: ", newProductData.options);
@@ -145,7 +152,10 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     }
     const updatedProduct = await Products.findByIdAndUpdate(
       id,
-      newProductData,
+      {
+        ...newProductData,
+        images: uploadedImages.map((image) => image.imageUrl),
+      },
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
