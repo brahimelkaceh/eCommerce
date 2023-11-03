@@ -11,12 +11,6 @@ const subCategorySchema = new mongoose.Schema({
     ref: "CategoryModel",
     required: true,
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ProductModel",
-    },
-  ],
   active: {
     type: Boolean,
     default: true,

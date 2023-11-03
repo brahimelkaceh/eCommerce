@@ -15,7 +15,7 @@ const { TokenCheck } = require("../middlewares/TokenCheck");
 Router.post(
   "/products",
   TokenCheck,
-  ValidatorSanitizer.validate,
+  // ValidatorSanitizer.validate,
   createProduct,
 );
 Router.put(

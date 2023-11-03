@@ -5,26 +5,26 @@ const catchAsync = require("../helpers/catchAsync");
 const orders = require("../models/Order");
 const CONSTANTS = require("../config/constants");
 const Products = require("../models/Products");
+const AppError = require("../helpers/appError");
+exports.createOrder = catchAsync(async (req, res, next) => {
+  const { customerID, orderItems, cartTotalPrice } = req.body;
 
-exports.createOrder = catchAsync(async (req, res) => {
-  const response = {};
   try {
-    const OrderData = req.body;
-    // console.log(OrderData);
-    const newOrder = await orders.create(req.body);
-    if (newOrder) {
-      response.message = CONSTANTS.ORDER_CREATED;
-      response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
-    } else {
-      response.message = CONSTANTS.ORDER_CREATED_FAILED;
-      response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-    }
-  } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-  }
+    const newOrder = new orders({
+      customerID,
+      orderItems,
+      cartTotalPrice,
+    });
 
-  return res.json({ response });
+    const savedOrder = await newOrder.save();
+
+    res.status(201).json({
+      status: "success",
+      data: savedOrder,
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 400));
+  }
 });
 exports.getOrderById = catchAsync(async (req, res) => {
   const response = {};

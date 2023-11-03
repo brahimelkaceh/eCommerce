@@ -63,7 +63,7 @@ exports.deleteCategory = async (req, res) => {
 };
 exports.getCategoryById = async (req, res, next) => {
   const id = req.params.id;
-  //console.log(id);
+  // console.log(id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return next(new AppError("Category not found", 404));
   } else {
@@ -94,7 +94,7 @@ exports.showAllCategories = async (req, res) => {
   try {
     const Categories = await Category.find()
       .sort({ _id: "descending" })
-      .limit(10); // This assumes you have a User model defined
+      .limit(10);
     res.json(Categories);
   } catch (err) {
     console.error(err);

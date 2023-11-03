@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const server = express();
+
+const mongoose = require("mongoose");
 
 const { connection } = require("./config/db");
 const userRouter = require("./routes/userRoutes");

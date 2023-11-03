@@ -4,39 +4,66 @@ const CONSTANTS = require("../config/constants");
 const AppError = require("../helpers/appError");
 const APIFeatures = require("./../helpers/apiFeatures");
 
-exports.createProduct = catchAsync(async (req, res, next) => {
-  const response = {};
-  try {
-    const { subCategoryID, categoryId, productName } = req.body;
-    const Product = await Products.findOne({ productName: productName });
-    if (Product) {
-      response.message = CONSTANTS.PRODUCT_NAME_EXISTED;
-      response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
-      return res.json({ response });
-    }
-    if (req.body.quantity) {
-      req.body.availability = "In Stock";
-    } else {
-      req.body.availability = "Out of Stock";
-    }
+const mongoose = require("mongoose");
 
-    const NewProduct = await Products.create({
-      categoryID: categoryId,
-      subCategoryID: subCategoryID,
-      ...req.body,
-    });
-    if (NewProduct) {
-      response.message = CONSTANTS.PRODUCT_CREATED;
-      response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
-    } else {
-      response.message = CONSTANTS.PRODUCT_CREATED_FAILED;
-      response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+const Category = require("../models/Categories");
+const SubCategory = require("../models/SubCategories");
+
+exports.createProduct = catchAsync(async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const {
+      sku,
+      productImage,
+      productName,
+      subCategoryId, // Now you pass the subcategory ID
+      shortDescription,
+      longDescription,
+      price,
+      discountPrice,
+      quantity,
+      options, // Array of product options
+      active,
+    } = req.body;
+    const subcategory = SubCategory.find(subCategoryId);
+    if (!subcategory) {
+      return next(
+        new AppError("Can't find the corresponding subcategory", 404),
+      );
     }
-    return res.json({ status: "success", data: NewProduct });
-  } catch (err) {
-    next(new AppError(err.message, 404));
+    const newProduct = new Products({
+      sku,
+      productImage,
+      productName,
+      subCategoryId, // Pass the subcategory ID
+      shortDescription,
+      longDescription,
+      price,
+      discountPrice,
+      quantity,
+      options, // Pass the array of product options
+      active,
+    });
+
+    await newProduct.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(201).json({
+      status: "success",
+      data: newProduct,
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
+    return next(new AppError(error.message, 400));
   }
 });
+
 exports.getAllProducts = async (req, res, next) => {
   try {
     // EXECUTE QUERY
