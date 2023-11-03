@@ -24,7 +24,6 @@ Router.put(
   "/products/:id",
   upload.array("images", 5),
   TokenCheck,
-  upload.array("images", 5),
   ValidatorSanitizer.validate,
   updateProduct,
 );
