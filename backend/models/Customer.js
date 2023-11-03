@@ -50,6 +50,12 @@ const customerSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OrderModel",
+    },
+  ],
 });
 
 // customerSchema.pre("save", async function (next) {

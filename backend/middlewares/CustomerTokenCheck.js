@@ -1,6 +1,6 @@
 const CONSTANTS = require("../config/constants.js");
 const jwt = require("jsonwebtoken");
-exports.TokenCheck = (req, res, next) => {
+exports.CustomerTokenCheck = (req, res, next) => {
   try {
     // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;
@@ -19,10 +19,16 @@ exports.TokenCheck = (req, res, next) => {
     req.role = userData.role;
     req.email = userData.email;
 
-    if (req.role === "admin" || req.role === "manager" || req.role === "customer") {
+    if (
+      req.role === "admin" ||
+      req.role === "manager" ||
+      req.role === "customer"
+    ) {
       next();
     } else {
-      throw new Error("Access denied. User is not an admin or manager or customer.");
+      throw new Error(
+        "Access denied. User is not an admin or manager or customer."
+      );
     }
   } catch (error) {
     return res.status(401).json({

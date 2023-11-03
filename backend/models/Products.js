@@ -1,9 +1,9 @@
-// ! MongoDB schema/model for products
 const mongoose = require("mongoose");
-// Define the ProductOptions schema for size and color
+
 const productOptionsSchema = new mongoose.Schema({
   size: {
     type: String,
+    // You might want to require these fields if they're always necessary.
     required: true,
   },
   color: {
@@ -17,36 +17,26 @@ const productOptionsSchema = new mongoose.Schema({
   },
 });
 
-// Define the Product schema
 const productSchema = new mongoose.Schema(
   {
     sku: {
       type: String,
-      unique: true, // Ensures SKU is unique for each product
-      required: true,
+      unique: true,
+      required: true, // If SKU is always required, consider adding this.
     },
-
     productImage: {
       type: String,
-      required: [true, "please enter this field"],
+      required: true, // Require product image URL
     },
-
     productName: {
       type: String,
       required: true,
     },
-
-    categoryID: {
+    subCategoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "categoryModel", // Reference to the Category model
+      ref: "SubCategoryModel",
       required: true,
     },
-    subCategoryID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SubCategoryModel", // Reference to the SubCategory model
-      required: true,
-    },
-
     shortDescription: {
       type: String,
       required: true,
@@ -57,28 +47,17 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true,
+      required: true, // Price should probably always be required.
     },
     discountPrice: {
       type: Number,
-      required: true,
+      default: 0,
     },
     quantity: {
       type: Number,
       default: 0,
     },
-
-    options: [productOptionsSchema], // Array of product options
-    size: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
-    availability: {
-      type: String,
-      enum: ["In Stock", "Out of Stock"],
-    },
+    options: [productOptionsSchema],
     active: {
       type: Boolean,
       default: true,
