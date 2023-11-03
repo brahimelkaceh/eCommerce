@@ -34,6 +34,7 @@ Router.put(
   "/customers/:id",
   ValidatorSanitizer.validate,
   Auth.TokenCheck,
+  upload.array("images", 5),
   updateCustomer,
 );
 Router.delete("/customers/:id", Auth.TokenCheck, deleteCustomer);

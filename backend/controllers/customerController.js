@@ -156,6 +156,8 @@ exports.deleteCustomer = catchAsync(async (req, res, next) => {
 
 exports.updateCustomer = catchAsync(async (req, res, next) => {
   const customerId = req.params.id;
+  const images = req.files;
+  const uploadedImages = await addImages(images);
   const { firstName, lastName, email, userName } = req.body;
   const updatedCustomer = await Customer.findByIdAndUpdate(
     customerId,
@@ -163,6 +165,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       userName,
       firstName,
       lastName,
+      images: uploadedImages.map((image) => image.imageUrl),
       email,
     },
     { new: true, runValidators: true },
