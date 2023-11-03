@@ -47,7 +47,6 @@ class ValidatorSanitizer {
         if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
         }
-
         // If there are no validation errors, proceed to sanitization
         this.sanitize(req);
         this.validationRules = [];
