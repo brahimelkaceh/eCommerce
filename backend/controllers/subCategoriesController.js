@@ -18,7 +18,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
   // 2. Create a new subcategory
   const createdSubcategory = new Subcategory({
     subCategoryName,
-    categoryId, // Associate the subcategory with the category
+    categoryId,
     active,
   });
 
@@ -39,10 +39,9 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
       data: { createdSubcategory },
     });
   } catch (error) {
-    // Handle any errors that may occur during subcategory creation
     console.error(error);
-    session.endSession(); // Roll back the transaction and end the session
-    return next(new AppError("Can't add subcategory due to an error", 500));
+    session.endSession();
+    return next(new AppError(error.message, 500));
   }
 });
 
@@ -58,9 +57,8 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
 
   // Find the subcategory by its ID
-  const subcategory = await Subcategory.findById(subcategoryId).populate(
-    "categoryId"
-  );
+  const subcategory =
+    await Subcategory.findById(subcategoryId).populate("categoryId");
 
   if (!subcategory) {
     return next(new AppError("Can't find the specified subcategory", 404));
