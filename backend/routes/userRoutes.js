@@ -17,7 +17,13 @@ const {
 
 Router.post("/users/login", login);
 Router.post("/users", TokenCheck, upload.array("images", 5), createUser);
-Router.put("/users/:id", TokenCheck, ValidatorSanitizer.validate, updateUser);
+Router.put(
+  "/users/:id",
+  TokenCheck,
+  ValidatorSanitizer.validate,
+  upload.array("images", 5),
+  updateUser,
+);
 Router.delete("/users/:id", TokenCheck, deleteUser);
 Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
