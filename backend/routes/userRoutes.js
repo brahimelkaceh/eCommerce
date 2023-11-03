@@ -19,9 +19,9 @@ Router.post("/users/login", login);
 Router.post("/users", TokenCheck, upload.array("images", 5), createUser);
 Router.put(
   "/users/:id",
+  upload.array("images", 5),
   TokenCheck,
   ValidatorSanitizer.validate,
-  upload.array("images", 5),
   updateUser,
 );
 Router.delete("/users/:id", TokenCheck, deleteUser);

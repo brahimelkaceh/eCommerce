@@ -24,10 +24,6 @@ const productSchema = new mongoose.Schema(
       unique: true,
       required: true, // If SKU is always required, consider adding this.
     },
-    productImage: {
-      type: String,
-      required: true, // Require product image URL
-    },
     productName: {
       type: String,
       required: true,
