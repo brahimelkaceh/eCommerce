@@ -18,10 +18,10 @@ const orderSchema = new mongoose.Schema({
         required: true,
       },
     },
-  ], // Corrected placement of closing square bracket
+  ],
   orderDate: {
     type: Date,
-    default: Date.now, // Set the default order date to the current date and time
+    default: Date.now,
   },
   cartTotalPrice: {
     type: Number,

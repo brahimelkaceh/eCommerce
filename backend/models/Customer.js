@@ -38,6 +38,9 @@ const customerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  images: {
+    type: [String],
+  },
   lastLogin: {
     type: Date,
     default: null,

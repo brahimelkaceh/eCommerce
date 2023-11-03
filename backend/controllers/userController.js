@@ -5,13 +5,14 @@ const catchAsync = require("../helpers/catchAsync");
 const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
 const jwt = require("jsonwebtoken");
+//const sharp = require('sharp'); // Import the "sharp" library
 const mongoose = require("mongoose");
 const AppError = require("../helpers/appError");
 const mailSender = require("../helpers/mailSender");
+const { addImages } = require("../helpers/addImage");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  // console.log(email , password)
 
   // Find the user by their email
   const user = await User.findOne({ email });
@@ -73,7 +74,11 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
   const { userName, email, password, confirmPassword, role, ...userData } =
     req.body;
-  console.log(userData);
+  // console.log(req.body);
+  // console.log(role);
+  const images = req.files;
+  const uploadedImages = await addImages(images);
+  uploadedImages.map((image) => console.log([image.imageUrl]));
   const existingUser = await User.findOne({ email: email });
   const existingCustomer = await Customer.findOne({ email: email });
   if (existingUser || existingCustomer) {
@@ -91,6 +96,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       userName: userName,
       email: email,
       password: hashedPassword,
+      images: uploadedImages.map((image) => image.imageUrl),
       role: role,
     });
   } else if (role.toLowerCase() === "customer") {
@@ -98,6 +104,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       ...userData,
       userName: userName,
       email: email,
+      images: uploadedImages.map((image) => image.imageUrl),
       password: hashedPassword,
     });
   } else {

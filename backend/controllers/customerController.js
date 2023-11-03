@@ -11,7 +11,11 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
 
+const { addImages } = require("../helpers/addImage");
+
 exports.signup = catchAsync(async (req, res, next) => {
+  const images = req.files;
+  const uploadedImages = await addImages(images);
   // Check if password and confirm password match
   if (req.body.password !== req.body.passwordConfirm) {
     return res.status(400).json({
@@ -27,6 +31,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     userName: req.body.userName,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    images: uploadedImages.map((image) => image.imageUrl),
     role: req.body.role,
     email: req.body.email,
     password: hashedPassword,
