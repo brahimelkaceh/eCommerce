@@ -12,7 +12,6 @@ const SubCategory = require("../models/SubCategories");
 exports.createProduct = catchAsync(async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
     const {
       sku,
@@ -27,7 +26,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       options, // Array of product options
       active,
     } = req.body;
-    const subcategory = SubCategory.find(subCategoryId);
+    const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
         new AppError("Can't find the corresponding subcategory", 404),
@@ -129,25 +128,41 @@ exports.getProductById = catchAsync(async (req, res, next) => {
     next(new AppError(err.message, 404));
   }
 });
+
 exports.updateProduct = catchAsync(async (req, res, next) => {
-  const response = {};
   try {
     const id = req.params.id;
     const newProductData = req.body;
-    const newProduct = await Products.updateOne(
-      { _id: id },
-      { $set: newProductData },
+    console.log("newProductData.options: ", newProductData.options);
+    // Ensure 'options' field is in the correct format
+    if (newProductData.options && !Array.isArray(newProductData.options)) {
+      return next(
+        new AppError(
+          "Invalid 'options' format. It should be an array of objects.",
+          400,
+        ),
+      );
+    }
+    const updatedProduct = await Products.findByIdAndUpdate(
+      id,
+      newProductData,
+      {
+        new: true, // Return the updated document
+        runValidators: true, // Run validators on update
+      },
     );
-    response.message = CONSTANTS.USER_UPDATED;
-    response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
-    return res.json({ response });
+    if (!updatedProduct) {
+      return next(new AppError("Product not found", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      data: updatedProduct,
+    });
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-    next(new AppError(err.message, 404));
+    next(new AppError(err.message, 400));
   }
-  return res.json({ response });
 });
+
 exports.deleteProduct = catchAsync(async (req, res) => {
   const response = {};
   try {

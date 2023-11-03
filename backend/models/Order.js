@@ -19,6 +19,10 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
+  orderDate: {
+    type: Date,
+    default: Date.now,
+  },
   cartTotalPrice: {
     type: Number,
     required: true,

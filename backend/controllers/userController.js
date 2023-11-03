@@ -9,9 +9,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const AppError = require("../helpers/appError");
 const mailSender = require("../helpers/mailSender");
-const { addImages } = require('../helpers/addImage');
-
-
+const { addImages } = require("../helpers/addImage");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -98,7 +96,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       userName: userName,
       email: email,
       password: hashedPassword,
-      images:uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.map((image) => image.imageUrl),
       role: role,
     });
   } else if (role.toLowerCase() === "customer") {
@@ -106,7 +104,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       ...userData,
       userName: userName,
       email: email,
-      images:uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.map((image) => image.imageUrl),
       password: hashedPassword,
     });
   } else {
