@@ -15,11 +15,10 @@ const {
   showAllUsers,
 } = require("../controllers/userController");
 
-Router.post("/users/login", login);
-Router.post("/users", TokenCheck, upload.array("images", 5), createUser);
+Router.post("/users/login",ValidatorSanitizer.validate  ,login);
+Router.post("/users", TokenCheck, upload.array("images", 5),ValidatorSanitizer.validate, createUser);
 Router.put(
   "/users/:id",
-  upload.array("images", 5),
   TokenCheck,
    upload.array("images", 5),
   ValidatorSanitizer.validate,
