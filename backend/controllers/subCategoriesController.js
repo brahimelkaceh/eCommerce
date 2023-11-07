@@ -43,6 +43,16 @@ exports.getAllSubcategories = async (req, res) => {
     data: subcategories.map((sub) => sub.toObject({ getters: true })),
   });
 };
+exports.searchSubCategory = catchAsync(async (req, res, next) => {
+  const searchParams  = req.query;
+  console.log(searchParams);
+  const subCategory = await Subcategory.find(searchParams);
+  console.log(subCategory);
+  if (!subCategory.length) {
+    return next(new AppError("subCategory not found", 404));
+  }
+  return res.json({ subCategory });
+})
 
 exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;

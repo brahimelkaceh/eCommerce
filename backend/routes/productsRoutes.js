@@ -17,7 +17,7 @@ Router.post(
   "/products",
   upload.array("images", 5),
   TokenCheck,
-  ValidatorSanitizer.validate,
+  //ValidatorSanitizer.validate,
   createProduct,
 );
 Router.put(

@@ -24,7 +24,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       options, // Array of product options
       active,
     } = req.body;
-
+    console.log(req.body);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
@@ -135,6 +135,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     const uploadedImages = await addImages(images);
     const id = req.params.id;
     const newProductData = req.body;
+    console.log(req.body)
     console.log("newProductData.options: ", newProductData.options);
     // Ensure 'options' field is in the correct format
     if (newProductData.options && !Array.isArray(newProductData.options)) {
@@ -156,6 +157,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         runValidators: true, // Run validators on update
       },
     );
+    console.log(updatedProduct)
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
@@ -172,7 +174,7 @@ exports.deleteProduct = catchAsync(async (req, res) => {
   const response = {};
   try {
     const { id } = req.params;
-    const deleteProduct = await Products.deleteOne({ _id: id });
+    const deleteProduct = await Products.findOneAndDelete({ _id: id });
     if (deleteProduct) {
       response.message = CONSTANTS.PRODUCT_DELETED;
       response.status = CONSTANTS.SERVER_OK_HTTP_CODE;
