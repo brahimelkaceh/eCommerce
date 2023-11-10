@@ -11,14 +11,9 @@ const SubCategory = require("../models/SubCategories");
 const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  const images = req.files;
-  const uploadedImages = await addImages(images);
-  const session = await mongoose.startSession();
-  session.startTransaction();
   try {
     const {
       sku,
-      productImage,
       productName,
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
@@ -29,16 +24,20 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       options, // Array of product options
       active,
     } = req.body;
+    console.log(req.body);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
         new AppError("Can't find the corresponding subcategory", 404),
       );
     }
+
+    // Handle image uploads here
     const images = req.files;
+    const uploadedImages = await addImages(images);
+
     const newProduct = new Products({
       sku,
-      productImage,
       productName,
       subCategoryId, // Pass the subcategory ID
       shortDescription,
@@ -51,22 +50,18 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       active,
     });
 
-    await newProduct.save({ session });
-
-    await session.commitTransaction();
-    session.endSession();
+    await newProduct.save();
 
     res.status(201).json({
       status: "success",
       data: newProduct,
     });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-
     return next(new AppError(error.message, 400));
   }
 });
+
+
 
 exports.getAllProducts = async (req, res, next) => {
   try {
@@ -140,6 +135,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     const uploadedImages = await addImages(images);
     const id = req.params.id;
     const newProductData = req.body;
+    console.log(req.body)
     console.log("newProductData.options: ", newProductData.options);
     // Ensure 'options' field is in the correct format
     if (newProductData.options && !Array.isArray(newProductData.options)) {
@@ -161,6 +157,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         runValidators: true, // Run validators on update
       },
     );
+    console.log(updatedProduct)
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
@@ -177,7 +174,7 @@ exports.deleteProduct = catchAsync(async (req, res) => {
   const response = {};
   try {
     const { id } = req.params;
-    const deleteProduct = await Products.deleteOne({ _id: id });
+    const deleteProduct = await Products.findOneAndDelete({ _id: id });
     if (deleteProduct) {
       response.message = CONSTANTS.PRODUCT_DELETED;
       response.status = CONSTANTS.SERVER_OK_HTTP_CODE;

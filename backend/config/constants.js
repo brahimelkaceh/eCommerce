@@ -79,7 +79,7 @@ module.exports.PRODUCT_NAME_EXISTED = "This product name already exists";
 /* orders constants*/
 module.exports.ORDER_CREATED = "  order created successfully";
 module.exports.ORDER_FOUND = "All orders found";
-module.exports.ORDER_NOT_FOUND = "we didn't find the orders";
+module.exports.ORDER_NOT_FOUND = "we didn't find the orders"
 module.exports.ORDER_UPDATED = "order updated successfully";
 module.exports.ORDER_CANCELED = "order canceled successfully";
 module.exports.ORDER_FOUND = "order  found";

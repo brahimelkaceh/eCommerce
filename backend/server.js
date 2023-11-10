@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 
 const { connection } = require("./config/db");
 const userRouter = require("./routes/userRoutes");
+const orderRouter = require("./routes/ordersRoutes");
 const customerRouter = require("./routes/customerRoutes");
 const categoryRouter = require("./routes/categoriesRoutes");
 const subcategoriesRouter = require("./routes/subCategoriesRoutes");
@@ -27,6 +28,7 @@ server.use(cors());
 server.use(morgan("dev"));
 
 server.use("/", userRouter);
+server.use("/", orderRouter);
 server.use("/", customerRouter);
 server.use("/", categoryRouter);
 server.use("/", subcategoriesRouter);

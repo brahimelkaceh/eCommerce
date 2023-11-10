@@ -25,13 +25,13 @@ const orderSchema = new mongoose.Schema({
   },
   cartTotalPrice: {
     type: Number,
-    // required: true,
+    required: true,
   },
-  status: {
+  Status: {
     type: String,
-    enum: ["Open", "Shipped", "Paid", "Closed", "Canceled"],
-    default: "Open", // Set the default status to "Open"
+    enum: ['Open', 'Shipped', 'Paid', 'Closed', 'Canceled'],
+    default: 'Open', // Set the default status to "Open"
   },
-});
+},{timestamps:true});
 
-module.exports = mongoose.model("OrderModel", orderSchema);
+module.exports = mongoose.model('OrdersModel', orderSchema);

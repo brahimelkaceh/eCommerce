@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const AppError = require("../helpers/appError");
 const mailSender = require("../helpers/mailSender");
 const { addImages } = require("../helpers/addImage");
+const { checkingID } = require("../helpers/checkIfExist");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -123,6 +124,12 @@ exports.updateUser = catchAsync(async (req, res) => {
   const uploadedImages = await addImages(images);
   try {
     const id = req.params.id;
+    const user = await checkingID(id);
+    if (!user) {
+      response.message = CONSTANTS.USER_NOT_FOUND;
+      response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
+      return res.json({ response });
+    }
     const newUserData = req.body;
     if (
       (newUserData.password && !newUserData.confirmPassword) ||

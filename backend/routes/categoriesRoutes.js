@@ -16,8 +16,8 @@ const {
 } = require("../controllers/categoriesController");
 
 Router.get("/categories/search", TokenCheck, searchCategory);
-Router.post("/categories", TokenCheck, createCategory);
-Router.put("/categories/:id", TokenCheck, updateCategory);
+Router.post("/categories", TokenCheck, ValidatorSanitizer.validate,createCategory);
+Router.put("/categories/:id", TokenCheck, ValidatorSanitizer.validate,updateCategory);
 Router.delete("/categories/:id", TokenCheck, deleteCategory);
 Router.get("/categories/", TokenCheck, showAllCategories);
 Router.get("/categories/:id", TokenCheck, getCategoryById);
