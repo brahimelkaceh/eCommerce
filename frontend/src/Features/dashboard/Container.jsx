@@ -1,22 +1,92 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import { Item } from "../../Components/mui/MuiStyles";
+import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
 import CardItem from "./components/cards/CardItem";
+import LinearChart from "../../Components/charts/LinearChart";
+import DashboardProductsList from "../../Features/Products/components/DashboardProductsList";
+import PieChart from "../../Components/charts/PeiChart";
+import { Box } from "@mui/material";
+import Sidebar from "../../Components/sidebar/Sidebar";
 
 const Container = () => {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={4}>
-        {/* <Item>card 1 </Item> */}
-        <CardItem />
-      </Grid>
-      <Grid item xs={4}>
-        <CardItem />
-      </Grid>
-      <Grid item xs={4}>
-        <CardItem />
-      </Grid>
-    </Grid>
+    <Box
+      sx={{
+        display: "flex",
+      }}
+    >
+      <Sidebar />
+      <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  {/* <Item>card 1 </Item> */}
+                  <CardItem />
+                </Grid>
+                <Grid item xs={4}>
+                  <CardItem />
+                </Grid>
+                <Grid item xs={4}>
+                  <CardItem />
+                </Grid>
+              </Grid>{" "}
+            </Grid>
+
+            <Grid item xs={8}>
+              <Box
+                sx={{
+                  height: "100%",
+                  background: "#fff",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+              >
+                <LinearChart />
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  height: "100%",
+                  background: "#fff",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+              >
+                <DashboardProductsList />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box
+                sx={{
+                  height: "100%",
+                  background: "#fff",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+              >
+                <PieChart />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box
+                sx={{
+                  height: "100%",
+                  background: "#fff",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+              >
+                <LinearChart />
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

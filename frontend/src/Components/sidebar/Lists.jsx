@@ -8,6 +8,13 @@ import MailIcon from "@mui/icons-material/Mail";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import CategoryIcon from "@mui/icons-material/Category";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PeopleIcon from "@mui/icons-material/People";
+
 import { Link, NavLink } from "react-router-dom";
 import "./style.css";
 const Lists = ({ open }) => {
@@ -17,7 +24,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <DashboardIcon
                 sx={{
                   color: "#fff",
                 }}
@@ -31,7 +38,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <ShoppingCartCheckoutIcon
                 sx={{
                   color: "#fff",
                 }}
@@ -45,7 +52,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <InventoryIcon
                 sx={{
                   color: "#fff",
                 }}
@@ -59,7 +66,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <CategoryIcon
                 sx={{
                   color: "#fff",
                 }}
@@ -73,7 +80,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <ManageAccountsIcon
                 sx={{
                   color: "#fff",
                 }}
@@ -87,7 +94,7 @@ const Lists = ({ open }) => {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <MailIcon
+              <PeopleIcon
                 sx={{
                   color: "#fff",
                 }}
