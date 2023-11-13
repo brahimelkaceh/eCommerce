@@ -9,6 +9,7 @@ import Profile from "./Pages/profile/Profile";
 import { Routes, Route } from "react-router-dom";
 import LoginAdmin from "./Features/auth/LoginAdmin";
 import LandingPage from "./Pages/landingpage/LandingPage";
+import Cart from "./Pages/cart/Cart";
 const App = () => {
   return (
     <Routes>
@@ -21,6 +22,7 @@ const App = () => {
       <Route path="/profile" exact element={<Profile />} />
       <Route path="/login" element={<LoginAdmin />} />
       <Route path="/home" element={<LandingPage />} />
+      <Route path="/cart" element={<Cart />} />
     </Routes>
   );
 };
