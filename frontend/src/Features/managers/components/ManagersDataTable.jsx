@@ -1,15 +1,17 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-
 import {
   GridRowModes,
   DataGrid,
-  GridActionsCellItem,
+  GridToolbarContainer,
   GridToolbar,
+  GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import {
@@ -17,78 +19,142 @@ import {
   randomTraderName,
   randomId,
   randomArrayItem,
-  randomDesk,
-  randomQuantity,
-  randomUnitPrice,
+  randomEmail,
+  randomUpdatedDate,
 } from "@mui/x-data-grid-generator";
+import Popup from "../components/PopupModel";
+
+const roles = ["manager", "admin"];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+const active = [true, false];
+const randomActive = () => {
+  return randomArrayItem(active);
+};
 
 const initialRows = [
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
   {
-    product: randomDesk(),
     id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
-    amount: randomUnitPrice(),
+    userName: randomTraderName(),
+    lastName: randomTraderName(),
+    firstName: randomTraderName(),
+    email: randomEmail(),
+    creationDate: randomCreatedDate(),
+    lastLogin: randomUpdatedDate(),
+    lastUpdate: randomUpdatedDate(),
+    role: randomRole(),
+    active: randomActive(),
   },
 ];
 
-export default function AllOrders() {
+function EditToolbar(props) {
+  const { setRows, setRowModesModel } = props;
+
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [
+      ...oldRows,
+      { id, userName: "", role: "", isNew: true },
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "userName" },
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+export default function allManagers() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
@@ -133,38 +199,59 @@ export default function AllOrders() {
   };
 
   const columns = [
-    { field: "product", headerName: "Product", editable: true },
+    { field: "userName", headerName: "UserName", width: 180, editable: true },
     {
-      field: "id",
-      headerName: "Order Id",
+      field: "firstName",
+      headerName: "First Name",
+      width: 100,
       align: "left",
       headerAlign: "left",
       editable: true,
     },
     {
-      field: "date",
-      headerName: "Date",
+      field: "lastName",
+      headerName: "Last Name",
+      width: 100,
+      align: "left",
+      headerAlign: "left",
+      editable: true,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 170,
+      align: "left",
+      headerAlign: "left",
+      editable: true,
+    },
+    {
+      field: "creationDate",
+      headerName: "Creation Date",
       type: "date",
+      width: 100,
       editable: true,
     },
     {
-      field: "name",
-      headerName: "Customer Name",
-      editable: true,
-    },
-
-    {
-      field: "quantity",
-      headerName: "Quantity",
-      type: "number",
+      field: "lastLogin",
+      headerName: "Last Login",
+      type: "date",
+      width: 100,
       editable: true,
     },
     {
-      field: "status",
-      headerName: "Status",
+      field: "lastUpdate",
+      headerName: "Last Update",
+      type: "date",
+      width: 100,
+      editable: true,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      width: 220,
       editable: true,
       type: "singleSelect",
-      valueOptions: ["string 1", "string 2", "string 3 ", "string 4 "],
+      valueOptions: ["manager", "admin"],
     },
     {
       field: "actions",
@@ -219,12 +306,10 @@ export default function AllOrders() {
     quickFilterValues: [""],
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
-
   return (
     <Box
       sx={{
         height: "100%",
-        minHeight: 560,
         width: "100%",
         "& .actions": {
           color: "text.secondary",
@@ -238,6 +323,7 @@ export default function AllOrders() {
         boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
       }}
     >
+      <Popup />
       <DataGrid
         rows={rows}
         columns={columns}
@@ -246,12 +332,14 @@ export default function AllOrders() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: GridToolbar,
+        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel, showQuickFilter: true },
         }}
         disableColumnFilter
         disableDensitySelector
-        slots={{ toolbar: GridToolbar }}
         filterModel={filterModel}
         onFilterModelChange={(newModel) => setFilterModel(newModel)}
         columnVisibilityModel={columnVisibilityModel}
