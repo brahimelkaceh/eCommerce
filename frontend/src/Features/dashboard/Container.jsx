@@ -8,7 +8,7 @@ import PieChart from "../../Components/charts/PeiChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
-
+import "./style.css";
 const Container = () => {
   return (
     <Box
@@ -27,22 +27,17 @@ const Container = () => {
                 sx={{
                   height: "100%",
                   background: "#fff",
-                  borderRadius: "8px",
+                  borderRadius: "var(--border-radius)",
                   width: "100%",
+                  // height: "100%",
+                  boxShadow: "var(--box-shadow)",
                 }}
               >
                 <LinearChart />
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box
-                sx={{
-                  height: "100%",
-                  background: "#fff",
-                  borderRadius: "8px",
-                  width: "100%",
-                }}
-              >
+              <Box className="dashboard-card">
                 <DashboardProductsList />
               </Box>
             </Grid>
@@ -55,18 +50,11 @@ const Container = () => {
                   width: "100%",
                 }}
               >
-                <PieChart />
+                {/* <PieChart /> */}
               </Box>
             </Grid>
             <Grid item xs={6}>
-              <Box
-                sx={{
-                  height: "100%",
-                  background: "#fff",
-                  borderRadius: "8px",
-                  width: "100%",
-                }}
-              >
+              <Box className="dashboard-card">
                 <LinearChart />
               </Box>
             </Grid>

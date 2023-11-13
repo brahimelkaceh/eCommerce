@@ -1,12 +1,14 @@
 import React from "react";
 import AdminDashboard from "./Pages/adminDashboard/AdminDashboard";
 import Products from "./Pages/products/Products";
-import Categories from "./Pages/categories/CategoriesContainer";
+import Categories from "./Pages/categories/Categories";
 import Managers from "./Pages/managers/Managers";
 import Customers from "./Pages/customers/Customers";
 import Orders from "./Pages/orders/Orders";
 import Profile from "./Pages/profile/Profile";
 import { Routes, Route } from "react-router-dom";
+import LoginAdmin from "./Features/auth/LoginAdmin";
+import LandingPage from "./Pages/landingpage/LandingPage";
 const App = () => {
   return (
     <Routes>
@@ -17,6 +19,8 @@ const App = () => {
       <Route path="/managers" exact element={<Managers />} />
       <Route path="/customers" exact element={<Customers />} />
       <Route path="/profile" exact element={<Profile />} />
+      <Route path="/login" element={<LoginAdmin />} />
+      <Route path="/home" element={<LandingPage />} />
     </Routes>
   );
 };
