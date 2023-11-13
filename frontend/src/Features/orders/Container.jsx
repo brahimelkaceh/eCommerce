@@ -1,18 +1,26 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import AllOrders from "./components/AllOrders";
-import CreateOrder from "./components/CreateOrder";
+import CreateOrderModal from "./components/CreateOrderModal";
+import OrdersStatistic from "./components/OrdersStatistic";
 const Container = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <h4>Orders</h4>
+        <h1>Orders</h1>
         <div>
-          <AllOrders />
-          <CreateOrder />
+          {/* <CreateOrderModal/ /> */}
+          <Grid container spacing={2}>
+            <Grid xs={6.5} item>
+              <AllOrders />
+            </Grid>
+            <Grid xs={5.5} item>
+              <OrdersStatistic />
+            </Grid>
+          </Grid>
         </div>
       </Box>
     </Box>

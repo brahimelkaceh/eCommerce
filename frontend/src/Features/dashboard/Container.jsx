@@ -7,6 +7,7 @@ import DashboardProductsList from "../../Features/Products/components/DashboardP
 import PieChart from "../../Components/charts/PeiChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
+import Cards from "./components/cards/Cards";
 
 const Container = () => {
   return (
@@ -20,21 +21,7 @@ const Container = () => {
         <DrawerHeader />
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  {/* <Item>card 1 </Item> */}
-                  <CardItem />
-                </Grid>
-                <Grid item xs={4}>
-                  <CardItem />
-                </Grid>
-                <Grid item xs={4}>
-                  <CardItem />
-                </Grid>
-              </Grid>{" "}
-            </Grid>
-
+            <Cards />
             <Grid item xs={8}>
               <Box
                 sx={{

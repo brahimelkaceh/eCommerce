@@ -25,4 +25,5 @@ h3 {
 /* .main-page  */
 .main-page {
   background-color: #eee;
+  height: 100vh;
 }
