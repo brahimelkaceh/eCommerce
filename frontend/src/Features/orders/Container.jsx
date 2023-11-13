@@ -12,7 +12,6 @@ const Container = () => {
         <DrawerHeader />
         <h1>Orders</h1>
         <div>
-          {/* <CreateOrderModal/ /> */}
           <Grid container spacing={2}>
             <Grid xs={6.5} item>
               <AllOrders />
