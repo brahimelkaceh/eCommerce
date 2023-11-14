@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const CONSTANTS = require("../config/constants");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const AppError = require("../helpers/appError");
+const AppError = require("../helpers/AppError");
 const mailSender = require("../helpers/mailSender");
 
 exports.login = catchAsync(async (req, res, next) => {

@@ -1,7 +1,7 @@
 const Products = require("../models/Products");
 const catchAsync = require("../helpers/catchAsync");
 const CONSTANTS = require("../config/constants");
-const AppError = require("../helpers/appError");
+const AppError = require("../helpers/AppError");
 const APIFeatures = require("./../helpers/apiFeatures");
 
 const mongoose = require("mongoose");

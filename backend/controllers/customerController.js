@@ -27,11 +27,11 @@ exports.signup = catchAsync(async (req, res, next) => {
     userName: req.body.userName,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    role: req.body.role,
     email: req.body.email,
     password: hashedPassword,
     activationToken: activationToken,
   });
+  console.log(req.body)
 
   // Construct the activation URL with the token
   const activationURL = `${req.protocol}://${req.get(
@@ -49,6 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(req.body)
 
   // 1) Check if email and password exist
   if (!email || !password) {
