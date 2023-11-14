@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { Formik, Field } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import DoneIcon from "@mui/icons-material/Done";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -37,6 +37,7 @@ const Form = () => {
 
   return (
     <Box m="20px">
+      <h1 className="main-title">add new manager</h1>
       <Formik
         onSubmit={(values, { resetForm }) =>
           handleFormSubmit(values, { resetForm })
@@ -55,7 +56,7 @@ const Form = () => {
           <form onSubmit={handleSubmit}>
             <Box
               display="grid"
-              gap="30px"
+              gap="15px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
@@ -63,7 +64,7 @@ const Form = () => {
             >
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="text"
                 label="First Name"
                 onBlur={handleBlur}
@@ -72,11 +73,11 @@ const Form = () => {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 4" }}
               />
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="text"
                 label="Last Name"
                 onBlur={handleBlur}
@@ -85,11 +86,11 @@ const Form = () => {
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 4" }}
               />
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="text"
                 label="Email"
                 onBlur={handleBlur}
@@ -98,11 +99,11 @@ const Form = () => {
                 name="email"
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 4" }}
               />
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="text"
                 label="User Name"
                 onBlur={handleBlur}
@@ -111,11 +112,11 @@ const Form = () => {
                 name="userName"
                 error={!!touched.userName && !!errors.userName}
                 helperText={touched.userName && errors.userName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 4" }}
               />
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="password"
                 label="Password"
                 onBlur={handleBlur}
@@ -128,7 +129,7 @@ const Form = () => {
               />
               <TextField
                 fullWidth
-                variant="filled"
+                size="small"
                 type="password"
                 label="confirm Password"
                 onBlur={handleBlur}
@@ -141,8 +142,15 @@ const Form = () => {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New User
+              <Button
+                type="submit"
+                className="submit-btn"
+                style={{
+                  color: "var(--white-background)",
+                }}
+                variant="contained"
+              >
+                Submit <DoneIcon></DoneIcon>
               </Button>
             </Box>
           </form>

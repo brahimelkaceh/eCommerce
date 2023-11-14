@@ -10,17 +10,15 @@ const Container = () => {
       <Sidebar />
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <h1>Orders</h1>
-        <div>
-          <Grid container spacing={2}>
-            <Grid xs={6.5} item>
-              <AllOrders />
-            </Grid>
-            <Grid xs={5.5} item>
-              <OrdersStatistic />
-            </Grid>
+        <h1 className="main-title">Orders List</h1>
+        <Grid container spacing={2}>
+          <Grid xs={6.5} item>
+            <AllOrders />
           </Grid>
-        </div>
+          <Grid xs={5.5} item>
+            <OrdersStatistic />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

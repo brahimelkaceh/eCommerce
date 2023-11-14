@@ -22,7 +22,7 @@ import {
   randomEmail,
   randomUpdatedDate,
 } from "@mui/x-data-grid-generator";
-import Popup from "../components/PopupModel";
+import { Chip } from "@mui/material";
 
 const roles = ["manager", "admin"];
 const randomRole = () => {
@@ -120,40 +120,6 @@ const initialRows = [
   },
 ];
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, userName: "", role: "", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "userName" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 export default function allManagers() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -203,61 +169,70 @@ export default function allManagers() {
     {
       field: "firstName",
       headerName: "First Name",
-      width: 100,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "lastName",
       headerName: "Last Name",
-      width: 100,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
-      width: 170,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
       type: "date",
-      width: 100,
       editable: true,
+      flex: 1,
     },
     {
       field: "lastLogin",
       headerName: "Last Login",
       type: "date",
-      width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "lastUpdate",
       headerName: "Last Update",
       type: "date",
-      width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "role",
       headerName: "Role",
-      width: 220,
+      flex: 1,
       editable: true,
       type: "singleSelect",
       valueOptions: ["manager", "admin"],
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          style={{
+            backgroundColor: params.value === "admin" ? "#88EEB1" : "#88C9F8",
+            textTransform: "capitalize",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      flex: 1,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -268,12 +243,23 @@ export default function allManagers() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -284,14 +270,23 @@ export default function allManagers() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
+            // color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
+            sx={{
+              color: "#E33434",
+            }}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -323,7 +318,6 @@ export default function allManagers() {
         boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
       }}
     >
-      <Popup />
       <DataGrid
         rows={rows}
         columns={columns}

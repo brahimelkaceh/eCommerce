@@ -21,6 +21,7 @@ import {
   randomQuantity,
   randomUnitPrice,
 } from "@mui/x-data-grid-generator";
+import { Chip } from "@mui/material";
 
 const initialRows = [
   {
@@ -29,7 +30,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -38,7 +39,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -47,7 +48,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -56,7 +57,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -65,7 +66,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -74,7 +75,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
   {
@@ -83,7 +84,7 @@ const initialRows = [
     date: randomCreatedDate(),
     name: randomTraderName(),
     quantity: randomQuantity(),
-    status: randomArrayItem(["string 1", "string 2", "string 3 ", "string 4 "]),
+    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
     amount: randomUnitPrice(),
   },
 ];
@@ -91,6 +92,23 @@ const initialRows = [
 export default function AllOrders() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
+
+  const getColorBasedOnStatus = (status) => {
+    switch (status) {
+      case "open":
+        return "#B7DFFB";
+      case "shipped":
+        return "#FEECD1"; // Change this to the color you want for "shipped"
+      case "payed":
+        return "#58B3F5"; // Change this to the color you want for "payed"
+      case "closed":
+        return "#B8F5D0"; // Change this to the color you want for "closed"
+      case "canceled":
+        return "#F6BCBC";
+      default:
+        return "default"; // You can set a default color for unknown statuses
+    }
+  };
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -133,9 +151,10 @@ export default function AllOrders() {
   };
 
   const columns = [
-    { field: "product", headerName: "Product", editable: true },
+    { field: "product", headerName: "Product", editable: true, flex: 1 },
     {
       field: "id",
+
       headerName: "Order Id",
       align: "left",
       headerAlign: "left",
@@ -151,6 +170,7 @@ export default function AllOrders() {
       field: "name",
       headerName: "Customer Name",
       editable: true,
+      flex: 1,
     },
 
     {
@@ -164,7 +184,17 @@ export default function AllOrders() {
       headerName: "Status",
       editable: true,
       type: "singleSelect",
-      valueOptions: ["string 1", "string 2", "string 3 ", "string 4 "],
+      valueOptions: ["open", "shipped", "payed", "closed", "canceled"],
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          size="small"
+          // sx
+          style={{
+            backgroundColor: getColorBasedOnStatus(params.value),
+          }}
+        />
+      ),
     },
     {
       field: "actions",
@@ -181,12 +211,23 @@ export default function AllOrders() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -197,14 +238,23 @@ export default function AllOrders() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
+            // color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
+            sx={{
+              color: "#E33434",
+            }}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -227,7 +277,7 @@ export default function AllOrders() {
         minHeight: 560,
         width: "100%",
         "& .actions": {
-          color: "text.secondary",
+          color: "red",
         },
         "& .textPrimary": {
           color: "text.primary",

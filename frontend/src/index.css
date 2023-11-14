@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap");
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -7,6 +8,8 @@
   --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   --border-radius: 20px;
   --white-background: #fff;
+  --blue-backround: #1093f1;
+  --green-color: #11dd62;
 }
 html,
 body,
@@ -29,4 +32,22 @@ h3 {
 .main-page {
   background-color: #eee;
   height: 100vh;
+}
+
+.main-title {
+  color: #010715;
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 19.694px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 27.572px; /* 140% */
+  letter-spacing: 0.236px;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+  width: fit-content;
+}
+.submit-btn {
+  background-color: #1f8b24 !important;
+
+  color: #c5f2c7 !important;
 }
