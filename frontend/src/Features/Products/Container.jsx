@@ -1,15 +1,25 @@
-import React from "react";
-import DashboardProductsList from "./components/DashboardProductsList";
-import CreateProducts from "./components/CreateProducts";
+import React, { useState } from "react";
+import { ProductProvider } from "./Context";
+import ProductList from "./components/ProductList";
+import ProductDetails from "./components/ProductsDetails";
 
 const Container = () => {
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+  const handleProductClick = (productId) => {
+    setSelectedProductId(productId);
+  };
+
   return (
-    <div>
-      Container for products
-      <CreateProducts />
-      <br />
-      <DashboardProductsList />
-    </div>
+    <ProductProvider>
+      <div>
+        {selectedProductId ? (
+          <ProductDetails productId={selectedProductId} setSelectedProductId={handleProductClick}/>
+        ) : (
+          <ProductList onProductClick={handleProductClick} />
+        )}
+      </div>
+    </ProductProvider>
   );
 };
 

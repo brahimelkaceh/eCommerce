@@ -27,9 +27,11 @@ Router.put(
   ValidatorSanitizer.validate,
   updateProduct,
 );
-Router.get("/products/", TokenCheck, getAllProducts);
+
+// TokenCheck
+Router.get("/products/", getAllProducts);
 Router.get("/products/search", TokenCheck, searchProducts);
-Router.get("/products/:id", TokenCheck, getProductById);
+Router.get("/products/:id", getProductById);
 Router.delete("/products/:id", TokenCheck, deleteProduct);
 
 module.exports = Router;
