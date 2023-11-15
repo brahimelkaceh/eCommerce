@@ -1,5 +1,4 @@
 import React from "react";
-import { useFormik } from "formik";
 import {
   Button,
   TextField,
@@ -7,8 +6,13 @@ import {
   Box,
   Typography,
   Checkbox,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  Fade,
 } from "@mui/material";
-import { MenuItem, FormControl, InputLabel, Select } from "@mui/material";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { styled } from "@mui/system";
 
@@ -24,7 +28,8 @@ const StyledModal = styled(Modal)(({ theme }) => ({
 
 // Form styling
 const StyledForm = styled("form")(({ theme }) => ({
-  width: 400,
+  width: 800,
+
   padding: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
   backgroundColor: "white",

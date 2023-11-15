@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import {DeleteUser} from "../service"
 import {
   GridRowModes,
   DataGrid,
@@ -14,150 +15,18 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-  randomEmail,
-  randomUpdatedDate,
-} from "@mui/x-data-grid-generator";
+
 import Popup from "../components/PopupModel";
+import { useManager } from "../Context";
 
-const roles = ["manager", "admin"];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-const active = [true, false];
-const randomActive = () => {
-  return randomArrayItem(active);
-};
-
-const initialRows = [
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-];
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, userName: "", role: "", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "userName" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 export default function allManagers() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const ManagerContext = useManager();
 
+  const [rows, setrows] = React.useState([]);
+  const [rowModesModel, setrowsmodesmodel] = React.useState({});
+  React.useEffect(() => {
+    setrows(ManagerContext.managers);
+  }, [ManagerContext.managers]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -165,37 +34,46 @@ export default function allManagers() {
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id) =>  () => {
+    try {
+      console.log(id);
+      DeleteUser(id).then((response) => {
+      console.log(response)
+    })
+  setrows(rows.filter((row) => row.id !== id));
+    } catch (err) {
+      throw err;
+}
+    
   };
 
   const handleCancelClick = (id) => () => {
-    setRowModesModel({
+    setrowsmodesmodel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setrows(rows.filter((row) => row.id !== id));
     }
   };
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+    setrowsmodesmodel(newRowModesModel);
   };
 
   const columns = [
@@ -307,23 +185,7 @@ export default function allManagers() {
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
   return (
-    <Box
-      sx={{
-        height: "100%",
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-        backgroundColor: "#fff",
-        p: 1,
-        borderRadius: 2,
-        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-      }}
-    >
-      <Popup />
+    ManagerContext.managers && (
       <DataGrid
         rows={rows}
         columns={columns}
@@ -336,7 +198,7 @@ export default function allManagers() {
           toolbar: GridToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel, showQuickFilter: true },
+          toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
         }}
         disableColumnFilter
         disableDensitySelector
@@ -347,6 +209,6 @@ export default function allManagers() {
           setColumnVisibilityModel(newModel)
         }
       />
-    </Box>
+    )
   );
 }
