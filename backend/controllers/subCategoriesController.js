@@ -27,14 +27,13 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
       status: "success",
-      data: { createdSubcategory },
+      data: createdSubcategory.toObject({ getters: true }),
     });
   } catch (error) {
     console.error(error);
     return next(new AppError(error.message, 500));
   }
 });
-
 
 exports.getAllSubcategories = async (req, res) => {
   const subcategories = await Subcategory.find({});
@@ -43,16 +42,24 @@ exports.getAllSubcategories = async (req, res) => {
     data: subcategories.map((sub) => sub.toObject({ getters: true })),
   });
 };
+
 exports.searchSubCategory = catchAsync(async (req, res, next) => {
-  const searchParams  = req.query;
+  const searchParams = req.query;
   console.log(searchParams);
-  const subCategory = await Subcategory.find(searchParams);
-  console.log(subCategory);
-  if (!subCategory.length) {
-    return next(new AppError("subCategory not found", 404));
+
+  const subCategories = await Subcategory.find(searchParams);
+
+  if (!subCategories.length) {
+    return next(new AppError("Subcategories not found", 404));
   }
-  return res.json({ subCategory });
-})
+
+  return res.json({
+    status: "success",
+    data: subCategories.map((subCategory) =>
+      subCategory.toObject({ getters: true }),
+    ),
+  });
+});
 
 exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
@@ -67,7 +74,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { subcategory },
+    data: subcategory.toObject({ getters: true }),
   });
 });
 
@@ -96,7 +103,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { subcategory },
+    data: subcategory.toObject({ getters: true }),
   });
 });
 
