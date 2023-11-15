@@ -1,32 +1,102 @@
-// ProductList.js
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { Edit, Save, Close, DeleteOutlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useProduct } from "../Context";
 import ProductForm from "./ProductForm";
+import { useProduct } from "../Context";
 
 const ProductList = ({ onProductClick }) => {
-  const { products, getProductById } = useProduct();
-  // console.log(products);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+  const { products, getProductById, editProduct, deleteProduct } = useProduct();
+
   const [isFormModalOpen, setFormModalOpen] = useState(false);
-  const navigate = useNavigate();
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [editModeRows, setEditModeRows] = useState(new Set());
 
-  const handleDeleteClick = (id) => {
-    // Handle delete logic here
-    console.log(`Delete product with id: ${id}`);
+  useEffect(() => {
+    // Close the form modal when switching to a different product
+    setFormModalOpen(false);
+  }, [selectedProductId]);
+
+  const handleDeleteClick = async (id) => {
+    try {
+      const deletedProduct = await deleteProduct(id);
+
+      if (!deletedProduct) {
+        console.error(`Failed to delete product with ID ${id}`);
+      }
+    } catch (error) {
+      console.error(`Error deleting product with ID ${id}:`, error);
+    }
   };
 
-  const handleSaveClick = (id) => {
-    // Handle save logic here
-    console.log(`Save product with id: ${id}`);
+  const handleEditClick = (id) => () => {
+    setEditModeRows((prevEditModeRows) => new Set([...prevEditModeRows, id]));
   };
 
-  const handleCancelClick = (id) => {
-    // Handle cancel logic here
-    console.log(`Cancel edit for product with id: ${id}`);
+  const handleSaveClick = async (id) => {
+    console.log(id);
+    try {
+      const originalProduct = await getProductById(id);
+  
+      const currentProduct = products.find((p) => p._id === id);
+  
+      if (!currentProduct) {
+        console.error(`Product with ID ${id} not found in the products array.`);
+        return;
+      }
+  
+      // Log original and current product details
+      console.log("Original Product:", originalProduct);
+      console.log("Current Product:", currentProduct);
+  
+      // Log changes made by the user
+      const changedFields = Object.keys(originalProduct).reduce((changes, field) => {
+        if (originalProduct[field] !== currentProduct[field]) {
+          // Check if the field is an object (e.g., an image)
+          if (typeof originalProduct[field] === "object" && typeof currentProduct[field] === "object") {
+            // Compare image URLs or other properties of the object as needed
+            if (originalProduct[field].url !== currentProduct[field].url) {
+              changes[field] = currentProduct[field];
+            }
+          } else {
+            changes[field] = currentProduct[field];
+          }
+        }
+        return changes;
+      }, {});
+  
+      console.log("Changes made by the user:", changedFields);
+  
+      // Prepare the updated data object
+      const updatedData = {
+        ...originalProduct,
+        ...changedFields,
+      };
+  
+      console.log("Updated Data:", updatedData);
+  
+      const updatedProduct = await editProduct(id, updatedData);
+  
+      if (updatedProduct) {
+        setEditModeRows((prevEditModeRows) => new Set([...prevEditModeRows].filter((rowId) => rowId !== id)));
+      } else {
+        console.error(`Failed to update product with ID ${id}`);
+      }
+    } catch (error) {
+      console.error(`Error updating product with ID ${id}:`, error);
+    }
+  };
+  
+
+  const handleCancelClick = (id) => () => {
+    setEditModeRows(
+      (prevEditModeRows) =>
+        new Set([...prevEditModeRows].filter((rowId) => rowId !== id))
+    );
   };
 
   const handleOpenFormModal = () => {
@@ -37,6 +107,23 @@ const ProductList = ({ onProductClick }) => {
     setFormModalOpen(false);
   };
 
+  const processRowUpdate = async (newRow) => {
+    if (newRow.isNew) {
+      // Handle new row creation
+    } else {
+      // Handle row update
+      await handleSaveClick(newRow._id);
+    }
+
+    return newRow;
+  };
+
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === "rowClick") {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
   const handleRowSelectionChange = (selectionModel) => {
     if (selectionModel.length > 0) {
       const selectedId = selectionModel[0];
@@ -44,28 +131,16 @@ const ProductList = ({ onProductClick }) => {
     }
   };
 
-  const handleRowClick = async (params) => {
-    const { _id } = params.row;
-    const product = await getProductById(_id);
-    setSelectedProductId(_id);
-  };
+  const handleCellEditChange = (params) => {
+    const { id, field, props } = params;
 
-  const handleDetailsClick = async (id) => {
-    try {
-      onProductClick(id);
-      const product = await getProductById(id);
-    } catch (error) {
-      console.error(error);
-    }
+    // No need to update the local state for inline editing in this context
+    // The DataGrid will automatically update the edited cell value
   };
 
   const columns = [
-    { field: "sku", headerName: "ID", width: 100 },
-    {
-      field: "productName",
-      headerName: "Product Name",
-      editable: true,
-    },
+    { field: "_id", headerName: "ID", width: 100 },
+    { field: "productName", headerName: "Product Name", editable: true },
     { field: "price", headerName: "Price", width: 120, editable: true },
     {
       field: "shortDescription",
@@ -74,68 +149,49 @@ const ProductList = ({ onProductClick }) => {
       editable: true,
     },
     {
-      field: "details",
-      headerName: "Details",
-      width: 120,
-      renderCell: (params) => {
-        const { _id } = params.row;
-        return (
-          <GridActionsCellItem
-            icon={<Save />}
-            label="Details"
-            onClick={() => handleDetailsClick(_id)}
-            color="primary"
-          />
-        );
-      },
-    },
-    {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       width: 120,
       renderCell: (params) => {
         const { _id } = params.row;
-        const isInEditMode = params.row.isEditMode;
+        const isInEditMode = editModeRows.has(_id);
 
         if (isInEditMode) {
-          return (
-            <>
-              <GridActionsCellItem
-                icon={<Save />}
-                label="Save"
-                onClick={() => handleSaveClick(_id)}
-                color="primary"
-              />
-              <GridActionsCellItem
-                icon={<Close />}
-                label="Cancel"
-                onClick={() => handleCancelClick(_id)}
-                color="primary"
-              />
-            </>
-          );
-        } else {
-          return (
-            <>
-              <GridActionsCellItem
-                icon={<Edit />}
-                label="Edit"
-                onClick={() => {
-                  // Handle edit logic here
-                  console.log(`Edit product with id: ${_id}`);
-                }}
-                color="primary"
-              />
-              <GridActionsCellItem
-                icon={<DeleteOutlined />}
-                label="Delete"
-                onClick={() => handleDeleteClick(_id)}
-                color="error"
-              />
-            </>
-          );
+          return [
+            <GridActionsCellItem
+              key={`save-${_id}`}
+              icon={<SaveIcon />}
+              label="Save"
+              onClick={() => handleSaveClick(_id)}
+              color="primary"
+            />,
+            <GridActionsCellItem
+              key={`cancel-${_id}`}
+              icon={<CancelIcon />}
+              label="Cancel"
+              onClick={handleCancelClick(_id)}
+              color="primary"
+            />,
+          ];
         }
+
+        return [
+          <GridActionsCellItem
+            key={`edit-${_id}`}
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={handleEditClick(_id)}
+            color="primary"
+          />,
+          <GridActionsCellItem
+            key={`delete-${_id}`}
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={() => handleDeleteClick(_id)}
+            color="error"
+          />,
+        ];
       },
     },
   ];
@@ -150,17 +206,14 @@ const ProductList = ({ onProductClick }) => {
         columns={columns}
         editMode="row"
         onSelectionModelChange={handleRowSelectionChange}
-        onCellClick={(params, event) => {
-          // Ensure that only the cell (not the actions) triggers the click event
-          if (event.target.tagName === "TD") {
-            handleRowClick(params);
-          }
-        }}
+        onEditCellChange={handleCellEditChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
       />
       <ProductForm
         open={isFormModalOpen}
         onClose={handleCloseFormModal}
-        // productId={selectedProductId}
+        productId={selectedProductId}
       />
     </Box>
   );
