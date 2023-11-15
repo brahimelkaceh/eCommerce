@@ -4,6 +4,7 @@ import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import DataTable from "./components/ManagersDataTable";
 import Forme from "./components/ManagersForm";
+import Popup from "./components/PopupModel";
 const Container = () => {
   return (
     <ManagerProvider>

@@ -12,9 +12,9 @@ const {
 const { TokenCheck } = require("../middlewares/TokenCheck");
 const { CustomerTokenCheck } = require("../middlewares/CustomerTokenCheck");
 
-Router.post("/requests", CustomerTokenCheck, createOrder);
-Router.get("/requests/:id", CustomerTokenCheck, getOrderById);
-Router.put("/requests/:id", CustomerTokenCheck, updateOrder);
-Router.get("/requests", CustomerTokenCheck, listOrders);
+Router.post("/orders", createOrder);
+Router.get("/orders/:id", getOrderById);
+Router.put("/orders/:id", updateOrder);
+Router.get("/orders", listOrders);
 
 module.exports = Router;

@@ -6,7 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import {DeleteUser} from "../service"
+import { DeleteUser } from "../service";
+import {useManager} from "../Context"
 import {
   GridRowModes,
   DataGrid,
@@ -15,9 +16,17 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
+import { randomArrayItem } from "@mui/x-data-grid-generator";
+import { Chip } from "@mui/material";
 
-import Popup from "../components/PopupModel";
-import { useManager } from "../Context";
+const roles = ["manager", "admin"];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+const active = [true, false];
+const randomActive = () => {
+  return randomArrayItem(active);
+};
 
 export default function allManagers() {
   const ManagerContext = useManager();
@@ -41,17 +50,16 @@ export default function allManagers() {
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) =>  () => {
+  const handleDeleteClick = (id) => () => {
     try {
       console.log(id);
       DeleteUser(id).then((response) => {
-      console.log(response)
-    })
-  setrows(rows.filter((row) => row.id !== id));
+        console.log(response);
+      });
+      setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
       throw err;
-}
-    
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -81,61 +89,70 @@ export default function allManagers() {
     {
       field: "firstName",
       headerName: "First Name",
-      width: 100,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "lastName",
       headerName: "Last Name",
-      width: 100,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
-      width: 170,
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
       type: "date",
-      width: 100,
       editable: true,
+      flex: 1,
     },
     {
       field: "lastLogin",
       headerName: "Last Login",
       type: "date",
-      width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "lastUpdate",
       headerName: "Last Update",
       type: "date",
-      width: 100,
+      flex: 1,
       editable: true,
     },
     {
       field: "role",
       headerName: "Role",
-      width: 220,
+      flex: 1,
       editable: true,
       type: "singleSelect",
       valueOptions: ["manager", "admin"],
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          style={{
+            backgroundColor: params.value === "admin" ? "#88EEB1" : "#88C9F8",
+            textTransform: "capitalize",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      flex: 1,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -146,12 +163,23 @@ export default function allManagers() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -162,14 +190,23 @@ export default function allManagers() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
+            // color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
+            sx={{
+              color: "#E33434",
+            }}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -185,7 +222,22 @@ export default function allManagers() {
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
   return (
-    ManagerContext.managers && (
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
+        backgroundColor: "#fff",
+        p: 1,
+        borderRadius: 2,
+        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+      }}
+    >
       <DataGrid
         rows={rows}
         columns={columns}
@@ -209,6 +261,6 @@ export default function allManagers() {
           setColumnVisibilityModel(newModel)
         }
       />
-    )
+    </Box>
   );
 }

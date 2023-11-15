@@ -29,7 +29,7 @@ const sasToken = generateBlobSASQueryParameters(
   sharedKeyCredential,
 ).toString();
 
-//const blobServiceClientWithSAS = new BlobServiceClient(`https://${process.env.ACCOUNT_NAME}.blob.core.windows.net?${sasToken}`);
+const blobServiceClientWithSAS = new BlobServiceClient(`https://${process.env.ACCOUNT_NAME}.blob.core.windows.net?${sasToken}`);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

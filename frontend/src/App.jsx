@@ -10,6 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import LoginAdmin from "./Features/auth/LoginAdmin";
 import LandingPage from "./Pages/landingpage/LandingPage";
 import Cart from "./Pages/cart/Cart";
+import Checkout from "./Pages/checkout/Checkout";
 const App = () => {
   return (
     <Routes>
@@ -23,6 +24,7 @@ const App = () => {
       <Route path="/login" element={<LoginAdmin />} />
       <Route path="/home" element={<LandingPage />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );
 };
