@@ -6,7 +6,6 @@ export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Fetch all products
     const fetchProducts = async () => {
       try {
         const response = await fetch("http://localhost:5000/products");
@@ -30,7 +29,7 @@ export const ProductProvider = ({ children }) => {
         `http://localhost:5000/products/${productId}`
       );
       const data = await response.json();
-      console.log(data.data[0])
+      console.log(data.data[0]);
       return data.data[0];
     } catch (error) {
       console.error(`Error fetching product with ID ${productId}:`, error);

@@ -1,6 +1,6 @@
 // ProductList.js
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Edit, Save, Close, DeleteOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -9,10 +9,8 @@ import ProductForm from "./ProductForm";
 
 const ProductList = ({ onProductClick }) => {
   const { products, getProductById } = useProduct();
-  // console.log(products);
+  console.log(products);
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [isFormModalOpen, setFormModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   const handleDeleteClick = (id) => {
     // Handle delete logic here
@@ -27,14 +25,6 @@ const ProductList = ({ onProductClick }) => {
   const handleCancelClick = (id) => {
     // Handle cancel logic here
     console.log(`Cancel edit for product with id: ${id}`);
-  };
-
-  const handleOpenFormModal = () => {
-    setFormModalOpen(true);
-  };
-
-  const handleCloseFormModal = () => {
-    setFormModalOpen(false);
   };
 
   const handleRowSelectionChange = (selectionModel) => {
@@ -60,23 +50,117 @@ const ProductList = ({ onProductClick }) => {
   };
 
   const columns = [
-    { field: "sku", headerName: "ID", width: 100 },
+    { field: "sku", headerName: "Sku" },
     {
       field: "productName",
       headerName: "Product Name",
+      flex: 1,
       editable: true,
     },
-    { field: "price", headerName: "Price", width: 120, editable: true },
+    { field: "price", headerName: "Price", editable: true, flex: 1 },
+    {
+      field: "discountPrice",
+      headerName: "Discount Price",
+      editable: true,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params.value + "%"}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
+    },
+
     {
       field: "shortDescription",
-      headerName: "Description",
-      width: 300,
+      headerName: "Short Description",
       editable: true,
+      width: 150,
+    },
+    {
+      field: "longDescription",
+      headerName: "Long Description",
+      editable: true,
+      width: 150,
+    },
+    {
+      field: "active",
+      headerName: "Status",
+      editable: true,
+      flex: 1,
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      editable: false,
+      flex: 1,
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#E5E5E580",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#616161",
+            }}
+          ></Chip>
+        );
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "Updated At",
+      editable: false,
+      flex: 1,
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
       field: "details",
       headerName: "Details",
-      width: 120,
+      flex: 1,
       renderCell: (params) => {
         const { _id } = params.row;
         return (
@@ -141,10 +225,17 @@ const ProductList = ({ onProductClick }) => {
   ];
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
-      <Button onClick={handleOpenFormModal} variant="contained" color="primary">
-        Create new product
-      </Button>
+    <Box
+      sx={{
+        minHeight: 500,
+        height: "100%",
+        width: "100%",
+        backgroundColor: "#fff",
+        p: 1,
+        borderRadius: 2,
+        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+      }}
+    >
       <DataGrid
         rows={products}
         columns={columns}
@@ -156,11 +247,6 @@ const ProductList = ({ onProductClick }) => {
             handleRowClick(params);
           }
         }}
-      />
-      <ProductForm
-        open={isFormModalOpen}
-        onClose={handleCloseFormModal}
-        // productId={selectedProductId}
       />
     </Box>
   );

@@ -2,7 +2,6 @@ import { Box, Grid } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import AllOrders from "./components/AllOrders";
-import CreateOrderModal from "./components/CreateOrderModal";
 import OrdersStatistic from "./components/OrdersStatistic";
 const Container = () => {
   return (
@@ -12,12 +11,12 @@ const Container = () => {
         <DrawerHeader />
         <h1 className="main-title">Orders List</h1>
         <Grid container spacing={2}>
-          <Grid xs={6.5} item>
+          <Grid xs={12} item>
             <AllOrders />
           </Grid>
-          <Grid xs={5.5} item>
+          {/* <Grid xs={5.5} item>
             <OrdersStatistic />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Box>

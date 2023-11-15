@@ -24,11 +24,12 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       options, // Array of product options
       active,
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
+    console.log(subCategoryId);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
-        new AppError("Can't find the corresponding subcategory", 404),
+        new AppError("Can't find the corresponding subcategory", 404)
       );
     }
 
@@ -60,8 +61,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     return next(new AppError(error.message, 400));
   }
 });
-
-
 
 exports.getAllProducts = async (req, res, next) => {
   try {
@@ -135,15 +134,15 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     const uploadedImages = await addImages(images);
     const id = req.params.id;
     const newProductData = req.body;
-    console.log(req.body)
+    console.log(req.body);
     console.log("newProductData.options: ", newProductData.options);
     // Ensure 'options' field is in the correct format
     if (newProductData.options && !Array.isArray(newProductData.options)) {
       return next(
         new AppError(
           "Invalid 'options' format. It should be an array of objects.",
-          400,
-        ),
+          400
+        )
       );
     }
     const updatedProduct = await Products.findByIdAndUpdate(
@@ -155,9 +154,9 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-      },
+      }
     );
-    console.log(updatedProduct)
+    console.log(updatedProduct);
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
