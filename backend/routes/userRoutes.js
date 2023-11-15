@@ -16,17 +16,16 @@ const {
 } = require("../controllers/userController");
 
 Router.post("/users/login",ValidatorSanitizer.validate  ,login);
-Router.post("/users", TokenCheck, upload.array("images", 5),ValidatorSanitizer.validate, createUser);
+Router.post("/users", upload.array("images", 5),ValidatorSanitizer.validate, createUser);//TokenCheck
 Router.put(
   "/users/:id",
-  TokenCheck,
    upload.array("images", 5),
   ValidatorSanitizer.validate,
   updateUser,
-);
-Router.delete("/users/:id", TokenCheck, deleteUser);
+);//TokenCheck
+Router.delete("/users/:id", deleteUser);//TokenCheck
 Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/getallusers/", TokenCheck, showAllUsers);
+Router.get("/getallusers/", showAllUsers);//TokenCheck
 
 module.exports = Router;
