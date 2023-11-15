@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 import { styled } from "@mui/system";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useProduct } from "../Context";
 
 // Input styling
 
@@ -25,6 +25,8 @@ const StyledCheckbox = styled("div")(({ theme }) => ({
 }));
 
 const ProductForm = ({ open, onClose }) => {
+  const { addProduct } = useProduct();
+
   const formik = useFormik({
     initialValues: {
       sku: "",
@@ -33,7 +35,7 @@ const ProductForm = ({ open, onClose }) => {
       shortDescription: "",
       longDescription: "",
       price: "",
-      images: [],
+      images: "",
       discountPrice: "",
       quantity: "",
       options: {
@@ -53,17 +55,58 @@ const ProductForm = ({ open, onClose }) => {
         .number()
         .required("Price is required")
         .positive("Price must be positive"),
+      // images: yup
+      //   .mixed()
+      //   .test("fileSize", "File size is too large", (value) => {
+      //     // Add your custom file size validation logic here
+      //     return value && value[0] && value[0].size <= 1024 * 1024; // Example: 1MB
+      //   }),
+      image: yup.string(),
       discountPrice: yup.number().positive("Discount Price must be positive"),
       quantity: yup
         .number()
         .required("Quantity is required")
         .positive("Quantity must be positive"),
-      options: yup.string().required("Options are required"),
+      options: yup.object().shape({
+        size: yup.string().required("Size is required"),
+        color: yup.string().required("Color is required"),
+        availability: yup.string().required("Availability is required"),
+      }),
       active: yup.boolean(),
     }),
+    onSubmit: async (values) => {
+      try {
+        console.log(formik.values);
+        console.log("Formik values before submission:", values);
+
+        // Create a FormData object to handle file uploads
+        const formData = new FormData();
+
+        // Append other form values to FormData
+        Object.entries(values).forEach(([key, value]) => {
+          console.log(`Appending ${key}: ${value} to FormData`);
+          formData.append(key, value);
+        });
+
+        // Append files to FormData
+        if (values.images) {
+          for (let i = 0; i < values.images.length; i++) {
+            console.log(`Appending image ${i}: ${values.images[i].name}`);
+            formData.append("images", values.images[i]);
+          }
+        }
+
+        console.log("FormData before submission:", formData);
+
+        // Call the onSubmit function passed as a prop
+        await addProduct(formik.values);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+      onClose();
+    },
   });
 
-  const isNonMobile = useMediaQuery("(min-width:600px)");
 
   return (
     <Box m="20px">
@@ -73,9 +116,7 @@ const ProductForm = ({ open, onClose }) => {
           display="grid"
           gap="15px"
           gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-          sx={{
-            "& > div": { gridColumn: isNonMobile ? undefined : "span 2" },
-          }}
+         
         >
           {/* <TextField
             id="sku"

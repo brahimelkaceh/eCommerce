@@ -11,6 +11,7 @@ const SubCategory = require("../models/SubCategories");
 const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  console.log("entered");
   try {
     const {
       sku,
@@ -25,7 +26,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       active,
     } = req.body;
     // console.log(req.body);
-    console.log(subCategoryId);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
@@ -76,9 +76,7 @@ exports.getAllProducts = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       results: products.length,
-      data: {
-        products,
-      },
+      data: products.map((p) => p.toObject({ getters: true })),
     });
   } catch (err) {
     next(new AppError(err.message, 404));
@@ -96,6 +94,10 @@ exports.searchProducts = catchAsync(async (req, res) => {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
       response.data = product;
+      return res.json({
+        status: "success",
+        data: product.toObject({ getters: true }),
+      });
     } else {
       response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
@@ -109,22 +111,24 @@ exports.searchProducts = catchAsync(async (req, res) => {
 // ! Get The Product by id
 exports.getProductById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const response = {};
+
   try {
-    const product = await Products.find({ _id: id });
-    if (product) {
-      response.message = CONSTANTS.PRODUCTS_FOUND;
-      response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
-      response.data = product;
-    } else {
-      response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
-      response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
+    const product = await Products.findById(id);
+
+    if (!product) {
+      return res.status(CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE).json({
+        status: "fail",
+        message: CONSTANTS.PRODUCTS_NOT_FOUND,
+      });
     }
-    return res.json({ status: "success", data: product });
+
+    return res.status(CONSTANTS.SERVER_FOUND_HTTP_CODE).json({
+      status: "success",
+      message: CONSTANTS.PRODUCTS_FOUND,
+      data: product.toObject({ getters: true }),
+    });
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-    next(new AppError(err.message, 404));
+    next(new AppError(err.message, CONSTANTS.SERVER_ERROR_HTTP_CODE));
   }
 });
 
@@ -156,13 +160,12 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         runValidators: true, // Run validators on update
       }
     );
-    console.log(updatedProduct);
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
     res.status(200).json({
       status: "success",
-      data: updatedProduct,
+      data: updatedProduct.toObject({ getters: true }),
     });
   } catch (err) {
     next(new AppError(err.message, 400));

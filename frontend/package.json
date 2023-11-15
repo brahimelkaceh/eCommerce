@@ -22,7 +22,7 @@
     "@mui/x-data-grid-generator": "^6.18.1",
     "@nivo/line": "^0.83.0",
     "antd": "^5.10.3",
-    "axios": "^1.6.2",
+    "axios": "^1.6.1",
     "buffer": "^6.0.3",
     "formik": "^2.4.5",
     "jsonwebtoken": "^9.0.2",

@@ -27,7 +27,7 @@ exports.addImages = async (images) => {
 
       // Use "sharp" to convert the image to WebP format
       const webpData = await sharp(image.buffer)
-        .webp({ quality: 10 }) // You can adjust the quality as needed
+        .webp({ quality: 85 }) // You can adjust the quality as needed
         .toBuffer();
       const options = {
         blobHTTPHeaders: {
