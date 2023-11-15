@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const productOptionsSchema = new mongoose.Schema({
   size: {
     type: String,
-    // You might want to require these fields if they're always necessary.
     required: true,
   },
   color: {
@@ -19,10 +18,11 @@ const productOptionsSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema(
   {
+    id: { type: mongoose.Types.ObjectId },
     sku: {
       type: String,
       unique: true,
-      required: true, // If SKU is always required, consider adding this.
+      required: true,
     },
     productName: {
       type: String,
@@ -32,6 +32,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategoryModel",
       required: true,
+      index: true, // Index for subCategoryId lookup
     },
     shortDescription: {
       type: String,
@@ -43,7 +44,8 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true, // Price should probably always be required.
+      required: true,
+      min: 0, // Ensure price is non-negative
     },
     images: {
       type: [String],
@@ -51,10 +53,12 @@ const productSchema = new mongoose.Schema(
     discountPrice: {
       type: Number,
       default: 0,
+      min: 0, // Ensure discountPrice is non-negative
     },
     quantity: {
       type: Number,
       default: 0,
+      min: 0, // Ensure quantity is non-negative
     },
     options: [productOptionsSchema],
     active: {
