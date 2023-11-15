@@ -12,7 +12,8 @@ export const ProductProvider = ({ children }) => {
       try {
         const response = await fetch("http://localhost:5000/products");
         const data = await response.json();
-        const productsWithId = data.data.products.map((product, index) => ({
+        console.log(data)
+        const productsWithId = data.data.map((product, index) => ({
           ...product,
           id: index + 1,
         }));
