@@ -9,7 +9,7 @@ import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import ProductsModal from "./components/ProductsModal";
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [isFormModalOpen, setFormModalOpen] = useState(true);
+  const [isFormModalOpen, setFormModalOpen] = useState(false);
 
   const handleProductClick = (productId) => {
     setSelectedProductId(productId);
@@ -31,16 +31,16 @@ const Container = () => {
             handleCloseFormModal={handleCloseFormModal}
             isFormModalOpen={isFormModalOpen}
           />
-          <div>
-            {selectedProductId ? (
-              <ProductDetails
-                productId={selectedProductId}
-                setSelectedProductId={handleProductClick}
-              />
-            ) : (
-              <ProductList onProductClick={handleProductClick} />
-            )}
-          </div>
+            <div>
+              {selectedProductId ? (
+                <ProductDetails
+                  productId={selectedProductId}
+                  setSelectedProductId={handleProductClick}
+                />
+              ) : (
+                <ProductList onProductClick={handleProductClick} />
+              )}
+            </div>
         </ProductProvider>
       </Box>
     </Box>

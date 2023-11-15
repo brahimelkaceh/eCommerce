@@ -17,8 +17,6 @@ export const DataProvider = ({ children }) => {
           ...order,
           id: order._id,
         }));
-        console.log(responseData);
-        console.log(orderssWithId);
         setData(orderssWithId);
       } catch (error) {
         setError(error);
