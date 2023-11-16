@@ -74,7 +74,10 @@ export default function allManagers() {
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
+    const updatedRow = {
+      ...newRow
+      , isNew: false
+  };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     const ID = updatedRow.id;
     delete updatedRow.isNew;

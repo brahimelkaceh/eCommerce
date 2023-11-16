@@ -7,7 +7,7 @@ import { createUser } from "../service";
 const initialValues = {
   firstName: "",
   lastName: "",
-  role: "",
+  role: "manager",
   email: "",
   userName: "",
   password: "",
@@ -16,7 +16,7 @@ const initialValues = {
 };
 const checkoutSchema = yup.object().shape({
   firstName: yup.string().required("required"),
-  role: yup.string().required("required"),
+ role: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   userName: yup.string().required("required"),
@@ -98,6 +98,7 @@ const Formm = () => {
                 label="Role"
                 onBlur={handleBlur}
                 onChange={handleChange}
+                disabled={true}
                 value={values.role}
                 name="role"
                 error={!!touched.role && !!errors.role}
@@ -178,9 +179,8 @@ const Formm = () => {
                       name="images"
                       type="file"
                       onChange={(event) => {
-                        console.log(values);
-                        console.log(event.target.files[0]);
-                        const file = event.target.files[0];
+                        // console.log(values);
+                        // console.log(event.target.files[0]);
                         setFieldValue("images", event.target.files[0]); // Set the image file directly
                       }}
                     />
