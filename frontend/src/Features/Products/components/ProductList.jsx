@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -48,7 +48,7 @@ function EditToolbar(props) {
 const ProductList = () => {
   const { products, addProduct, getProductById, editProduct, deleteProduct } =
     useProduct();
-    console.log(products)
+  console.log(products);
   const [isFormModalOpen, setFormModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editModeRows, setEditModeRows] = useState(new Set());
@@ -157,6 +157,42 @@ const ProductList = () => {
     // The DataGrid will automatically update the edited cell value
   };
 
+  const renderOptionsSelect = (params) => {
+    const { id, options } = params.row;
+
+    return (
+      <Select
+        value={options.length > 0 ? options[0].size : ""}
+        onChange={(e) => {
+          const selectedSize = e.target.value;
+
+          const updatedRows = rows.map((row) =>
+            row.id === id
+              ? {
+                  ...row,
+                  options: [
+                    {
+                      ...row.options[0],
+                      size: selectedSize,
+                    },
+                    ...row.options.slice(1),
+                  ],
+                }
+              : row
+          );
+
+          setRows(updatedRows);
+        }}
+      >
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.size}>
+            {`${option.size} - ${option.color} - ${option.availability}`}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  };
+
   const columns = [
     { field: "_id", headerName: "ID", width: 210, editable: true },
     { field: "sku", headerName: "SKU", width: 50, editable: true },
@@ -168,10 +204,11 @@ const ProductList = () => {
     },
     {
       field: "subCategoryId",
-      headerName: "Subcategory ID",
+      headerName: "Subcategory Name",
       width: 150,
       editable: true,
-    },
+      renderCell: (params) => params.row.subCategoryId.subCategoryName,
+    },    
     {
       field: "shortDescription",
       headerName: "Short Description",
@@ -205,13 +242,20 @@ const ProductList = () => {
       width: 80,
       editable: true,
     },
-    { field: "options.size", headerName: "Size", width: 80, editable: true },
-    { field: "options.color", headerName: "Color", width: 80, editable: true },
+    // { field: "size", headerName: "Size", width: 80, editable: true },
+    // { field: "color", headerName: "Color", width: 80, editable: true },
+    // {
+    //   field: "availability",
+    //   headerName: "Availability",
+    //   width: 80,
+    //   editable: true,
+    // },
     {
-      field: "options.availability",
-      headerName: "Availability",
-      width: 80,
+      field: "options",
+      headerName: "Options",
+      width: 200,
       editable: true,
+      renderCell: renderOptionsSelect,
     },
     {
       field: "active",
@@ -271,7 +315,7 @@ const ProductList = () => {
   ];
 
   return (
-    <Box sx={{ height: 400, width: "100%", margin: "auto" }}>
+    <Box sx={{ width: "100%", margin: "auto" }}>
       <Button onClick={handleOpenFormModal} variant="contained" color="primary">
         Create new product
       </Button>
