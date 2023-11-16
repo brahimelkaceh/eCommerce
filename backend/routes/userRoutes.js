@@ -16,7 +16,7 @@ const {
 } = require("../controllers/userController");
 
 Router.post("/users/login",ValidatorSanitizer.validate  ,login);
-Router.post("/users", upload.array("images", 5),ValidatorSanitizer.validate, createUser);//TokenCheck
+Router.post("/users", upload.array("images", 5), createUser);//TokenCheck
 Router.put(
   "/users/:id",
    upload.array("images", 5),

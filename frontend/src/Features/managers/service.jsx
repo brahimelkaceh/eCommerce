@@ -6,14 +6,19 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+const config = {
+  headers: {
+    "Content-type": "multipart/form-data",
+  },
+};
 export function createUser(body) {
-  return api.post("/users", body);
+  return api.post("/users", body, config);
 }
 export function DeleteUser(body) {
   return api.delete(`/users/${body}`);
 }
 
-export function editUser(id,body) {
+export function editUser(id, body) {
   return api.put(`/users/${id}`, body);
 }
 
