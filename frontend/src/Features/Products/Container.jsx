@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ProductContext, ProductProvider, useProduct } from "./Context";
+import React, { useState } from "react";
+import { ProductProvider } from "./Context";
+import { SubcategoriesProvider } from "../categories/Context";
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductsDetails";
 import { Box, Button } from "@mui/material";

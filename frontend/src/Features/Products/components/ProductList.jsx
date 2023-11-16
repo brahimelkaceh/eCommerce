@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Chip } from "@mui/material";
+import { Box, Button, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -38,9 +38,9 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      {/* <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Add record
-      </Button>
+      </Button> */}
     </GridToolbarContainer>
   );
 }
@@ -48,6 +48,7 @@ function EditToolbar(props) {
 const ProductList = () => {
   const { products, addProduct, getProductById, editProduct, deleteProduct } =
     useProduct();
+  console.log(products);
   const [isFormModalOpen, setFormModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editModeRows, setEditModeRows] = useState(new Set());
@@ -148,6 +149,42 @@ const ProductList = () => {
     // The DataGrid will automatically update the edited cell value
   };
 
+  const renderOptionsSelect = (params) => {
+    const { id, options } = params.row;
+
+    return (
+      <Select
+        value={options.length > 0 ? options[0].size : ""}
+        onChange={(e) => {
+          const selectedSize = e.target.value;
+
+          const updatedRows = rows.map((row) =>
+            row.id === id
+              ? {
+                  ...row,
+                  options: [
+                    {
+                      ...row.options[0],
+                      size: selectedSize,
+                    },
+                    ...row.options.slice(1),
+                  ],
+                }
+              : row
+          );
+
+          setRows(updatedRows);
+        }}
+      >
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.size}>
+            {`${option.size} - ${option.color} - ${option.availability}`}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  };
+
   const columns = [
     { field: "_id", headerName: "ID", width: 210 },
     {
@@ -239,7 +276,7 @@ const ProductList = () => {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 80,
       renderCell: (params) => {
         const { id } = params.row;
         const isInEditMode = editModeRows.has(id);
@@ -286,17 +323,10 @@ const ProductList = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        minHeight: 500,
-        height: "100%",
-        width: "100%",
-        backgroundColor: "#fff",
-        p: 1,
-        borderRadius: 2,
-        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-      }}
-    >
+    <Box sx={{ width: "100%", margin: "auto" }}>
+      <Button onClick={handleOpenFormModal} variant="contained" color="primary">
+        Create new product
+      </Button>
       <DataGrid
         rows={rows}
         columns={columns}

@@ -70,7 +70,10 @@ exports.getAllProducts = async (req, res, next) => {
       .sort()
       .limitFields()
       .paginate();
-    const products = await features.query;
+    const products = await features.query.populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
 
     // SEND RESPONSE
     res.status(200).json({

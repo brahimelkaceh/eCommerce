@@ -51,7 +51,7 @@ exports.getOrderById = catchAsync(async (req, res) => {
     const id = req.params.id;
     const order = await orders.findOne({ _id: id }).populate({
       path: "orderItems.product",
-      select: "price quantity images options",
+      select: "productName price quantity images options",
     });
     if (order) {
       response.message = CONSTANTS.ORDER_FOUND;
