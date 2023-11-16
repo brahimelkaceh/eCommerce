@@ -7,16 +7,14 @@ const api = axios.create({
   },
 });
 export function createUser(body) {
-    return api.post("/users/")
+  return api.post("/users", body);
 }
 export function DeleteUser(body) {
   return api.delete(`/users/${body}`);
 }
 
-export function editUser(body) {
-  return api.put("/users/:id", body);
+export function editUser(id,body) {
+  return api.put(`/users/${id}`, body);
 }
-
-
 
 export default api;

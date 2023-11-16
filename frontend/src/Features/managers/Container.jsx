@@ -14,6 +14,7 @@ const Container = () => {
           <DrawerHeader />
           <h1>Managers</h1>
           <div>
+            <Popup/>
             <DataTable />
           </div>
         </Box>

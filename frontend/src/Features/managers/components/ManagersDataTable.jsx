@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { DeleteUser } from "../service";
+import { DeleteUser ,editUser} from "../service";
 import {useManager} from "../Context"
 import {
   GridRowModes,
@@ -52,7 +52,6 @@ export default function allManagers() {
 
   const handleDeleteClick = (id) => () => {
     try {
-      console.log(id);
       DeleteUser(id).then((response) => {
         console.log(response);
       });
@@ -77,6 +76,21 @@ export default function allManagers() {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    const ID = updatedRow.id;
+    delete updatedRow.isNew;
+    try {
+      editUser(ID, updatedRow)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error occurred: while editing user", error);
+        });
+    } catch (error) {
+      throw error 
+    }
+    console.log(updatedRow);
+    console.log(updatedRow.id);
     return updatedRow;
   };
 

@@ -3,9 +3,11 @@ import { Formik, Field } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
+import {createUser} from "../service";
 const initialValues = {
   firstName: "",
   lastName: "",
+  role:"",
   email: "",
   userName: "",
   password: "",
@@ -13,6 +15,7 @@ const initialValues = {
 };
 const checkoutSchema = yup.object().shape({
   firstName: yup.string().required("required"),
+  role:yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   userName: yup.string().required("required"),
@@ -32,7 +35,19 @@ const Form = () => {
 
   const handleFormSubmit = (values, { resetForm }) => {
     console.log(values);
-    resetForm();
+     try {
+       createUser(values)
+         .then((response) => {
+           console.log(response);
+         })
+         .catch((error) => {
+           console.error("Error occurred: while creating user", error);
+         });
+       resetForm();
+     } catch (err) {
+      console.error("Error occurred during createUser:", error);
+     }
+    
   };
 
   return (
@@ -73,6 +88,19 @@ const Form = () => {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
+                sx={{ gridColumn: "span 4" }}
+              />
+              <TextField
+                fullWidth
+                size="small"
+                type="text"
+                label="Role"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.role}
+                name="role"
+                error={!!touched.role && !!errors.role}
+                helperText={touched.role && errors.role}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
