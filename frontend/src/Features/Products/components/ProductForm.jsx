@@ -12,6 +12,7 @@ import { MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 import * as yup from "yup";
 import { styled } from "@mui/system";
 import { useProduct } from "../Context";
+import { useSubcategories } from "../../categories/Context";
 
 // Styled components for improved styling
 const StyledModal = styled(Modal)(({ theme }) => ({
@@ -47,6 +48,9 @@ const StyledCheckbox = styled("div")(({ theme }) => ({
 
 const ProductForm = ({ open, onClose }) => {
   const { addProduct } = useProduct();
+  const { subcategories } = useSubcategories();
+  console.log(subcategories.data);
+
 
   const formik = useFormik({
     initialValues: {
@@ -117,7 +121,7 @@ const ProductForm = ({ open, onClose }) => {
           }
         }
 
-        console.log("FormData before submission:", formData);
+        // console.log("FormData before submission:", formData);
 
         // Call the onSubmit function passed as a prop
         await addProduct(formik.values);
@@ -155,7 +159,7 @@ const ProductForm = ({ open, onClose }) => {
           }
           helperText={formik.touched.productName && formik.errors.productName}
         />
-        <StyledTextField
+        {/* <StyledTextField
           id="subCategoryId"
           name="subCategoryId"
           label="Subcategory ID"
@@ -169,7 +173,28 @@ const ProductForm = ({ open, onClose }) => {
           helperText={
             formik.touched.subCategoryId && formik.errors.subCategoryId
           }
-        />
+        /> */}
+        <FormControl
+          fullWidth
+          variant="outlined"
+          error={formik.touched.subCategoryId && Boolean(formik.errors.subCategoryId)}
+        >
+          <InputLabel id="subCategory-label">Subcategory</InputLabel>
+          <Select
+            labelId="subCategory-label"
+            id="subCategoryId"
+            name="subCategoryId"
+            label="Subcategory"
+            value={formik.values.subCategoryId}
+            onChange={formik.handleChange}
+          >
+            {subcategories?.data?.map(subcategory => (
+              <MenuItem key={subcategory.id} value={subcategory.id}>
+                {subcategory.subCategoryName}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <StyledTextField
           id="shortDescription"
           name="shortDescription"

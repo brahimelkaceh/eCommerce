@@ -38,9 +38,9 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      {/* <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Add record
-      </Button>
+      </Button> */}
     </GridToolbarContainer>
   );
 }
@@ -48,6 +48,7 @@ function EditToolbar(props) {
 const ProductList = () => {
   const { products, addProduct, getProductById, editProduct, deleteProduct } =
     useProduct();
+    console.log(products)
   const [isFormModalOpen, setFormModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editModeRows, setEditModeRows] = useState(new Set());
@@ -55,7 +56,9 @@ const ProductList = () => {
   const [rowModesModel, setRowModesModel] = useState({});
 
   useEffect(() => {
-    setRows(products.map((product) => ({ ...product, isNew: false, id: product._id })));
+    setRows(
+      products.map((product) => ({ ...product, isNew: false, id: product._id }))
+    );
   }, [products]);
 
   useEffect(() => {
@@ -70,7 +73,7 @@ const ProductList = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    console.log(id)
+    console.log(id);
     await deleteProduct(id);
     setRows((prevRows) => prevRows.filter((row) => row.id !== id));
   };
@@ -155,20 +158,73 @@ const ProductList = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 210 },
-    { field: "productName", headerName: "Product Name", editable: true, width: 200 },
-    { field: "price", headerName: "Price", width: 80, editable: true },
+    { field: "_id", headerName: "ID", width: 210, editable: true },
+    { field: "sku", headerName: "SKU", width: 50, editable: true },
+    {
+      field: "productName",
+      headerName: "Product Name",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "subCategoryId",
+      headerName: "Subcategory ID",
+      width: 150,
+      editable: true,
+    },
     {
       field: "shortDescription",
-      headerName: "Description",
-      width: 300,
+      headerName: "Short Description",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "longDescription",
+      headerName: "Long Description",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      type: "number",
+      width: 70,
+      editable: true,
+    },
+    {
+      field: "discountPrice",
+      headerName: "Discount Price",
+      type: "number",
+      width: 120,
+      editable: true,
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      type: "number",
+      width: 80,
+      editable: true,
+    },
+    { field: "options.size", headerName: "Size", width: 80, editable: true },
+    { field: "options.color", headerName: "Color", width: 80, editable: true },
+    {
+      field: "options.availability",
+      headerName: "Availability",
+      width: 80,
+      editable: true,
+    },
+    {
+      field: "active",
+      headerName: "Active",
+      type: "boolean",
+      width: 80,
       editable: true,
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 80,
       renderCell: (params) => {
         const { id } = params.row;
         const isInEditMode = editModeRows.has(id);
@@ -215,7 +271,7 @@ const ProductList = () => {
   ];
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: 400, width: "100%", margin: "auto" }}>
       <Button onClick={handleOpenFormModal} variant="contained" color="primary">
         Create new product
       </Button>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ProductProvider } from "./Context";
+import { SubcategoriesProvider } from "../categories/Context";
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductsDetails";
 import ProductL from "./components/ProductL";
@@ -21,7 +22,9 @@ const Container = () => {
           />
         ) : (
           // <ProductList onProductClick={handleProductClick} />
-          <ProductList />
+          <SubcategoriesProvider>
+            <ProductList />
+          </SubcategoriesProvider>
         )}
       </div>
     </ProductProvider>
