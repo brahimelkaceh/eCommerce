@@ -3,6 +3,7 @@ import { ProductContext, ProductProvider, useProduct } from "./Context";
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductsDetails";
 import { Box, Button } from "@mui/material";
+import ProductL from "./components/ProductL";
 
 import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
@@ -31,19 +32,32 @@ const Container = () => {
             handleCloseFormModal={handleCloseFormModal}
             isFormModalOpen={isFormModalOpen}
           />
-            <div>
-              {selectedProductId ? (
-                <ProductDetails
-                  productId={selectedProductId}
-                  setSelectedProductId={handleProductClick}
-                />
-              ) : (
-                <ProductList onProductClick={handleProductClick} />
-              )}
-            </div>
+          <div>
+            {selectedProductId ? (
+              <ProductDetails
+                productId={selectedProductId}
+                setSelectedProductId={handleProductClick}
+              />
+            ) : (
+              <ProductList onProductClick={handleProductClick} />
+            )}
+          </div>
         </ProductProvider>
       </Box>
     </Box>
+    // <ProductProvider>
+    //   <div>
+    //     {selectedProductId ? (
+    //       <ProductDetails
+    //         productId={selectedProductId}
+    //         setSelectedProductId={handleProductClick}
+    //       />
+    //     ) : (
+    //       // <ProductList onProductClick={handleProductClick} />
+    //       <ProductList />
+    //     )}
+    //   </div>
+    // </ProductProvider>
   );
 };
 

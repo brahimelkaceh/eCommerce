@@ -4,8 +4,9 @@ import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import AllOrders from "./components/AllOrders";
 import { useState } from "react";
 import DetailsOrderModal from "./components/DetailsOrderModal";
+import "./style.css";
 const Container = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (

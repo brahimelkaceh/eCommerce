@@ -29,3 +29,13 @@ export const fetchOrderById = async (id) => {
     throw error;
   }
 };
+
+export const updateOrderById = async (id, updatedOrderData) => {
+  const endpoint = `${id}`;
+  try {
+    const response = await apiService.put(endpoint, updatedOrderData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

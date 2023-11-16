@@ -30,7 +30,7 @@ import { useState } from "react";
 import { useCustomer } from "../../../Features/customers/Context";
 
 export default function AllOrders({ handleOpen }) {
-  const { data, loading, error, getOrderById } = useData();
+  const { data, loading, error, getOrderById, updateOrder } = useData();
   const { getCustomerById, customers } = useCustomer();
 
   const [rows, setrows] = useState([]);
@@ -94,6 +94,8 @@ export default function AllOrders({ handleOpen }) {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    delete updatedRow.isNew;
+    updateOrder(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
@@ -316,16 +318,6 @@ export default function AllOrders({ handleOpen }) {
             className="textPrimary"
             onClick={handleEditClick(id)}
             // color="inherit"
-          />,
-
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            sx={{
-              color: "#E33434",
-            }}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
           />,
         ];
       },
