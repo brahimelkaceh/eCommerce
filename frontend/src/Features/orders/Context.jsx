@@ -1,6 +1,6 @@
 // DataContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchData } from "./Services";
+import { fetchData, fetchOrderById } from "./Services";
 
 const DataContext = createContext();
 
@@ -13,7 +13,7 @@ export const DataProvider = ({ children }) => {
     const fetchDataFromApi = async () => {
       try {
         const responseData = await fetchData("/orders");
-        const orderssWithId = responseData.response.data.map((order) => ({
+        const orderssWithId = responseData.data.map((order) => ({
           ...order,
           id: order._id,
         }));
@@ -27,11 +27,20 @@ export const DataProvider = ({ children }) => {
 
     fetchDataFromApi();
   }, []);
-
+  const getOrderById = async (id) => {
+    try {
+      const fetchedOrder = await fetchOrderById(id);
+      // setCustomers(fetchedElement.data.userName);
+      console.log(fetchedOrder.data);
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  };
   const values = {
     data,
     loading,
     error,
+    getOrderById,
   };
 
   return <DataContext.Provider value={values}>{children}</DataContext.Provider>;

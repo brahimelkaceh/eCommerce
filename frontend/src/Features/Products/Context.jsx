@@ -11,7 +11,6 @@ export const ProductProvider = ({ children }) => {
       try {
         const response = await fetch("http://localhost:5000/products");
         const data = await response.json();
-        console.log(data)
         const productsWithId = data.data.map((product, index) => ({
           ...product,
           id: index + 1,
@@ -43,8 +42,8 @@ export const ProductProvider = ({ children }) => {
     axios
       .post("http://localhost:5000/products", newProduct, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -53,11 +52,15 @@ export const ProductProvider = ({ children }) => {
 
   const editProduct = async (productId, updatedProduct) => {
     try {
-      const response = await axios.put(`http://localhost:5000/products/${productId}`, updatedProduct, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const response = await axios.put(
+        `http://localhost:5000/products/${productId}`,
+        updatedProduct,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
 
       if (response.status !== 200) {
         throw new Error(`Failed to edit product: ${response.statusText}`);
@@ -80,7 +83,9 @@ export const ProductProvider = ({ children }) => {
 
   const deleteProduct = async (productId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/products/${productId}`);
+      const response = await axios.delete(
+        `http://localhost:5000/products/${productId}`
+      );
 
       if (response.status !== 200) {
         throw new Error(`Failed to delete product: ${response.statusText}`);
@@ -102,7 +107,7 @@ export const ProductProvider = ({ children }) => {
     getProductById,
     addProduct,
     editProduct,
-    deleteProduct
+    deleteProduct,
   };
 
   return (

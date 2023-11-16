@@ -26,16 +26,24 @@ import { Chip } from "@mui/material";
 import { useData } from "../Context";
 import { useEffect } from "react";
 import Loader from "../../../Components/loader/Loader";
+import { useState } from "react";
+import { useCustomer } from "../../../Features/customers/Context";
 
-export default function AllOrders() {
-  const { data, loading, error } = useData();
-  console.log(data);
+export default function AllOrders({ handleOpen }) {
+  const { data, loading, error, getOrderById } = useData();
+  const { getCustomerById, customers } = useCustomer();
 
-  const [rows, setrows] = React.useState([]);
-  const [rowModesModel, setrowmodesmodel] = React.useState({});
+  const [rows, setrows] = useState([]);
+  const [customerId, setcustomer] = useState("");
+  const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
   }, [data]);
+
+  useEffect(() => {
+    getCustomerById(customerId);
+  }, [customerId]);
+
   const getColorBasedOnStatus = (status) => {
     switch (status) {
       case "Open":
@@ -99,36 +107,48 @@ export default function AllOrders() {
       headerName: "Order Id",
       align: "left",
       headerAlign: "left",
-      flex: 1,
+      width: 200,
     },
     {
       field: "orderItems",
       headerName: "Product",
-      flex: 1,
+      width: 120,
+
       renderCell: (params) => {
-        return params.value?.map((prod) => (
+        return (
           <Chip
-            label={prod.product}
+            label={
+              params?.value?.length > 1
+                ? params.value.length + " Products"
+                : params.value.length + " Product"
+            }
             size="small"
             // sx
             style={{
               backgroundColor: getColorBasedOnStatus(params.value),
             }}
           />
-        ));
+        );
       },
     },
 
     {
       field: "customerID",
-      headerName: "Customer Id",
+      headerName: "Customer Name",
       align: "left",
+      width: 120,
+
       headerAlign: "left",
-      flex: 1,
+      renderCell: (params) => {
+        setcustomer(params.value);
+        return <span className="customer-name"> {customers}</span>;
+      },
     },
     {
       field: "createdAt",
       headerName: "Created At",
+      width: 120,
+
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -151,6 +171,8 @@ export default function AllOrders() {
     {
       field: "updatedAt",
       headerName: "Updated At",
+      width: 120,
+
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -173,6 +195,8 @@ export default function AllOrders() {
     {
       field: "orderDate",
       headerName: "Order Date",
+      width: 120,
+
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -196,6 +220,8 @@ export default function AllOrders() {
     {
       field: "cartTotalPrice",
       headerName: "Total price",
+      width: 100,
+
       renderCell: (params) => (
         <Chip
           label={"$" + params.value}
@@ -212,6 +238,7 @@ export default function AllOrders() {
       headerName: "Status",
       editable: true,
       type: "singleSelect",
+      width: 100,
       valueOptions: ["open", "Shipped", "Payed", "Closed", "Canceled"],
       renderCell: (params) => (
         <Chip
@@ -270,9 +297,10 @@ export default function AllOrders() {
             sx={{
               color: "#0A3977",
             }}
-            label="Delete"
+            label="View"
             onClick={() => {
-              console.log("show details");
+              handleOpen();
+              getOrderById(id);
             }}
             color="inherit"
           />,
@@ -313,6 +341,7 @@ export default function AllOrders() {
   return (
     data && (
       <DataGrid
+        className="dataGrid"
         rows={rows}
         columns={columns}
         editMode="row"
