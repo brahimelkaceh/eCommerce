@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ProductProvider } from "./Context";
 import ProductList from "./components/ProductList";
 import ProductDetails from "./components/ProductsDetails";
+import ProductL from "./components/ProductL";
 
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -14,9 +15,13 @@ const Container = () => {
     <ProductProvider>
       <div>
         {selectedProductId ? (
-          <ProductDetails productId={selectedProductId} setSelectedProductId={handleProductClick}/>
+          <ProductDetails
+            productId={selectedProductId}
+            setSelectedProductId={handleProductClick}
+          />
         ) : (
-          <ProductList onProductClick={handleProductClick} />
+          // <ProductList onProductClick={handleProductClick} />
+          <ProductList />
         )}
       </div>
     </ProductProvider>
