@@ -28,16 +28,15 @@ Router.post(
 );
 Router.post("/customers/login", ValidatorSanitizer.validate, login);
 Router.get("/customers/activate", activate);
-Router.get("/customers/", TokenCheck, getAllCustomers);
-Router.get("/customers/search",TokenCheck, searchForCustomer);
-Router.get("/customers/:id",CustomerTokenCheck, getCustomerById);
+Router.get("/customers/", getAllCustomers);//TokenCheck
+Router.get("/customers/search", searchForCustomer);//TokenCheck
+Router.get("/customers/:id", getCustomerById);//TokenCheck
 Router.put(
   "/customers/:id",
   upload.array("images", 5),
   ValidatorSanitizer.validate,
-  TokenCheck,
   updateCustomer,
-);
-Router.delete("/customers/:id", TokenCheck, deleteCustomer);
+);//TokenCheck
+Router.delete("/customers/:id", deleteCustomer);//TokenCheck
 
 module.exports = Router;
