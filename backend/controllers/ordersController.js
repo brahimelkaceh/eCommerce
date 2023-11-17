@@ -27,6 +27,8 @@ exports.createOrder = catchAsync(async (req, res) => {
       }
     }
     const newOrder = await orders.create(req.body);
+    customer.orders.push(newOrder);
+    await customer.save();
     if (newOrder) {
       response.message = CONSTANTS.ORDER_CREATED;
       response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
