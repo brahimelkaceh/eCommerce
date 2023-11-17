@@ -8,8 +8,10 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Navbar from "../navbar/Navbar";
 import Lists from "./Lists";
 import { DrawerHeader, Drawer } from "../mui/MuiStyles";
+import { memo } from "react";
 
-export default function Sidebar() {
+const Sidebar = () => {
+  console.log("entred side bar");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -48,4 +50,6 @@ export default function Sidebar() {
       </Drawer>
     </Box>
   );
-}
+};
+
+export default React.memo(Sidebar);

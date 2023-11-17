@@ -169,21 +169,7 @@ export default function AllProducts({ handleOpen }) {
         );
       },
     },
-    {
-      field: "price",
-      headerName: "Price",
-      editable: true,
-      renderCell: (params) => (
-        <Chip
-          label={"$" + params.value}
-          size="small"
-          // sx
-          style={{
-            backgroundColor: "#C5DCFA80",
-          }}
-        />
-      ),
-    },
+
     {
       field: "shortDescription",
       headerName: "Short Description",

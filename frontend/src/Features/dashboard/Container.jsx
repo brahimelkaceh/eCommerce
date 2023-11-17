@@ -7,8 +7,10 @@ import PieChart from "../../Components/charts/PeiChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
+import { UserC } from "../auth/Context";
 import "./style.css";
 const Container = () => {
+  const { username } = UserC();
   return (
     <Box
       sx={{
@@ -18,6 +20,7 @@ const Container = () => {
       <Sidebar />
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        <h1 style={{ color: "red" }}>{username}</h1>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Cards />

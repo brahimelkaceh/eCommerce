@@ -6,11 +6,13 @@ exports.TokenCheck = (req, res, next) => {
     // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;
     const token = authHeader && authHeader.split(" ")[1];
+    console.log("token: " + token);
 
     if (!token) {
       throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }
     const userData = jwt.verify(token, process.env.SECRET_KEY);
+    console.log("user@" + userData);
     if (!userData) {
       throw new Error("Error while verifying the token");
     }

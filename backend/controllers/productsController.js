@@ -70,7 +70,7 @@ exports.getAllProducts = async (req, res, next) => {
       .paginate();
     const products = await features.query.populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     // SEND RESPONSE
@@ -92,7 +92,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   try {
     const product = await Products.findOne(searchParams).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
@@ -119,7 +119,7 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   try {
     const product = await Products.findById(id).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     if (!product) {
@@ -165,14 +165,9 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-<<<<<<< HEAD
       }
-    );
-=======
-      },
     ).populate("subCategoryId", "subCategoryName");
     console.log(updatedProduct);
->>>>>>> 74b8abaccb11e598beec629b52ee8de717abe8dc
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
