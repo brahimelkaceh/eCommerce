@@ -19,7 +19,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       discountPrice,
       quantity,
       options, // Array of product options
@@ -43,7 +42,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,
@@ -92,7 +90,10 @@ exports.searchProducts = catchAsync(async (req, res) => {
   const searchParams = req.query;
   console.log(searchParams);
   try {
-    const product = await Products.findOne(searchParams);
+    const product = await Products.findOne(searchParams).populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -116,7 +117,10 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const product = await Products.findById(id);
+    const product = await Products.findById(id).populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
 
     if (!product) {
       return res.status(CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE).json({
@@ -161,8 +165,14 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
+<<<<<<< HEAD
       }
     );
+=======
+      },
+    ).populate("subCategoryId", "subCategoryName");
+    console.log(updatedProduct);
+>>>>>>> 74b8abaccb11e598beec629b52ee8de717abe8dc
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }

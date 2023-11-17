@@ -14,6 +14,11 @@ const productOptionsSchema = new mongoose.Schema({
     enum: ["In Stock", "Out of Stock"],
     required: true,
   },
+  price: {
+    type: Number,
+    required: true,
+    min: 0, // Ensure price is non-negative
+  },
 });
 
 const productSchema = new mongoose.Schema(
@@ -40,11 +45,6 @@ const productSchema = new mongoose.Schema(
     longDescription: {
       type: String,
       required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0, // Ensure price is non-negative
     },
     images: {
       type: [String],

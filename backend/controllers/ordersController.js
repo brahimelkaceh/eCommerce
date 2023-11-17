@@ -27,6 +27,8 @@ exports.createOrder = catchAsync(async (req, res) => {
       }
     }
     const newOrder = await orders.create(req.body);
+    customer.orders.push(newOrder);
+    await customer.save();
     if (newOrder) {
       response.message = CONSTANTS.ORDER_CREATED;
       response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
@@ -49,10 +51,13 @@ exports.getOrderById = catchAsync(async (req, res) => {
   const response = {};
   try {
     const id = req.params.id;
-    const order = await orders.findOne({ _id: id }).populate({
-      path: "orderItems.product",
-      select: "productName price quantity images options",
-    });
+    const order = await orders
+      .findOne({ _id: id })
+      .populate({
+        path: "orderItems.product",
+        select: "productName price quantity images options",
+      })
+      .populate("customerID", "email userName role images");
     if (order) {
       response.message = CONSTANTS.ORDER_FOUND;
       response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -76,6 +81,7 @@ exports.updateOrder = catchAsync(async (req, res) => {
   try {
     const { customerID, orderItems } = req.body;
     const customer = await Customer.findOne({ _id: customerID });
+
     if (!customer) {
       response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
       response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
@@ -97,12 +103,13 @@ exports.updateOrder = catchAsync(async (req, res) => {
       { _id: id },
       { $set: newOrderData }
     );
+
     response.message = CONSTANTS.ORDER_UPDATED;
     response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
-    return res.status(201).json({
-      status: "success",
-      data: updatedOrder.toObject({ getters: true }),
-    });
+    // return res.status(201).json({
+    //   status: "success",
+    //   data: updatedOrder,
+    // });
   } catch (err) {
     response.message = err.message;
     response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
@@ -112,7 +119,14 @@ exports.updateOrder = catchAsync(async (req, res) => {
 exports.listOrders = catchAsync(async (req, res) => {
   const response = {};
   try {
-    const Orders = await orders.find().limit(10);
+    const Orders = await orders
+      .find()
+      .limit(10)
+      .populate({
+        path: "orderItems.product",
+        select: "productName price quantity images options",
+      })
+      .populate("customerID", "email userName role images");
     if (Orders) {
       response.message = CONSTANTS.ORDER_FOUND;
       response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
