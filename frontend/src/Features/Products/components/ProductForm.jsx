@@ -15,6 +15,7 @@ import {
 import * as yup from "yup";
 import { styled } from "@mui/system";
 import { useProduct } from "../Context";
+import { useSubcategories } from "../../categories/Context";
 
 // Input styling
 
@@ -26,6 +27,9 @@ const StyledCheckbox = styled("div")(({ theme }) => ({
 
 const ProductForm = ({ open, onClose }) => {
   const { addProduct } = useProduct();
+  const { subcategories } = useSubcategories();
+  console.log(subcategories.data);
+
 
   const formik = useFormik({
     initialValues: {
@@ -96,7 +100,7 @@ const ProductForm = ({ open, onClose }) => {
           }
         }
 
-        console.log("FormData before submission:", formData);
+        // console.log("FormData before submission:", formData);
 
         // Call the onSubmit function passed as a prop
         await addProduct(formik.values);

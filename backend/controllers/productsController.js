@@ -70,7 +70,10 @@ exports.getAllProducts = async (req, res, next) => {
       .sort()
       .limitFields()
       .paginate();
-    const products = await features.query;
+    const products = await features.query.populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
 
     // SEND RESPONSE
     res.status(200).json({
@@ -89,7 +92,10 @@ exports.searchProducts = catchAsync(async (req, res) => {
   const searchParams = req.query;
   console.log(searchParams);
   try {
-    const product = await Products.findOne(searchParams);
+    const product = await Products.findOne(searchParams).populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
@@ -113,7 +119,10 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const product = await Products.findById(id);
+    const product = await Products.findById(id).populate(
+      "subCategoryId",
+      "subCategoryName",
+    );
 
     if (!product) {
       return res.status(CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE).json({
@@ -158,8 +167,9 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-      }
-    );
+      },
+    ).populate("subCategoryId", "subCategoryName");
+    console.log(updatedProduct);
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }

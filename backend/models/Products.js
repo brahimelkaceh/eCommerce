@@ -18,7 +18,6 @@ const productOptionsSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema(
   {
-    id: { type: mongoose.Types.ObjectId },
     sku: {
       type: String,
       unique: true,
