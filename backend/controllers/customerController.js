@@ -125,13 +125,16 @@ exports.activate = catchAsync(async (req, res) => {
 });
 
 exports.getAllCustomers = catchAsync(async (req, res, next) => {
-  const customers = await Customer.find({});
-  // if (!customers) {
-  //   return res.status(404).json({
-  //     status: "fail",
-  //     data: "No customers",
-  //   });
-  // }
+  const customers = await Customer.find({}).populate({
+    path: "orders",
+    // select: "productName price quantity images options",
+  });
+  if (!customers) {
+    return res.status(404).json({
+      status: "fail",
+      data: "No customers",
+    });
+  }
 
   res.status(200).json({
     status: "success",

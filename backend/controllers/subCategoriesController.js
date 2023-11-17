@@ -36,7 +36,10 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllSubcategories = async (req, res) => {
-  const subcategories = await Subcategory.find({});
+  const subcategories = await Subcategory.find({}).populate(
+    "categoryId",
+    "categoryName",
+  );
   res.json({
     status: "success",
     data: subcategories.map((sub) => sub.toObject({ getters: true })),
@@ -47,7 +50,10 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
   const searchParams = req.query;
   console.log(searchParams);
 
-  const subCategories = await Subcategory.find(searchParams);
+  const subCategories = await Subcategory.find(searchParams).populate(
+    "categoryId",
+    "categoryName",
+  );
 
   if (!subCategories.length) {
     return next(new AppError("Subcategories not found", 404));
@@ -65,8 +71,10 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
 
   // Find the subcategory by its ID
-  const subcategory =
-    await Subcategory.findById(subcategoryId).populate("categoryId");
+  const subcategory = await Subcategory.findById(subcategoryId).populate(
+    "categoryId",
+    "categoryName",
+  );
 
   if (!subcategory) {
     return next(new AppError("Can't find the specified subcategory", 404));
@@ -88,7 +96,10 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   }
 
   // Find the subcategory by its ID
-  const subcategory = await Subcategory.findById(subcategoryId);
+  const subcategory = await Subcategory.findById(subcategoryId).populate(
+    "categoryId",
+    "categoryName",
+  );
 
   if (!subcategory) {
     return next(new AppError("Can't find the specified subcategory", 404));
