@@ -20,7 +20,6 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
   return (
     <Box>
       <Navbar handleDrawerOpen={handleDrawerOpen} open={open} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
 import {
@@ -15,7 +15,9 @@ import {
 import * as yup from "yup";
 import { styled } from "@mui/system";
 import { useProduct } from "../Context";
-import { useSubcategories } from "../../categories/Context";
+import validationSchema from "./manageProducts/validationSchema";
+import initialValues from "./manageProducts/InitialValues";
+import { useSubCatData } from "../../categories/Context";
 
 // Input styling
 
@@ -27,65 +29,19 @@ const StyledCheckbox = styled("div")(({ theme }) => ({
 
 const ProductForm = ({ open, onClose }) => {
   const { addProduct } = useProduct();
-  const { subcategories } = useSubcategories();
-  console.log(subcategories.data);
+  const { SubcatData } = useSubCatData();
+  // console.log(SubcatData);
 
   const formik = useFormik({
-    initialValues: {
-      sku: "",
-      productName: "",
-      subCategoryId: "",
-      shortDescription: "",
-      longDescription: "",
-      price: "",
-      images: "",
-      discountPrice: "",
-      quantity: "",
-      options: {
-        size: "",
-        color: "",
-        availability: "In Stock",
-      },
-      active: false,
-    },
-    validationSchema: yup.object({
-      sku: yup.string().required("SKU is required"),
-      productName: yup.string().required("Product Name is required"),
-      subCategoryId: yup.string().required("Subcategory ID is required"),
-      shortDescription: yup.string().required("Short Description is required"),
-      longDescription: yup.string().required("Long Description is required"),
-      price: yup
-        .number()
-        .required("Price is required")
-        .positive("Price must be positive"),
-      // images: yup
-      //   .mixed()
-      //   .test("fileSize", "File size is too large", (value) => {
-      //     // Add your custom file size validation logic here
-      //     return value && value[0] && value[0].size <= 1024 * 1024; // Example: 1MB
-      //   }),
-      image: yup.string(),
-      discountPrice: yup.number().positive("Discount Price must be positive"),
-      quantity: yup
-        .number()
-        .required("Quantity is required")
-        .positive("Quantity must be positive"),
-      options: yup.object().shape({
-        size: yup.string().required("Size is required"),
-        color: yup.string().required("Color is required"),
-        availability: yup.string().required("Availability is required"),
-      }),
-      active: yup.boolean(),
-    }),
+    initialValues: initialValues,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         console.log(formik.values);
         console.log("Formik values before submission:", values);
 
-        // Create a FormData object to handle file uploads
         const formData = new FormData();
 
-        // Append other form values to FormData
         Object.entries(values).forEach(([key, value]) => {
           console.log(`Appending ${key}: ${value} to FormData`);
           formData.append(key, value);
@@ -99,9 +55,6 @@ const ProductForm = ({ open, onClose }) => {
           }
         }
 
-        // console.log("FormData before submission:", formData);
-
-        // Call the onSubmit function passed as a prop
         await addProduct(formik.values);
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -119,19 +72,6 @@ const ProductForm = ({ open, onClose }) => {
           gap="15px"
           gridTemplateColumns="repeat(4, minmax(0, 1fr))"
         >
-          {/* <TextField
-            id="sku"
-            name="sku"
-            label="SKU"
-            variant="outlined"
-            display="none"
-            sx={{ gridColumn: "span 2" }}
-            size="small"
-            value={formik.values.sku}
-            onChange={formik.handleChange}
-            error={formik.touched.sku && Boolean(formik.errors.sku)}
-            helperText={formik.touched.sku && formik.errors.sku}
-          /> */}
           <TextField
             id="productName"
             name="productName"
@@ -146,23 +86,54 @@ const ProductForm = ({ open, onClose }) => {
             }
             helperText={formik.touched.productName && formik.errors.productName}
           />
-          <TextField
-            id="subCategoryId"
-            name="subCategoryId"
-            label="Subcategory ID"
-            variant="outlined"
-            sx={{ gridColumn: "span 2" }}
+          <FormControl
+            sx={{ gridColumn: "span 1" }}
             size="small"
-            value={formik.values.subCategoryId}
-            onChange={formik.handleChange}
+            variant="outlined"
             error={
-              formik.touched.subCategoryId &&
-              Boolean(formik.errors.subCategoryId)
+              formik.touched.options?.availability &&
+              Boolean(formik.errors.options?.availability)
             }
-            helperText={
-              formik.touched.subCategoryId && formik.errors.subCategoryId
-            }
+          >
+            <InputLabel id="availability-label">Subcategory</InputLabel>
+            <Select
+              labelId="availability-label"
+              id="options.availability"
+              name="subCategoryId"
+              label="Subcategory"
+              value={formik.values.subCategoryId}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.subCategoryId &&
+                Boolean(formik.errors.subCategoryId)
+              }
+              helperText={
+                formik.touched.subCategoryId && formik.errors.subCategoryId
+              }
+            >
+              {SubcatData?.map((subCategory) => {
+                return (
+                  <MenuItem value={subCategory._id} key={subCategory._id}>
+                    <em>{subCategory.subCategoryName}</em>
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <TextField
+            id="sku"
+            name="sku"
+            label="SKU"
+            variant="outlined"
+            display="none"
+            sx={{ gridColumn: "span 1" }}
+            size="small"
+            value={formik.values.sku}
+            onChange={formik.handleChange}
+            error={formik.touched.sku && Boolean(formik.errors.sku)}
+            helperText={formik.touched.sku && formik.errors.sku}
           />
+
           <TextField
             id="shortDescription"
             name="shortDescription"
@@ -209,15 +180,7 @@ const ProductForm = ({ open, onClose }) => {
             error={formik.touched.price && Boolean(formik.errors.price)}
             helperText={formik.touched.price && formik.errors.price}
           />
-          <input
-            id="images"
-            name="images"
-            type="file"
-            onChange={(event) => {
-              formik.setFieldValue("images", event.currentTarget.files);
-            }}
-            multiple
-          />
+
           <TextField
             id="discountPrice"
             name="discountPrice"
@@ -317,6 +280,15 @@ const ProductForm = ({ open, onClose }) => {
             <Typography variant="body1">Active</Typography>
           </StyledCheckbox>
         </Box>
+        <input
+          id="images"
+          name="images"
+          type="file"
+          onChange={(event) => {
+            formik.setFieldValue("images", event.currentTarget.files);
+          }}
+          multiple
+        />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             type="submit"

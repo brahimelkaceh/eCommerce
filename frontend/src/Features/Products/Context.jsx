@@ -6,24 +6,6 @@ export const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/products");
-        const data = await response.json();
-        const productsWithId = data.data.map((product, index) => ({
-          ...product,
-          id: index + 1,
-        }));
-        setProducts(productsWithId);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
   const getProductById = async (productId) => {
     try {
       const response = await fetch(
@@ -51,6 +33,7 @@ export const ProductProvider = ({ children }) => {
   };
 
   const editProduct = async (productId, updatedProduct) => {
+    console.log(productId);
     try {
       const response = await axios.put(
         `http://localhost:5000/products/${productId}`,
@@ -66,7 +49,7 @@ export const ProductProvider = ({ children }) => {
         throw new Error(`Failed to edit product: ${response.statusText}`);
       }
 
-      const updatedData = response.data.data.product;
+      const updatedData = response.data.data;
 
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
@@ -82,14 +65,16 @@ export const ProductProvider = ({ children }) => {
   };
 
   const deleteProduct = async (productId) => {
+    console.log(`Deleting ${productId}`);
     try {
       const response = await axios.delete(
-        `http://localhost:5000/products/${productId}`
+        `http://localhost:5000/products/` + productId
       );
 
       if (response.status !== 200) {
         throw new Error(`Failed to delete product: ${response.statusText}`);
       }
+      console.log("deleteds", response.data);
 
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== productId)
@@ -101,6 +86,22 @@ export const ProductProvider = ({ children }) => {
       return false;
     }
   };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/products");
+        const data = await response.json();
+        const productsWithId = data.data.map((product, index) => ({
+          ...product,
+        }));
+        setProducts(productsWithId);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const productContextValue = {
     products,

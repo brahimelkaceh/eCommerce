@@ -25,6 +25,7 @@ function ProductsDetails({ productId, setSelectedProductId }) {
 
     fetchProduct();
   }, [productId, getProductById]);
+  console.log("inside fetchProduct", getProductById);
 
   return (
     <Box sx={{ display: "flex", p: 3 }}>

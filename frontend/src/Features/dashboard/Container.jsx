@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
 import CardItem from "./components/cards/CardItem";
 import LinearChart from "../../Components/charts/LinearChart";
-import DashboardProductsList from "../../Features/Products/components/DashboardProductsList";
 import PieChart from "../../Components/charts/PeiChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
@@ -37,9 +36,7 @@ const Container = () => {
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box className="dashboard-card">
-                <DashboardProductsList />
-              </Box>
+              <Box className="dashboard-card"></Box>
             </Grid>
             <Grid item xs={6}>
               <Box
