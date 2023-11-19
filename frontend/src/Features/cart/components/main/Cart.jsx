@@ -1,6 +1,14 @@
 import React from "react";
-
+import { CartStore } from "../State/CartContext";
+import { useEffect, useState } from "react";
 const Cart = () => {
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  console.log("hello total price");
+  console.log("total price", totalPrice);
+  useEffect(() => {
+    console.log("hello Shopping Cart");
+    console.log(shoppingCart);
+  }, [shoppingCart]);
   return (
     <div className="cart-area pt-100 pb-100">
       <div className="container">
@@ -8,6 +16,8 @@ const Cart = () => {
           <div className="col-12">
             <div className="cart-wrapper">
               <div className="table-responsive">
+                {/* <p>here the added products should added </p>
+                <p>here you can add subtract and empty the product</p> */}
                 <table className="table mb-0">
                   <thead>
                     <tr>
@@ -20,88 +30,83 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="product-thumbnail">
-                        <a href="shop-details.html">
-                          <img src="img/product/cart_img01.jpg" alt="" />
-                        </a>
-                      </td>
-                      <td className="product-name">
-                        <h4>
-                          <a href="shop-details.html">Travelling Bags</a>
-                        </h4>
-                      </td>
-                      <td className="product-price">$ 37.00</td>
-                      <td className="product-quantity">
-                        <div className="cart-plus-minus">
-                          <form action="#" className="num-block">
-                            <input
-                              type="text"
-                              className="in-num"
-                              value="1"
-                              readonly=""
-                            />
-                            <div className="qtybutton-box">
-                              <span className="plus">
-                                <img src="img/icon/plus.png" alt="" />
-                              </span>
-                              <span className="minus dis">
-                                <img src="img/icon/minus.png" alt="" />
-                              </span>
-                            </div>
-                          </form>
-                        </div>
-                      </td>
-                      <td className="product-subtotal">
-                        <span>$ 74.00</span>
-                      </td>
-                      <td className="product-delete">
-                        <a href="#">
-                          <i className="flaticon-trash"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="product-thumbnail">
-                        <a href="shop-details.html">
-                          <img src="img/product/cart_img02.jpg" alt="" />
-                        </a>
-                      </td>
-                      <td className="product-name">
-                        <h4>
-                          <a href="shop-details.html">Travelling Bags</a>
-                        </h4>
-                      </td>
-                      <td className="product-price">$ 37.00</td>
-                      <td className="product-quantity">
-                        <div className="cart-plus-minus">
-                          <form action="#" className="num-block">
-                            <input
-                              type="text"
-                              className="in-num"
-                              value="1"
-                              readonly=""
-                            />
-                            <div className="qtybutton-box">
-                              <span className="plus">
-                                <img src="img/icon/plus.png" alt="" />
-                              </span>
-                              <span className="minus dis">
-                                <img src="img/icon/minus.png" alt="" />
-                              </span>
-                            </div>
-                          </form>
-                        </div>
-                      </td>
-                      <td className="product-subtotal">
-                        <span>$ 74.00</span>
-                      </td>
-                      <td className="product-delete">
-                        <a href="#">
-                          <i className="flaticon-trash"></i>
-                        </a>
-                      </td>
-                    </tr>
+                    {shoppingCart.map((product) => (
+                      <tr key={product._id}>
+                        <td className="product-thumbnail">
+                          <a href="shop-details.html">
+                            <img src="img/product/cart_img01.jpg" alt="" />
+                          </a>
+                        </td>
+                        <td className="product-name">
+                          <h4>
+                            <a href="shop-details.html">
+                              {product.productName}
+                            </a>
+                          </h4>
+                        </td>
+                        <td className="product-price">{product.price}</td>
+                        <td className="product-quantity">
+                          <div className="cart-plus-minus">
+                            <form  className="num-block">
+                              <input
+                                type="text"
+                                className="in-num"
+                                value={product.quantity}
+                                readonly=""
+                              />
+                              <div className="qtybutton-box">
+                                {/* <span className="plus">
+                                  {/* <img src="img/icon/plus.png" alt="" /> */}
+
+                                {/* </span> */}
+                                <button
+                                  onClick={() =>
+                                    dispatch({
+                                      type: "INCREMENT",
+                                      id: product._id,
+                                    })
+                                  }
+                                >
+                                  +
+                                </button>
+                                {/* <span className="minus dis">
+                                  {/* <img src="img/icon/minus.png" alt="" /> */}
+                                {/* - */}
+                                {/* </span> */}
+                                <button
+                                  onClick={() =>
+                                    dispatch({
+                                      type: "DECREMENT",
+                                      id: product._id,
+                                    })
+                                  }
+                                >
+                                  -
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </td>
+                        <td className="product-subtotal">
+                          <span>{product.price * product.quantity}</span>
+                        </td>
+                        <td className="product-delete">
+                          {/* <a href="#">
+                            <i className="flaticon-trash"></i>
+                          </a> */}
+                          <button
+                            onClick={() =>
+                              dispatch({
+                                type: "DELETE_PRODUCT",
+                                id: product._id,
+                              })
+                            }
+                          >
+                            X
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -163,7 +168,7 @@ const Cart = () => {
                     </li>
                     <li className="cart-total-amount">
                       <span>TOTAL</span>{" "}
-                      <span className="amount">$ 151.00</span>
+                      <span className="amount">${totalPrice}</span>
                     </li>
                   </ul>
                   <a href="checkout.html" className="btn">
