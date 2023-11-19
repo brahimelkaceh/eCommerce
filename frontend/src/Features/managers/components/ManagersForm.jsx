@@ -72,7 +72,7 @@ const Form = () => {
                 value={values.firstName}
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
+                helpertext={touched.firstName && errors.firstName}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
@@ -85,7 +85,7 @@ const Form = () => {
                 value={values.lastName}
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
+                helpertext={touched.lastName && errors.lastName}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
@@ -98,7 +98,7 @@ const Form = () => {
                 value={values.email}
                 name="email"
                 error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
+                helpertext={touched.email && errors.email}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
@@ -111,7 +111,7 @@ const Form = () => {
                 value={values.userName}
                 name="userName"
                 error={!!touched.userName && !!errors.userName}
-                helperText={touched.userName && errors.userName}
+                helpertext={touched.userName && errors.userName}
                 sx={{ gridColumn: "span 4" }}
               />
               <TextField
@@ -124,7 +124,7 @@ const Form = () => {
                 value={values.password}
                 name="password"
                 error={!!touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
+                helpertext={touched.password && errors.password}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField
@@ -137,7 +137,7 @@ const Form = () => {
                 value={values.confirmPassword}
                 name="confirmPassword"
                 error={!!touched.confirmPassword && !!errors.confirmPassword}
-                helperText={touched.confirmPassword && errors.confirmPassword}
+                helpertext={touched.confirmPassword && errors.confirmPassword}
                 sx={{ gridColumn: "span 2" }}
               />
             </Box>

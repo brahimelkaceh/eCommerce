@@ -13,12 +13,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "90%",
-  height: "90%",
+  width: "80%",
+  height: "95%",
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: " var(--border-radius)",
   p: 1,
+  overflow: "scroll",
 };
 
 export default function ProductsModal({

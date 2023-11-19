@@ -146,7 +146,6 @@ export default function AllProducts({ handleOpen }) {
       field: "subCategoryId",
       headerName: "Subcategory Name",
       flex: 1,
-      editable: true,
       type: "singleSelect",
       // valueOptions: subcategories,
 

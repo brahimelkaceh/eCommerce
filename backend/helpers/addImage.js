@@ -6,21 +6,22 @@ const {
 } = require("@azure/storage-blob");
 const sharedKeyCredential = new StorageSharedKeyCredential(
   process.env.ACCOUNT_NAME,
-  `${process.env.AZURE_KEY}`,
+  `${process.env.AZURE_KEY}`
 );
 const blobServiceClient = new BlobServiceClient(
   `https://${process.env.ACCOUNT_NAME}.blob.core.windows.net`,
-  sharedKeyCredential,
+  sharedKeyCredential
 );
 exports.addImages = async (images) => {
   if (images && images.length > 0) {
     const containerClient = blobServiceClient.getContainerClient(
-      process.env.CONTAINER_NAME,
+      process.env.CONTAINER_NAME
     );
     const uploadedImages = [];
 
     for (const image of images) {
       const blobName = `${Date.now()}_${image.originalname}`;
+      // const blobName = `${Date.now()}_${image}`;
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
       const imageContentType = image.mimetype;
@@ -34,6 +35,8 @@ exports.addImages = async (images) => {
           blobContentType: "image/webp", // Set the content type to WebP
         },
       };
+      console.log("hello world");
+      console.log(webpData);
 
       await blockBlobClient.upload(webpData, webpData.length, options);
       const imageUrl = `${process.env.CDN_URL}/${process.env.CONTAINER_NAME}/${blobName}`;
@@ -43,7 +46,7 @@ exports.addImages = async (images) => {
         // Add other fields as needed for each image
       });
     }
-    console.log(uploadedImages);
+    // console.log(uploadedImages);
     return uploadedImages; // Return the array of uploaded images
   } else {
     console.log("No images received");
