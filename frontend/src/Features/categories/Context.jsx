@@ -1,39 +1,65 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+// DataContext.js
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { fetchSubcategoriesData } from "./Services";
 
-// Create context
-const SubcategoriesContext = createContext();
+const DataSubcategoriesContext = createContext();
 
-// Create context provider component
-export const SubcategoriesProvider = ({ children }) => {
-  const [subcategories, setSubcategories] = useState([]);
+export const SubcategoryProvider = ({ children }) => {
+  const [SubcatData, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [order, setOrder] = useState(null);
 
-  // Fetch subcategories data
+  const [orderDetailsData, setOrderDetailsData] = useState([]);
   useEffect(() => {
-    const fetchSubcategories = async () => {
+    const fetchDataFromApi = async () => {
       try {
-        const response = await fetch('http://localhost:5000/subcategories');
-        const data = await response.json();
-        setSubcategories(data);
+        const responseData = await fetchSubcategoriesData("");
+        console.log("data", responseData.data);
+        setData(responseData.data);
       } catch (error) {
-        console.error('Error fetching subcategories:', error);
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchSubcategories();
+    fetchDataFromApi();
   }, []);
+  // const getOrderById = async (id) => {
+  //   try {
+  //     const fetchedOrder = await fetchOrderById(id);
+  //     setOrderDetailsData(fetchedOrder.data);
+  //   } catch (error) {
+  //     console.error("Error fetching customer:", error);
+  //   }
+  // };
+  // const updateOrder = async (id, updatedOrderData) => {
+  //   console.log(updatedOrderData);
+  //   try {
+  //     const updatedOrder = await updateOrderById(id, updatedOrderData);
+  //     setOrder(updatedOrder);
+  //   } catch (error) {
+  //     console.error("Error updating order:", error);
+  //   }
+  // };
+
+  const values = {
+    SubcatData,
+    loading,
+    error,
+    // getOrderById,
+    // orderDetailsData,
+    // updateOrder,
+  };
 
   return (
-    <SubcategoriesContext.Provider value={{ subcategories }}>
+    <DataSubcategoriesContext.Provider value={values}>
       {children}
-    </SubcategoriesContext.Provider>
+    </DataSubcategoriesContext.Provider>
   );
 };
 
-// Create a custom hook for using the SubcategoriesContext
-export const useSubcategories = () => {
-  const context = useContext(SubcategoriesContext);
-  if (!context) {
-    throw new Error('useSubcategories must be used within a SubcategoriesProvider');
-  }
-  return context;
+export const useSubCatData = () => {
+  return useContext(DataSubcategoriesContext);
 };

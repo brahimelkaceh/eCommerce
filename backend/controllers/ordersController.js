@@ -101,7 +101,7 @@ exports.updateOrder = catchAsync(async (req, res) => {
 
     const updatedOrder = await orders.updateOne(
       { _id: id },
-      { $set: newOrderData },
+      { $set: newOrderData }
     );
 
     response.message = CONSTANTS.ORDER_UPDATED;

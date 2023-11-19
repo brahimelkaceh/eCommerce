@@ -15,43 +15,19 @@ import {
 } from "@mui/x-data-grid";
 
 import { Chip } from "@mui/material";
-import { useData } from "../Context";
+import { useProduct } from "../Context";
 import { useEffect } from "react";
-import Loader from "../../../Components/loader/Loader";
 import { useState } from "react";
-import { useCustomer } from "../../../Features/customers/Context";
 
-export default function AllOrders({ handleOpen }) {
-  const { data, loading, error, getOrderById, updateOrder } = useData();
-  const { getCustomerById, customers } = useCustomer();
-
-  const [rows, setrows] = useState([]);
-  const [customerId, setcustomer] = useState("");
+export default function AllProducts({ handleOpen }) {
+  const { products, getProductById, editProduct, deleteProduct } = useProduct();
+  const [rows, setrows] = useState(products && products);
   const [rowModesModel, setrowmodesmodel] = useState({});
-  useEffect(() => {
-    setrows(data);
-  }, [data]);
+  // console.log("inside all products", products);
 
   useEffect(() => {
-    getCustomerById(customerId);
-  }, [customerId]);
-
-  const getColorBasedOnStatus = (status) => {
-    switch (status) {
-      case "Open":
-        return "#B7DFFB";
-      case "Shipped":
-        return "#FEECD1"; // Change this to the color you want for "shipped"
-      case "Payed":
-        return "#58B3F5"; // Change this to the color you want for "payed"
-      case "Closed":
-        return "#B8F5D0"; // Change this to the color you want for "closed"
-      case "Canceled":
-        return "#F6BCBC";
-      default:
-        return "default"; // You can set a default color for unknown statuses
-    }
-  };
+    setrows(products);
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -67,8 +43,12 @@ export default function AllOrders({ handleOpen }) {
     setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setrows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id) => async () => {
+    const deletedProduct = await deleteProduct(id);
+    if (deletedProduct) {
+      // return setrows(rows.filter((row) => row.id !== id));
+      return products;
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -83,43 +63,107 @@ export default function AllOrders({ handleOpen }) {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
-    updateOrder(updatedRow._id, updatedRow);
+    const updatedProd = await editProduct(updatedRow._id, updatedRow);
+
     return updatedRow;
   };
-
   const handleRowModesModelChange = (newRowModesModel) => {
     setrowmodesmodel(newRowModesModel);
   };
 
   const columns = [
+    { field: "_id", headerName: "Product ID", width: 150 },
     {
-      field: "id",
-      headerName: "Order Id",
-      align: "left",
-      headerAlign: "left",
-      width: 200,
-    },
-    {
-      field: "orderItems",
-      headerName: "Product",
-      width: 120,
-
+      field: "images",
+      headerName: "",
       renderCell: (params) => {
         return (
-          <Chip
-            label={
-              params?.value?.length > 1
-                ? params.value.length + " Products"
-                : params.value.length + " Product"
-            }
-            size="small"
-            // sx
+          <div
             style={{
-              backgroundColor: getColorBasedOnStatus(params.value),
+              height: "4rem",
+              width: "4rem ",
+            }}
+          >
+            <img
+              src={
+                params.value
+                  ? params?.formattedValue[0]
+                  : "https://themesbrand.com/velzon/html/saas/assets/images/products/img-6.png"
+              }
+              alt="Product"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover", // You can adjust this property based on your layout requirements
+                borderRadius: "5px", // Optional: Add border radius for rounded corners
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      field: "productName",
+      headerName: "Product Name",
+      editable: true,
+      flex: 1,
+      renderCell: (params) => (
+        <div className="product-name">
+          <span className="name">{params.value}</span>
+          <span
+            className="subcategory"
+            // sx
+          >
+            {params.row.subCategoryId.subCategoryName}
+          </span>
+        </div>
+      ),
+    },
+    {
+      field: "quantity",
+      headerName: "Availability",
+      editable: true,
+      flex: 1,
+      renderCell: (params) => (
+        <Chip
+          label={params.value > 0 ? "in Stock" : "out stock"}
+          size="small"
+          style={{
+            backgroundColor: params.value > 0 ? "#CFF8E0" : "#eee",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value > 0 ? "#1F8B24" : "#818181",
+          }}
+        />
+      ),
+    },
+
+    {
+      field: "subCategoryId",
+      headerName: "Subcategory Name",
+      flex: 1,
+      editable: true,
+      type: "singleSelect",
+      // valueOptions: subcategories,
+
+      renderCell: (params) => {
+        // console.log(params);
+        const subCategoryName =
+          typeof params.value === "object"
+            ? params.value.subCategoryName
+            : params.value;
+
+        return (
+          <Chip
+            label={subCategoryName}
+            size="small"
+            style={{
+              color: "#0A3977",
+              background: "transparent",
             }}
           />
         );
@@ -127,22 +171,42 @@ export default function AllOrders({ handleOpen }) {
     },
 
     {
-      field: "customerID",
-      headerName: "Customer Name",
-      align: "left",
-      width: 120,
+      field: "shortDescription",
+      headerName: "Short Description",
+      editable: true,
+      width: 150,
+    },
+    {
+      field: "longDescription",
+      headerName: "Long Description",
+      editable: true,
+      width: 150,
+    },
+    {
+      field: "active",
+      headerName: "Status",
+      editable: true,
+      valueOptions: [true, false],
+      type: "singleSelect",
 
-      headerAlign: "left",
-      renderCell: (params) => {
-        setcustomer(params.value);
-        return <span className="customer-name"> {customers}</span>;
-      },
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "createdAt",
-      headerName: "Created At",
-      width: 120,
-
+      headerName: "Published",
+      editable: false,
+      flex: 1,
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -153,10 +217,10 @@ export default function AllOrders({ handleOpen }) {
             label={formatted}
             size="small"
             style={{
-              backgroundColor: "#C5F2C7",
+              backgroundColor: "#E5E5E580",
               textTransform: "capitalize",
               fontWeight: "bold",
-              color: "#1F8B24",
+              color: "#616161",
             }}
           ></Chip>
         );
@@ -165,32 +229,8 @@ export default function AllOrders({ handleOpen }) {
     {
       field: "updatedAt",
       headerName: "Updated At",
-      width: 120,
-
-      renderCell: (params) => {
-        const dateObject = new Date(params.value);
-        const options = { year: "numeric", month: "short", day: "numeric" };
-        const formatted = dateObject.toLocaleDateString(undefined, options);
-
-        return (
-          <Chip
-            label={formatted}
-            size="small"
-            style={{
-              backgroundColor: "#FBF3D0",
-              textTransform: "capitalize",
-              fontWeight: "bold",
-              color: "#BF710F",
-            }}
-          ></Chip>
-        );
-      },
-    },
-    {
-      field: "orderDate",
-      headerName: "Order Date",
-      width: 120,
-
+      editable: false,
+      flex: 1,
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -209,41 +249,6 @@ export default function AllOrders({ handleOpen }) {
           ></Chip>
         );
       },
-    },
-
-    {
-      field: "cartTotalPrice",
-      headerName: "Total price",
-      width: 100,
-
-      renderCell: (params) => (
-        <Chip
-          label={"$" + params.value}
-          size="small"
-          // sx
-          style={{
-            backgroundColor: getColorBasedOnStatus(params.value),
-          }}
-        />
-      ),
-    },
-    {
-      field: "Status",
-      headerName: "Status",
-      editable: true,
-      type: "singleSelect",
-      width: 100,
-      valueOptions: ["open", "Shipped", "Payed", "Closed", "Canceled"],
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          size="small"
-          // sx
-          style={{
-            backgroundColor: getColorBasedOnStatus(params.value),
-          }}
-        />
-      ),
     },
     {
       field: "actions",
@@ -287,18 +292,6 @@ export default function AllOrders({ handleOpen }) {
 
         return [
           <GridActionsCellItem
-            icon={<RemoveRedEyeIcon />}
-            sx={{
-              color: "#0A3977",
-            }}
-            label="View"
-            onClick={() => {
-              handleOpen();
-              getOrderById(id);
-            }}
-            color="inherit"
-          />,
-          <GridActionsCellItem
             icon={
               <EditIcon
                 sx={{
@@ -309,7 +302,15 @@ export default function AllOrders({ handleOpen }) {
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            // color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+            sx={{
+              color: "#E33434",
+            }}
           />,
         ];
       },
@@ -323,10 +324,10 @@ export default function AllOrders({ handleOpen }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
 
   return (
-    data && (
+    rows && (
       <DataGrid
         className="dataGrid"
-        rows={rows}
+        rows={products && products}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}

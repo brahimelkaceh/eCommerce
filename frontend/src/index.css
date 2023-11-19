@@ -51,3 +51,24 @@ h3 {
 
   color: #c5f2c7 !important;
 }
+.customer-name {
+  color: var(--Black, #000);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "clig" off, "liga" off;
+
+  /* Manrope / Body 1 */
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: 0.269px;
+  text-transform: capitalize;
+}
+
+.dataGrid {
+  background-color: #fff;
+  margin-top: 15px;
+  padding: 7px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}

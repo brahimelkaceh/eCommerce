@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, MenuItem, Select } from "@mui/material";
+import { Box, Button, Chip, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -12,13 +12,7 @@ import {
   GridToolbarContainer,
   GridRowModes,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
-import ProductForm from "./ProductForm";
+import { randomId } from "@mui/x-data-grid-generator";
 import { useProduct } from "../Context";
 
 function EditToolbar(props) {
@@ -48,22 +42,16 @@ function EditToolbar(props) {
 const ProductList = () => {
   const { products, addProduct, getProductById, editProduct, deleteProduct } =
     useProduct();
-  console.log(products);
-  const [isFormModalOpen, setFormModalOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editModeRows, setEditModeRows] = useState(new Set());
   const [rows, setRows] = useState(products);
   const [rowModesModel, setRowModesModel] = useState({});
-
+  // console.log(products);
   useEffect(() => {
     setRows(
       products.map((product) => ({ ...product, isNew: false, id: product._id }))
     );
   }, [products]);
-
-  useEffect(() => {
-    setFormModalOpen(false);
-  }, [selectedProductId]);
 
   const handleSaveClick = (id) => () => {
     setRowModesModel((prevRowModesModel) => ({
@@ -78,24 +66,9 @@ const ProductList = () => {
     setRows((prevRows) => prevRows.filter((row) => row.id !== id));
   };
 
-  // const processRowUpdate = (newRow) => {
-  //   if (newRow.isNew) {
-  //     console.log("product new");
-  //   } else {
-  //     console.log("product edited");
-  //   }
-  //   const updatedRow = { ...newRow, isNew: false };
-  //   setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  //   return updatedRow;
-  // };
-
   const processRowUpdate = async (newRow) => {
     if (newRow.isNew) {
-      console.log("product new", newRow);
-
-      // Assuming addProduct returns the newly added product
       const addedProduct = await addProduct(newRow);
-
       const updatedRow = { ...addedProduct, isNew: false };
       setRows((prevRows) =>
         prevRows.map((row) => (row.id === newRow.id ? updatedRow : row))
@@ -130,14 +103,6 @@ const ProductList = () => {
       (prevEditModeRows) =>
         new Set([...prevEditModeRows].filter((rowId) => rowId !== id))
     );
-  };
-
-  const handleOpenFormModal = () => {
-    setFormModalOpen(true);
-  };
-
-  const handleCloseFormModal = () => {
-    setFormModalOpen(false);
   };
 
   const handleRowEditStop = (params, event) => {
@@ -194,74 +159,67 @@ const ProductList = () => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 210, editable: true },
-    { field: "sku", headerName: "SKU", width: 50, editable: true },
+    { field: "_id", headerName: "Product ID", width: 150 },
     {
       field: "productName",
       headerName: "Product Name",
-      width: 200,
       editable: true,
+      flex: 1,
+      renderCell: (params) => (
+        <div className="product-name">
+          <span className="name">{params.value}</span>
+          <span
+            className="subcategory"
+            // sx
+          >
+            {params.row.subCategoryId.subCategoryName}
+          </span>
+        </div>
+      ),
     },
     {
       field: "subCategoryId",
       headerName: "Subcategory Name",
-      width: 150,
+      flex: 1,
       editable: true,
-      renderCell: (params) => params.row.subCategoryId.subCategoryName,
-    },    
-    {
-      field: "shortDescription",
-      headerName: "Short Description",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "longDescription",
-      headerName: "Long Description",
-      width: 150,
-      editable: true,
+      valueOptions: ["open", "Shipped", "Payed", "Closed", "Canceled"],
+
+      renderCell: (params) => {
+        const subCategoryName =
+          typeof params.value === "object"
+            ? params.value.subCategoryName
+            : params.value;
+
+        return (
+          <Chip
+            label={subCategoryName}
+            size="small"
+            style={{
+              color: "#0A3977",
+              background: "transparent",
+            }}
+          />
+        );
+      },
     },
     {
       field: "price",
       headerName: "Price",
-      type: "number",
-      width: 70,
       editable: true,
+      renderCell: (params) => (
+        <Chip
+          label={"$" + params.value}
+          size="small"
+          // sx
+          style={{
+            backgroundColor: "#C5DCFA80",
+          }}
+        />
+      ),
     },
     {
-      field: "discountPrice",
-      headerName: "Discount Price",
-      type: "number",
-      width: 120,
-      editable: true,
-    },
-    {
-      field: "quantity",
-      headerName: "Quantity",
-      type: "number",
-      width: 80,
-      editable: true,
-    },
-    // { field: "size", headerName: "Size", width: 80, editable: true },
-    // { field: "color", headerName: "Color", width: 80, editable: true },
-    // {
-    //   field: "availability",
-    //   headerName: "Availability",
-    //   width: 80,
-    //   editable: true,
-    // },
-    {
-      field: "options",
-      headerName: "Options",
-      width: 200,
-      editable: true,
-      renderCell: renderOptionsSelect,
-    },
-    {
-      field: "active",
-      headerName: "Active",
-      type: "boolean",
-      width: 80,
+      field: "shortDescription",
+      headerName: "Short Description",
       editable: true,
       width: 150,
     },
@@ -275,6 +233,7 @@ const ProductList = () => {
       field: "active",
       headerName: "Status",
       editable: true,
+      valueOptions: ["active", "disabled"],
       flex: 1,
       renderCell: (params) => (
         <Chip
@@ -389,9 +348,6 @@ const ProductList = () => {
 
   return (
     <Box sx={{ width: "100%", margin: "auto" }}>
-      <Button onClick={handleOpenFormModal} variant="contained" color="primary">
-        Create new product
-      </Button>
       <DataGrid
         rows={rows}
         columns={columns}

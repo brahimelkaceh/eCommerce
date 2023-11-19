@@ -37,13 +37,14 @@ exports.login = catchAsync(async (req, res, next) => {
         role: user.role,
         username: user.userName,
       },
-      process.env.SECRET_KEY,
+      process.env.SECRET_KEY
     );
-    user.lastLogin = new Date();
+    // user.lastLogin = new Date();
     // console.log(user.lastLogin);
     await user.save();
+    console.log(user);
 
-    return res.status(200).json({ status: "success", data: token });
+    return res.status(200).json({ status: "success", data: token, user: user });
   }
 
   // For managers, check if the user is active
@@ -52,7 +53,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // Update the last login date
-  user.lastLogin = new Date.now();
+  // user.lastLogin = new Date.now();
   console.log(user.lastLogin);
   await user.save();
 
@@ -64,10 +65,10 @@ exports.login = catchAsync(async (req, res, next) => {
       role: user.role,
       username: user.userName,
     },
-    process.env.SECRET_KEY,
+    process.env.SECRET_KEY
   );
 
-  res.status(200).json({ status: "success", data: token });
+  res.status(200).json({ status: "success", data: token, user });
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {

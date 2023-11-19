@@ -19,7 +19,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       discountPrice,
       quantity,
       options, // Array of product options
@@ -43,7 +42,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,
@@ -72,7 +70,7 @@ exports.getAllProducts = async (req, res, next) => {
       .paginate();
     const products = await features.query.populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     // SEND RESPONSE
@@ -94,7 +92,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   try {
     const product = await Products.findOne(searchParams).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
@@ -121,7 +119,7 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   try {
     const product = await Products.findById(id).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     if (!product) {
@@ -167,7 +165,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-      },
+      }
     ).populate("subCategoryId", "subCategoryName");
     console.log(updatedProduct);
     if (!updatedProduct) {
