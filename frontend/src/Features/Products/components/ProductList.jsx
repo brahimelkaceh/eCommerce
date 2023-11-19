@@ -365,6 +365,7 @@ const ProductList = () => {
           toolbar: { setRows, setRowModesModel },
         }}
       />
+ 
     </Box>
   );
 };
