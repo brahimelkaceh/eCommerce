@@ -92,7 +92,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
   const hashedPassword = await bcrypt.hash(password, 12);
 
   let newUser;
-  if (role.toLowerCase() === "manager") {
+  if (role.toLowerCase() === "manager" ) {
     newUser = new User({
       ...userData,
       userName: userName,
