@@ -11,6 +11,7 @@ exports.TokenCheck = (req, res, next) => {
       throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }
     const userData = jwt.verify(token, process.env.SECRET_KEY);
+    console.log(userData);
     if (!userData) {
       throw new Error("Error while verifying the token");
     }

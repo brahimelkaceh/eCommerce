@@ -15,18 +15,24 @@ const {
   showAllUsers,
 } = require("../controllers/userController");
 
-Router.post("/users/login",ValidatorSanitizer.validate  ,login);
-Router.post("/users", TokenCheck, upload.array("images", 5),ValidatorSanitizer.validate, createUser);
+Router.post("/users/login", ValidatorSanitizer.validate, login);
+Router.post(
+  "/users",
+  TokenCheck,
+  upload.array("images", 5),
+  ValidatorSanitizer.validate,
+  createUser,
+);
 Router.put(
   "/users/:id",
   TokenCheck,
-   upload.array("images", 5),
+  upload.array("images", 5),
   ValidatorSanitizer.validate,
   updateUser,
 );
 Router.delete("/users/:id", TokenCheck, deleteUser);
 Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/getallusers/", TokenCheck, showAllUsers);
+Router.get("/users/", TokenCheck, showAllUsers);
 
 module.exports = Router;
