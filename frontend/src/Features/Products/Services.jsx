@@ -8,11 +8,13 @@ const apiService = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 
 const getToken = () => {
   const token = localStorage.getItem("userT");
+  console.log(token);
   if (!token) {
     throw new Error("Token not available");
   }
@@ -20,9 +22,10 @@ const getToken = () => {
 };
 
 const handleRequest = async (method, endpoint, data = null) => {
+  console.log(getToken());
   try {
     const headers = {
-      Authorization: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
     };
 
     const response = await apiService({

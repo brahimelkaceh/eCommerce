@@ -12,7 +12,7 @@ const initialValues = {
     price: "",
     size: [],
     color: [],
-    availability: "",
+    availability: true,
   },
   active: false,
 };

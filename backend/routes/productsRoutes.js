@@ -19,24 +19,18 @@ const validatorSanitizer = require("../middlewares/validator");
 const ValidatorSanitizer = new validatorSanitizer();
 const { TokenCheck } = require("../middlewares/TokenCheck");
 
-Router.post(
-  "/products",
-  upload.array("image"),
-  // TokenCheck,
-  ValidatorSanitizer.validate,
-  createProduct
-);
+Router.post("/products", upload.array("image"), TokenCheck, createProduct);
 Router.put(
   "/products/:id",
   upload.array("images", 5),
-  ValidatorSanitizer.validate,
+  TokenCheck,
   updateProduct
 );
 
 // TokenCheck
 Router.get("/products/", getAllProducts);
-Router.get("/products/search", TokenCheck, searchProducts);
-Router.get("/products/:id", TokenCheck, getProductById);
+Router.get("/products/search", searchProducts);
+Router.get("/products/:id", getProductById);
 Router.delete("/products/:id", deleteProduct);
 
 module.exports = Router;

@@ -61,7 +61,7 @@ const ProductForm = () => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values.options);
+      // console.log(values);
       addNewProduct({ ...values, images: [values.images[0].name] });
     },
   });
@@ -120,7 +120,7 @@ const ProductForm = () => {
             <InputLabel id="availability-label">Subcategory</InputLabel>
             <Select
               labelId="availability-label"
-              id="options.availability"
+              id="subCategoryId"
               name="subCategoryId"
               label="Subcategory"
               value={formik.values.subCategoryId}
@@ -379,8 +379,8 @@ const ProductForm = () => {
                 value={formik.values.options.availability}
                 onChange={formik.handleChange}
               >
-                <MenuItem value="In Stock">In Stock</MenuItem>
-                <MenuItem value="Out of Stock">Out Of Stock</MenuItem>
+                <MenuItem value={true}>In Stock</MenuItem>
+                <MenuItem value={false}>Out Of Stock</MenuItem>
               </Select>
             </FormControl>
           </Box>
