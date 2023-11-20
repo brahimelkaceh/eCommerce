@@ -62,7 +62,7 @@ const ProductForm = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values.options);
-      // addNewProduct({ ...values, images: [values.images[0].name] });
+      addNewProduct({ ...values, images: [values.images[0].name] });
     },
   });
   const [size, setSize] = useState(formik.values.options.size);

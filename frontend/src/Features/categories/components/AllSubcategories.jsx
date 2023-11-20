@@ -19,19 +19,14 @@ import {
   randomBoolean,
   randomArrayItem,
 } from "@mui/x-data-grid-generator";
+import { useSubCatData } from "../Context";
+import { useEffect } from "react";
+import { Chip } from "@mui/material";
 
 const categoryName = ["Market", "Finance", "Development"];
 const randomCategory = () => {
   return randomArrayItem(categoryName);
 };
-const initialRows = [
-  {
-    id: randomId(),
-    subcategory: randomTraderName(),
-    category: randomCategory(),
-    status: randomBoolean(),
-  },
-];
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -55,9 +50,13 @@ function EditToolbar(props) {
 }
 
 export default function AllSubcategories() {
-  const [rows, setRows] = React.useState(initialRows);
+  const { SubcatData, updateSubCat } = useSubCatData();
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
+  useEffect(() => {
+    setRows(SubcatData);
+  }, [SubcatData]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -88,9 +87,11 @@ export default function AllSubcategories() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    delete updatedRow.isNew;
+    const updatedProd = await updateSubCat(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
@@ -103,30 +104,43 @@ export default function AllSubcategories() {
       field: "id",
       headerName: "Category Id",
       align: "center",
-      editable: false,
       width: 200,
     },
     {
-      field: "subcategory",
+      field: "subCategoryName",
       headerName: "Subcategory Name",
       align: "center",
       editable: true,
       width: 150,
     },
     {
-      field: "category",
+      field: "categoryId",
       headerName: "Category Name",
       align: "center",
-      editable: true,
       width: 150,
-      valueOptions: ["Market", "Finance", "Development"],
+      renderCell: (params) => {
+        return <Chip label={params.value.categoryName}></Chip>;
+      },
     },
     {
-      field: "status",
+      field: "active",
       headerName: "Active",
-      type: "boolean",
-      align: "center",
       editable: true,
+      valueOptions: [true, false],
+      type: "boolean",
+
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
@@ -144,12 +158,23 @@ export default function AllSubcategories() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -160,17 +185,25 @@ export default function AllSubcategories() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            sx={{
+              color: "#E33434",
+            }}
           />,
         ];
       },

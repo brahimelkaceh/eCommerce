@@ -23,7 +23,6 @@ export const fetchSubcategoriesData = async (endpoint) => {
     const response = await apiService.get(endpoint, {
       headers: getToken(),
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -40,12 +39,12 @@ export const fetchSubcategoriesData = async (endpoint) => {
 //   }
 // };
 
-// export const updateOrderById = async (id, updatedOrderData) => {
-//   const endpoint = `${id}`;
-//   try {
-//     const response = await apiService.put(endpoint, updatedOrderData);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const updateSubcategory = async (id, updatedOrderData) => {
+  const endpoint = `${id}`;
+  try {
+    const response = await apiService.put(endpoint, updatedOrderData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
