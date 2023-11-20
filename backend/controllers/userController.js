@@ -98,7 +98,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       userName: userName,
       email: email,
       password: hashedPassword,
-      // images: uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.map((image) => image.imageUrl),
       role: role,
     });
   } else if (role.toLowerCase() === "customer") {

@@ -19,9 +19,9 @@ Router.post(
   ValidatorSanitizer.validate,
   createSubCategory
 );
-Router.get("/subcategories/search", TokenCheck, searchSubCategory);
-Router.get("/subcategories/", TokenCheck, getAllSubcategories);
-Router.get("/subcategories/:id", TokenCheck, getSubCategoryById);
+Router.get("/subcategories/search", searchSubCategory);
+Router.get("/subcategories/", getAllSubcategories);
+Router.get("/subcategories/:id", getSubCategoryById);
 Router.put(
   "/subcategories/:id",
   TokenCheck,

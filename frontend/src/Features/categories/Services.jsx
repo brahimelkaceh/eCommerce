@@ -10,10 +10,20 @@ const apiService = axios.create({
     "Content-Type": "application/json",
   },
 });
+const getToken = () => {
+  const token = localStorage.getItem("userT");
+  if (!token) {
+    throw new Error("Token not available");
+  }
+  return token;
+};
 
 export const fetchSubcategoriesData = async (endpoint) => {
   try {
-    const response = await apiService.get(endpoint);
+    const response = await apiService.get(endpoint, {
+      headers: getToken(),
+    });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
