@@ -22,14 +22,14 @@ const { TokenCheck } = require("../middlewares/TokenCheck");
 Router.post(
   "/products",
   upload.array("image"),
-  // TokenCheck,
-  ValidatorSanitizer.validate,
+   TokenCheck,
+  // ValidatorSanitizer.validate,
   createProduct
 );
 Router.put(
   "/products/:id",
   upload.array("images", 5),
-  ValidatorSanitizer.validate,
+  //ValidatorSanitizer.validate,
   updateProduct
 );
 
