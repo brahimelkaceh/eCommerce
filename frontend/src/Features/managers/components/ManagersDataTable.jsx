@@ -6,6 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import { DeleteUser, editUser } from "../service";
+import { useManager } from "../Context";
 import {
   GridRowModes,
   DataGrid,
@@ -14,14 +16,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-  randomEmail,
-  randomUpdatedDate,
-} from "@mui/x-data-grid-generator";
+import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
 
 const roles = ["manager", "admin"];
@@ -33,97 +28,14 @@ const randomActive = () => {
   return randomArrayItem(active);
 };
 
-const initialRows = [
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-  {
-    id: randomId(),
-    userName: randomTraderName(),
-    lastName: randomTraderName(),
-    firstName: randomTraderName(),
-    email: randomEmail(),
-    creationDate: randomCreatedDate(),
-    lastLogin: randomUpdatedDate(),
-    lastUpdate: randomUpdatedDate(),
-    role: randomRole(),
-    active: randomActive(),
-  },
-];
-
 export default function allManagers() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const ManagerContext = useManager();
 
+  const [rows, setrows] = React.useState([]);
+  const [rowModesModel, setrowsmodesmodel] = React.useState({});
+  React.useEffect(() => {
+    setrows(ManagerContext.managers);
+  }, [ManagerContext.managers]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -131,46 +43,70 @@ export default function allManagers() {
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    try {
+      DeleteUser(id).then((response) => {
+        console.log(response);
+      });
+      setrows(rows.filter((row) => row.id !== id));
+    } catch (err) {
+      throw err;
+    }
   };
 
   const handleCancelClick = (id) => () => {
-    setRowModesModel({
+    setrowsmodesmodel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setrows(rows.filter((row) => row.id !== id));
     }
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    const updatedRow = {
+      ...newRow,
+      isNew: false,
+    };
+    setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    const ID = updatedRow.id;
+    delete updatedRow.isNew;
+    try {
+      editUser(ID, updatedRow)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error occurred: while editing user", error);
+        });
+    } catch (error) {
+      throw error;
+    }
+    console.log(updatedRow);
+    console.log(updatedRow.id);
     return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+    setrowsmodesmodel(newRowModesModel);
   };
 
   const columns = [
-    { field: "userName", headerName: "UserName", width: 180, editable: true },
+    { field: "userName", headerName: "UserName", editable: true },
     {
       field: "firstName",
       headerName: "First Name",
       align: "left",
-      headerAlign: "left",
       editable: true,
       flex: 1,
     },
@@ -178,7 +114,6 @@ export default function allManagers() {
       field: "lastName",
       headerName: "Last Name",
       align: "left",
-      headerAlign: "left",
       editable: true,
       flex: 1,
     },
@@ -187,14 +122,12 @@ export default function allManagers() {
       headerName: "Email",
       align: "left",
       headerAlign: "left",
-      editable: true,
       flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
       type: "date",
-      editable: true,
       flex: 1,
     },
     {
@@ -202,20 +135,17 @@ export default function allManagers() {
       headerName: "Last Login",
       type: "date",
       flex: 1,
-      editable: true,
     },
     {
       field: "lastUpdate",
       headerName: "Last Update",
       type: "date",
       flex: 1,
-      editable: true,
     },
     {
       field: "role",
       headerName: "Role",
       flex: 1,
-      editable: true,
       type: "singleSelect",
       valueOptions: ["manager", "admin"],
       renderCell: (params) => (
@@ -330,7 +260,7 @@ export default function allManagers() {
           toolbar: GridToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel, showQuickFilter: true },
+          toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
         }}
         disableColumnFilter
         disableDensitySelector

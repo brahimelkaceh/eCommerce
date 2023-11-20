@@ -4,6 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 import {
   GridRowModes,
@@ -12,98 +13,40 @@ import {
   GridToolbar,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-  randomDesk,
-  randomQuantity,
-  randomUnitPrice,
-} from "@mui/x-data-grid-generator";
+
 import { Chip } from "@mui/material";
+import { useData } from "../Context";
+import { useEffect } from "react";
+import Loader from "../../../Components/loader/Loader";
+import { useState } from "react";
+import { useCustomer } from "../../../Features/customers/Context";
 
-const initialRows = [
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-  {
-    product: randomDesk(),
-    id: randomId(),
-    date: randomCreatedDate(),
-    name: randomTraderName(),
-    quantity: randomQuantity(),
-    status: randomArrayItem(["open", "shipped", "payed", "closed", "canceled"]),
-    amount: randomUnitPrice(),
-  },
-];
+export default function AllOrders({ handleOpen }) {
+  const { data, loading, error, getOrderById, updateOrder } = useData();
+  const { getCustomerById, singleCustomer } = useCustomer();
 
-export default function AllOrders() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [rows, setrows] = useState([]);
+  const [customerId, setcustomer] = useState("");
+  const [rowModesModel, setrowmodesmodel] = useState({});
+  useEffect(() => {
+    setrows(data);
+  }, [data]);
+
+  useEffect(() => {
+    getCustomerById(customerId);
+  }, [customerId]);
 
   const getColorBasedOnStatus = (status) => {
     switch (status) {
-      case "open":
+      case "Open":
         return "#B7DFFB";
-      case "shipped":
+      case "Shipped":
         return "#FEECD1"; // Change this to the color you want for "shipped"
-      case "payed":
+      case "Payed":
         return "#58B3F5"; // Change this to the color you want for "payed"
-      case "closed":
+      case "Closed":
         return "#B8F5D0"; // Change this to the color you want for "closed"
-      case "canceled":
+      case "Canceled":
         return "#F6BCBC";
       default:
         return "default"; // You can set a default color for unknown statuses
@@ -117,74 +60,180 @@ export default function AllOrders() {
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleCancelClick = (id) => () => {
-    setRowModesModel({
+    setrowmodesmodel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
     const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setrows(rows.filter((row) => row.id !== id));
     }
   };
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    // console.log(updatedRow);
+    setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    delete updatedRow.isNew;
+    updateOrder(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+    setrowmodesmodel(newRowModesModel);
   };
 
   const columns = [
-    { field: "product", headerName: "Product", editable: true, flex: 1 },
     {
       field: "id",
-
       headerName: "Order Id",
       align: "left",
       headerAlign: "left",
-      editable: true,
+      width: 200,
     },
     {
-      field: "date",
-      headerName: "Date",
-      type: "date",
-      editable: true,
-    },
-    {
-      field: "name",
-      headerName: "Customer Name",
-      editable: true,
-      flex: 1,
+      field: "orderItems",
+      headerName: "Product",
+      width: 120,
+
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={
+              params?.value?.length > 1
+                ? params.value.length + " Products"
+                : params.value.length + " Product"
+            }
+            size="small"
+            // sx
+            style={{
+              backgroundColor: getColorBasedOnStatus(params.value),
+            }}
+          />
+        );
+      },
     },
 
     {
-      field: "quantity",
-      headerName: "Quantity",
-      type: "number",
-      editable: true,
+      field: "customerID",
+      headerName: "Customer Name",
+      align: "left",
+      width: 120,
+
+      headerAlign: "left",
+      renderCell: (params) => {
+        // console.log();
+        setcustomer(params.value._id);
+        return (
+          <span className="customer-name"> {singleCustomer?.userName}</span>
+        );
+      },
     },
     {
-      field: "status",
+      field: "createdAt",
+      headerName: "Created At",
+      width: 120,
+
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#C5F2C7",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#1F8B24",
+            }}
+          ></Chip>
+        );
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "Updated At",
+      width: 120,
+
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#FBF3D0",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#BF710F",
+            }}
+          ></Chip>
+        );
+      },
+    },
+    {
+      field: "orderDate",
+      headerName: "Order Date",
+      width: 120,
+
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
+    },
+
+    {
+      field: "cartTotalPrice",
+      headerName: "Total price",
+      width: 100,
+
+      renderCell: (params) => (
+        <Chip
+          label={"$" + params.value}
+          size="small"
+          // sx
+          style={{
+            backgroundColor: getColorBasedOnStatus(params.value),
+          }}
+        />
+      ),
+    },
+    {
+      field: "Status",
       headerName: "Status",
       editable: true,
       type: "singleSelect",
-      valueOptions: ["open", "shipped", "payed", "closed", "canceled"],
+      width: 100,
+      valueOptions: ["open", "Shipped", "Payed", "Closed", "Canceled"],
       renderCell: (params) => (
         <Chip
           label={params.value}
@@ -238,6 +287,18 @@ export default function AllOrders() {
 
         return [
           <GridActionsCellItem
+            icon={<RemoveRedEyeIcon />}
+            sx={{
+              color: "#0A3977",
+            }}
+            label="View"
+            onClick={() => {
+              handleOpen();
+              getOrderById(id);
+            }}
+            color="inherit"
+          />,
+          <GridActionsCellItem
             icon={
               <EditIcon
                 sx={{
@@ -249,15 +310,6 @@ export default function AllOrders() {
             className="textPrimary"
             onClick={handleEditClick(id)}
             // color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            sx={{
-              color: "#E33434",
-            }}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
           />,
         ];
       },
@@ -271,24 +323,9 @@ export default function AllOrders() {
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        minHeight: 560,
-        width: "100%",
-        "& .actions": {
-          color: "red",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-        backgroundColor: "#fff",
-        p: 1,
-        borderRadius: 2,
-        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-      }}
-    >
+    data && (
       <DataGrid
+        className="dataGrid"
         rows={rows}
         columns={columns}
         editMode="row"
@@ -297,7 +334,7 @@ export default function AllOrders() {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         slotProps={{
-          toolbar: { setRows, setRowModesModel, showQuickFilter: true },
+          toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
         }}
         disableColumnFilter
         disableDensitySelector
@@ -309,6 +346,6 @@ export default function AllOrders() {
           setColumnVisibilityModel(newModel)
         }
       />
-    </Box>
+    )
   );
 }

@@ -98,7 +98,6 @@ export default function AllCategories() {
       headerName: "Category Id",
       align: "center",
       editable: false,
-      headerAlign: "center",
       width: 200,
     },
     {
@@ -107,16 +106,13 @@ export default function AllCategories() {
       align: "center",
       editable: true,
       width: 200,
-      headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Active",
       type: "boolean",
       align: "center",
-      headerAlign: "left",
       editable: true,
-      headerAlign: "center",
     },
     {
       field: "actions",
@@ -124,7 +120,6 @@ export default function AllCategories() {
       headerName: "Actions",
       align: "center",
       cellClassName: "actions",
-      headerAlign: "center",
 
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

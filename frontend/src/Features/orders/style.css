@@ -1,1 +1,95 @@
+.box-order-details-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.box-order-id {
+  color: var(--grey-800, #3b4758);
 
+  /* Roboto_bold_24px */
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.product-details .product-details-title {
+  color: var(--grey-800, #3b4758);
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  padding-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+
+.product-details .products-imgs {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 15px;
+  align-self: stretch;
+}
+.products-details-container {
+  background-color: #fff;
+  display: flex;
+  gap: 25px;
+}
+.products-details-container .product-details {
+  background: #c3c3c3;
+  padding: 12px 24px;
+}
+.products-details-container .product-details .product-details-img {
+  width: 307px;
+}
+.products-details-container .product-details .product-details-img img {
+  width: 100%;
+  border-radius: var(--border-radius);
+}
+
+.products-details-options-container {
+  display: flex;
+  justify-content: space-between;
+}
+.product-details .products-details-options-container .products-details-options {
+  flex: 1;
+}
+
+.product-details .products-details-options .option {
+  color: var(--blue-04, #1672ec);
+  margin-left: 5px;
+  /* Manrope / Subtitle 1 */
+  font-size: 16px;
+  font-style: normal;
+  text-transform: capitalize;
+}
+.product-details .products-details-options .option span {
+  color: var(--Black, #000);
+
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration-line: strikethrough;
+}
+
+.product-details-title .quantity-options {
+  color: #414141;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 132%; /* 31.68px */
+}
+.mySwiper {
+  height: 100%;
+  width: 100%;
+}
+.swiper {
+  /* border-left: 4px solid var(--dark-blue); */
+  /* box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px; */
+  border-radius: var(--border-radius);
+  /* background-color: #fff; */
+}

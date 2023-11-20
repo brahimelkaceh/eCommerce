@@ -2,18 +2,22 @@ const mongoose = require("mongoose");
 
 const productOptionsSchema = new mongoose.Schema({
   size: {
-    type: String,
-    // You might want to require these fields if they're always necessary.
+    type: [String],
     required: true,
   },
   color: {
-    type: String,
+    type: [String],
     required: true,
   },
   availability: {
     type: String,
     enum: ["In Stock", "Out of Stock"],
     required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0, // Ensure price is non-negative
   },
 });
 
@@ -22,7 +26,7 @@ const productSchema = new mongoose.Schema(
     sku: {
       type: String,
       unique: true,
-      required: true, // If SKU is always required, consider adding this.
+      required: true,
     },
     productName: {
       type: String,
@@ -32,6 +36,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategoryModel",
       required: true,
+      index: true, // Index for subCategoryId lookup
     },
     shortDescription: {
       type: String,
@@ -41,20 +46,18 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true, // Price should probably always be required.
-    },
     images: {
       type: [String],
     },
     discountPrice: {
       type: Number,
       default: 0,
+      min: 0, // Ensure discountPrice is non-negative
     },
     quantity: {
       type: Number,
       default: 0,
+      min: 0, // Ensure quantity is non-negative
     },
     options: [productOptionsSchema],
     active: {
@@ -62,7 +65,7 @@ const productSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true, versionKey: false },
+  { timestamps: true, versionKey: false }
 );
 
 module.exports = mongoose.model("ProductModel", productSchema);

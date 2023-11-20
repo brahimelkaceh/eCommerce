@@ -17,12 +17,13 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // Find the user by their email
   const user = await User.findOne({ email });
+  // console.log(user);
   if (!user) {
     return next(new AppError("User not found!", 404));
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  // console.log(isPasswordValid)
+  console.log(isPasswordValid);
   if (!isPasswordValid) {
     return next(new AppError("Invalid password", 404));
   }
@@ -37,13 +38,14 @@ exports.login = catchAsync(async (req, res, next) => {
         role: user.role,
         username: user.userName,
       },
-      process.env.SECRET_KEY,
+      process.env.SECRET_KEY
     );
-    user.lastLogin = new Date();
+    // user.lastLogin = new Date();
     // console.log(user.lastLogin);
     await user.save();
+    console.log(user);
 
-    return res.status(200).json({ status: "success", data: token });
+    return res.status(200).json({ status: "success", data: token, user: user });
   }
 
   // For managers, check if the user is active
@@ -52,7 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // Update the last login date
-  user.lastLogin = new Date.now();
+  // user.lastLogin = new Date.now();
   console.log(user.lastLogin);
   await user.save();
 
@@ -64,10 +66,10 @@ exports.login = catchAsync(async (req, res, next) => {
       role: user.role,
       username: user.userName,
     },
-    process.env.SECRET_KEY,
+    process.env.SECRET_KEY
   );
 
-  res.status(200).json({ status: "success", data: token });
+  res.status(200).json({ status: "success", data: token, user });
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {

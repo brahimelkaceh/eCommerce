@@ -10,14 +10,24 @@ const {
   updateSubCategory,
   deleteSubCategory,
   getSubCategoryById,
-  searchSubCategory
+  searchSubCategory,
 } = require("../controllers/subCategoriesController");
 
-Router.post("/subcategories/", TokenCheck, ValidatorSanitizer.validate, createSubCategory);
-Router.get("/subcategories/search", TokenCheck, searchSubCategory);
-Router.get("/subcategories/", TokenCheck, getAllSubcategories);
-Router.get("/subcategories/:id", TokenCheck, getSubCategoryById);
-Router.put("/subcategories/:id", TokenCheck,ValidatorSanitizer.validate,updateSubCategory);
+Router.post(
+  "/subcategories/",
+  TokenCheck,
+  ValidatorSanitizer.validate,
+  createSubCategory
+);
+Router.get("/subcategories/search", searchSubCategory);
+Router.get("/subcategories/", getAllSubcategories);
+Router.get("/subcategories/:id", getSubCategoryById);
+Router.put(
+  "/subcategories/:id",
+  TokenCheck,
+  ValidatorSanitizer.validate,
+  updateSubCategory
+);
 Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
 
 module.exports = Router;

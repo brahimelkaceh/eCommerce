@@ -104,7 +104,6 @@ export default function AllSubcategories() {
       headerName: "Category Id",
       align: "center",
       editable: false,
-      headerAlign: "center",
       width: 200,
     },
     {
@@ -113,7 +112,6 @@ export default function AllSubcategories() {
       align: "center",
       editable: true,
       width: 150,
-      headerAlign: "center",
     },
     {
       field: "category",
@@ -121,7 +119,6 @@ export default function AllSubcategories() {
       align: "center",
       editable: true,
       width: 150,
-      headerAlign: "center",
       valueOptions: ["Market", "Finance", "Development"],
     },
     {
@@ -129,9 +126,7 @@ export default function AllSubcategories() {
       headerName: "Active",
       type: "boolean",
       align: "center",
-      headerAlign: "left",
       editable: true,
-      headerAlign: "center",
     },
     {
       field: "actions",
@@ -139,7 +134,6 @@ export default function AllSubcategories() {
       headerName: "Actions",
       align: "center",
       cellClassName: "actions",
-      headerAlign: "center",
 
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

@@ -11,6 +11,8 @@ const SubCategory = require("../models/SubCategories");
 const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  console.log(req.body.options);
+
   try {
     const {
       sku,
@@ -18,31 +20,31 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       discountPrice,
       quantity,
       options, // Array of product options
       active,
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
-        new AppError("Can't find the corresponding subcategory", 404),
+        new AppError("Can't find the corresponding subcategory", 404)
       );
     }
 
     // Handle image uploads here
     const images = req.files;
-    const uploadedImages = await addImages(images);
+    // console.log(req.files);
 
+    // const images = req.body.images;
+    const uploadedImages = await addImages(images);
     const newProduct = new Products({
       sku,
       productName,
       subCategoryId, // Pass the subcategory ID
       shortDescription,
       longDescription,
-      price,
       images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,
@@ -61,8 +63,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
   }
 });
 
-
-
 exports.getAllProducts = async (req, res, next) => {
   try {
     // EXECUTE QUERY
@@ -71,15 +71,16 @@ exports.getAllProducts = async (req, res, next) => {
       .sort()
       .limitFields()
       .paginate();
-    const products = await features.query;
+    const products = await features.query.populate(
+      "subCategoryId",
+      "subCategoryName"
+    );
 
     // SEND RESPONSE
     res.status(200).json({
       status: "success",
       results: products.length,
-      data: {
-        products,
-      },
+      data: products.map((p) => p.toObject({ getters: true })),
     });
   } catch (err) {
     next(new AppError(err.message, 404));
@@ -92,11 +93,18 @@ exports.searchProducts = catchAsync(async (req, res) => {
   const searchParams = req.query;
   console.log(searchParams);
   try {
-    const product = await Products.findOne(searchParams);
+    const product = await Products.findOne(searchParams).populate(
+      "subCategoryId",
+      "subCategoryName"
+    );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
       response.message = CONSTANTS.SERVER_FOUND_HTTP_CODE;
       response.data = product;
+      return res.json({
+        status: "success",
+        data: product.toObject({ getters: true }),
+      });
     } else {
       response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
@@ -110,22 +118,27 @@ exports.searchProducts = catchAsync(async (req, res) => {
 // ! Get The Product by id
 exports.getProductById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const response = {};
+
   try {
-    const product = await Products.find({ _id: id });
-    if (product) {
-      response.message = CONSTANTS.PRODUCTS_FOUND;
-      response.status = CONSTANTS.SERVER_FOUND_HTTP_CODE;
-      response.data = product;
-    } else {
-      response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
-      response.status = CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE;
+    const product = await Products.findById(id).populate(
+      "subCategoryId",
+      "subCategoryName"
+    );
+
+    if (!product) {
+      return res.status(CONSTANTS.SERVER_NOT_FOUND_HTTP_CODE).json({
+        status: "fail",
+        message: CONSTANTS.PRODUCTS_NOT_FOUND,
+      });
     }
-    return res.json({ status: "success", data: product });
+
+    return res.status(CONSTANTS.SERVER_FOUND_HTTP_CODE).json({
+      status: "success",
+      message: CONSTANTS.PRODUCTS_FOUND,
+      data: product.toObject({ getters: true }),
+    });
   } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-    next(new AppError(err.message, 404));
+    next(new AppError(err.message, CONSTANTS.SERVER_ERROR_HTTP_CODE));
   }
 });
 
@@ -135,15 +148,15 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     const uploadedImages = await addImages(images);
     const id = req.params.id;
     const newProductData = req.body;
-    console.log(req.body)
+    console.log(req.body);
     console.log("newProductData.options: ", newProductData.options);
     // Ensure 'options' field is in the correct format
     if (newProductData.options && !Array.isArray(newProductData.options)) {
       return next(
         new AppError(
           "Invalid 'options' format. It should be an array of objects.",
-          400,
-        ),
+          400
+        )
       );
     }
     const updatedProduct = await Products.findByIdAndUpdate(
@@ -155,15 +168,15 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-      },
-    );
-    console.log(updatedProduct)
+      }
+    ).populate("subCategoryId", "subCategoryName");
+    console.log(updatedProduct);
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
     res.status(200).json({
       status: "success",
-      data: updatedProduct,
+      data: updatedProduct.toObject({ getters: true }),
     });
   } catch (err) {
     next(new AppError(err.message, 400));

@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
+import { memo } from "react";
 
 const drawerWidth = 240;
 
@@ -52,4 +53,4 @@ const Navbar = ({ handleDrawerOpen, open }) => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

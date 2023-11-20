@@ -1,7 +1,7 @@
 import React from "react";
 
 const CreateProducts = () => {
-  return <div>From for Create Products</div>;
+  return <div>Form for Create Products</div>;
 };
 
 export default CreateProducts;

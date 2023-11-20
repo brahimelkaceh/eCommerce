@@ -5,24 +5,28 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import CreateOrderForm from "./CreateOrderForm";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
+import ProductForm from "./ProductForm";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "80%",
+  height: "95%",
   bgcolor: "background.paper",
-  // border: "2px solid #000",
-
-  borderRadius: "8px",
   boxShadow: 24,
-  p: 4,
+  borderRadius: " var(--border-radius)",
+  p: 1,
+  overflow: "scroll",
 };
 
-export default function CreateOrderModal() {
-  const [open, setOpen] = React.useState(true);
+export default function ProductsModal({
+  handleCloseFormModal,
+  isFormModalOpen,
+}) {
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -30,18 +34,19 @@ export default function CreateOrderModal() {
     <div
       style={{
         display: "flex",
-        justifyContent: "flex-end",
+        flexDirection: "column",
       }}
     >
       <Button
         onClick={handleOpen}
-        variant="contained"
-        color="primary"
-        sx={{
-          mb: 1,
+        style={{
+          backgroundColor: "var(--blue-backround)",
+          color: "var(--white-background)",
+          marginBottom: "5px",
+          alignSelf: "flex-end",
         }}
       >
-        Open modal
+        Add new Product <AddBoxIcon></AddBoxIcon>
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -58,7 +63,10 @@ export default function CreateOrderModal() {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <CreateOrderForm />
+            <ProductForm
+              open={isFormModalOpen}
+              onClose={handleCloseFormModal}
+            />
           </Box>
         </Fade>
       </Modal>

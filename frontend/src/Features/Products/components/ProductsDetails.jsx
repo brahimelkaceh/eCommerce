@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
 import { DrawerHeader } from "../../../Components/mui/MuiStyles";
 import { Box, Button } from "@mui/material";
 import Sidebar from "../../../Components/sidebar/Sidebar";
@@ -26,6 +25,7 @@ function ProductsDetails({ productId, setSelectedProductId }) {
 
     fetchProduct();
   }, [productId, getProductById]);
+  console.log("inside fetchProduct", getProductById);
 
   return (
     <Box sx={{ display: "flex", p: 3 }}>
@@ -37,7 +37,8 @@ function ProductsDetails({ productId, setSelectedProductId }) {
           to="/products"
           variant="contained"
           color="primary"
-         onClick={() => setSelectedProductId(null)}>
+          onClick={() => setSelectedProductId(null)}
+        >
           Go to Products
         </Button>
         <h2>Details of Product: {product?.productName}</h2>
