@@ -210,6 +210,7 @@ exports.deleteUser = async (req, res, next) => {
 exports.showAllUsers = async (req, res) => {
   try {
     const users = await User.find().sort({ _id: "descending" }).limit(10); // This assumes you have a User model defined
+    console.log(users);
     res.json(users);
   } catch (err) {
     console.error(err);
