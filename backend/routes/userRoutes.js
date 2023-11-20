@@ -25,7 +25,6 @@ Router.post(
   "/users",
   upload.array("images", 5),
   TokenCheck,
-
   ValidatorSanitizer.validate,
   createUser
 );

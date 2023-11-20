@@ -8,7 +8,6 @@ exports.TokenCheck = (req, res, next) => {
     const authHeader = req.headers.authorization || null;
     const token = authHeader && authHeader.split(" ")[1];
     console.log("token: " + token);
-
     if (!token) {
       throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }
