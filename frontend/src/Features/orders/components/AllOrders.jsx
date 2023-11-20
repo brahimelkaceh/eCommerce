@@ -23,7 +23,7 @@ import { useCustomer } from "../../../Features/customers/Context";
 
 export default function AllOrders({ handleOpen }) {
   const { data, loading, error, getOrderById, updateOrder } = useData();
-  const { getCustomerById, customers } = useCustomer();
+  const { getCustomerById, singleCustomer } = useCustomer();
 
   const [rows, setrows] = useState([]);
   const [customerId, setcustomer] = useState("");
@@ -67,10 +67,6 @@ export default function AllOrders({ handleOpen }) {
     setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setrows(rows.filter((row) => row.id !== id));
-  };
-
   const handleCancelClick = (id) => () => {
     setrowmodesmodel({
       ...rowModesModel,
@@ -85,6 +81,7 @@ export default function AllOrders({ handleOpen }) {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
+    // console.log(updatedRow);
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
     updateOrder(updatedRow._id, updatedRow);
@@ -134,8 +131,11 @@ export default function AllOrders({ handleOpen }) {
 
       headerAlign: "left",
       renderCell: (params) => {
-        setcustomer(params.value);
-        return <span className="customer-name"> {customers}</span>;
+        // console.log();
+        setcustomer(params.value._id);
+        return (
+          <span className="customer-name"> {singleCustomer?.userName}</span>
+        );
       },
     },
     {

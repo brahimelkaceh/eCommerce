@@ -1,37 +1,49 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { createProduct } from "./Services";
 
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState(null);
+  // const getProductById = async (productId) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5000/products/${productId}`
+  //     );
+  //     const data = await response.json();
+  //     return data.data[0];
+  //   } catch (error) {
+  //     console.error(`Error fetching product with ID ${productId}:`, error);
+  //     return null;
+  //   }
+  // };
 
-  const getProductById = async (productId) => {
+  // const addProduct = async (newProduct) => {
+  //   console.log("new product", newProduct);
+  //   axios
+  //     .post("http://localhost:5000/products", newProduct, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  // };
+
+  const addNewProduct = async (productData) => {
+    console.log(productData);
+    // return;
     try {
-      const response = await fetch(
-        `http://localhost:5000/products/${productId}`
-      );
-      const data = await response.json();
-      return data.data[0];
+      const addedProduct = await createProduct(productData);
+      console.log(addedProduct);
+      setProducts((prevData) => [...prevData, { ...addedProduct }]);
     } catch (error) {
-      console.error(`Error fetching product with ID ${productId}:`, error);
-      return null;
+      console.error("Error adding Product:", error);
     }
   };
-
-  const addProduct = async (newProduct) => {
-    console.log("new product", newProduct);
-    axios
-      .post("http://localhost:5000/products", newProduct, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  };
-
   const editProduct = async (productId, updatedProduct) => {
     console.log(productId);
     try {
@@ -91,7 +103,7 @@ export const ProductProvider = ({ children }) => {
       try {
         const response = await fetch("http://localhost:5000/products");
         const data = await response.json();
-        const productsWithId = data.data.map((product, index) => ({
+        const productsWithId = data.data.map((product) => ({
           ...product,
         }));
         setProducts(productsWithId);
@@ -105,8 +117,10 @@ export const ProductProvider = ({ children }) => {
 
   const productContextValue = {
     products,
-    getProductById,
-    addProduct,
+    addNewProduct,
+    setNewProduct,
+    // getProductById,
+    // addProduct,
     editProduct,
     deleteProduct,
   };

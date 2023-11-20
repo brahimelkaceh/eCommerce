@@ -6,8 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { DeleteUser ,editUser} from "../service";
-import {useManager} from "../Context"
+import { DeleteUser, editUser } from "../service";
+import { useManager } from "../Context";
 import {
   GridRowModes,
   DataGrid,
@@ -75,9 +75,9 @@ export default function allManagers() {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = {
-      ...newRow
-      , isNew: false
-  };
+      ...newRow,
+      isNew: false,
+    };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     const ID = updatedRow.id;
     delete updatedRow.isNew;
@@ -90,7 +90,7 @@ export default function allManagers() {
           console.error("Error occurred: while editing user", error);
         });
     } catch (error) {
-      throw error 
+      throw error;
     }
     console.log(updatedRow);
     console.log(updatedRow.id);
@@ -102,12 +102,11 @@ export default function allManagers() {
   };
 
   const columns = [
-    { field: "userName", headerName: "UserName", width: 180, editable: true },
+    { field: "userName", headerName: "UserName", editable: true },
     {
       field: "firstName",
       headerName: "First Name",
       align: "left",
-      headerAlign: "left",
       editable: true,
       flex: 1,
     },
@@ -115,7 +114,6 @@ export default function allManagers() {
       field: "lastName",
       headerName: "Last Name",
       align: "left",
-      headerAlign: "left",
       editable: true,
       flex: 1,
     },
@@ -124,14 +122,12 @@ export default function allManagers() {
       headerName: "Email",
       align: "left",
       headerAlign: "left",
-      editable: true,
       flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
       type: "date",
-      editable: true,
       flex: 1,
     },
     {
@@ -139,20 +135,17 @@ export default function allManagers() {
       headerName: "Last Login",
       type: "date",
       flex: 1,
-      editable: true,
     },
     {
       field: "lastUpdate",
       headerName: "Last Update",
       type: "date",
       flex: 1,
-      editable: true,
     },
     {
       field: "role",
       headerName: "Role",
       flex: 1,
-      editable: true,
       type: "singleSelect",
       valueOptions: ["manager", "admin"],
       renderCell: (params) => (

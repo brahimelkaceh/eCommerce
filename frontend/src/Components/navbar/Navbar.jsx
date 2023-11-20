@@ -27,7 +27,6 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 const Navbar = ({ handleDrawerOpen, open }) => {
-  console.log("enter navbar");
   return (
     <AppBar
       position="fixed"

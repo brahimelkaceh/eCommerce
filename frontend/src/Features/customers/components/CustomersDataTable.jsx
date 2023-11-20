@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { DeleteCustomer, editCustomer } from "../service";
+// import { DeleteCustomer, editCustomer } from "../service";
 import { useCustomer } from "../Context";
 import {
   GridRowModes,
@@ -18,7 +18,6 @@ import {
 } from "@mui/x-data-grid";
 import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
-
 
 const active = [true, false];
 const randomActive = () => {

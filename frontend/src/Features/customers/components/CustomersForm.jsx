@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
-import { createCustomer } from "../service";
+// import { createCustomer } from "../service";
 const initialValues = {
   firstName: "",
   lastName: "",
