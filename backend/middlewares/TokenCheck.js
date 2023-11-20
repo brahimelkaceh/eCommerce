@@ -13,7 +13,6 @@ exports.TokenCheck = (req, res, next) => {
     }
     const userData = jwt.verify(token, process.env.SECRET_KEY);
     console.log(userData);
-    // console.log("user@" + userData);
     if (!userData) {
       throw new Error("Error while verifying the token");
     }
