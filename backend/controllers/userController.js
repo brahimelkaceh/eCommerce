@@ -14,10 +14,9 @@ const { checkingID } = require("../helpers/checkIfExist");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
   // Find the user by their email
   const user = await User.findOne({ email });
-  // console.log(user);
+  console.log(user)
   if (!user) {
     return next(new AppError("User not found!", 404));
   }
