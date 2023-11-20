@@ -11,8 +11,6 @@ const SubCategory = require("../models/SubCategories");
 const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  console.log(req.body.options);
-
   try {
     const {
       sku,

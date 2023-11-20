@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ProductProvider } from "./Context";
-import { SubcategoryProvider } from "../categories/Context";
 import ProductDetails from "./components/ProductsDetails";
 import { Box } from "@mui/material";
 import "./style.css";
@@ -27,22 +26,20 @@ const Container = () => {
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <ProductProvider>
-          <SubcategoryProvider>
-            <ProductsModal
-              handleCloseFormModal={handleCloseFormModal}
-              isFormModalOpen={isFormModalOpen}
-            />
-            <div>
-              {selectedProductId ? (
-                <ProductDetails
-                  productId={selectedProductId}
-                  setSelectedProductId={handleProductClick}
-                />
-              ) : (
-                <AllProducts />
-              )}
-            </div>
-          </SubcategoryProvider>
+          <ProductsModal
+            handleCloseFormModal={handleCloseFormModal}
+            isFormModalOpen={isFormModalOpen}
+          />
+          <div>
+            {selectedProductId ? (
+              <ProductDetails
+                productId={selectedProductId}
+                setSelectedProductId={handleProductClick}
+              />
+            ) : (
+              <AllProducts />
+            )}
+          </div>
         </ProductProvider>
       </Box>
     </Box>

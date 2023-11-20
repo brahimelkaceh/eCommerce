@@ -1,6 +1,9 @@
 // DataContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchSubcategoriesData } from "./Services";
+import {
+  fetchSubcategoriesData,
+  updateSubcategory,
+} from "./SubCategorisServices";
 
 const DataSubcategoriesContext = createContext();
 
@@ -15,7 +18,6 @@ export const SubcategoryProvider = ({ children }) => {
     const fetchDataFromApi = async () => {
       try {
         const responseData = await fetchSubcategoriesData("");
-        console.log("data", responseData.data);
         setData(responseData.data);
       } catch (error) {
         setError(error);
@@ -34,15 +36,17 @@ export const SubcategoryProvider = ({ children }) => {
   //     console.error("Error fetching customer:", error);
   //   }
   // };
-  // const updateOrder = async (id, updatedOrderData) => {
-  //   console.log(updatedOrderData);
-  //   try {
-  //     const updatedOrder = await updateOrderById(id, updatedOrderData);
-  //     setOrder(updatedOrder);
-  //   } catch (error) {
-  //     console.error("Error updating order:", error);
-  //   }
-  // };
+  const updateSubCat = async (id, updatedSubcategoryData) => {
+    // console.log(updatedSubcategoryData);
+    // return;
+    try {
+      const updatedOrder = await updateSubcategory(id, updatedSubcategoryData);
+      console.log(updatedOrder);
+      setOrder(updatedOrder);
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+  };
 
   const values = {
     SubcatData,
@@ -50,7 +54,7 @@ export const SubcategoryProvider = ({ children }) => {
     error,
     // getOrderById,
     // orderDetailsData,
-    // updateOrder,
+    updateSubCat,
     test: "test",
   };
 

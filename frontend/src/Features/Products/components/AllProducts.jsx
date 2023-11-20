@@ -186,7 +186,7 @@ export default function AllProducts({ handleOpen }) {
       headerName: "Status",
       editable: true,
       valueOptions: [true, false],
-      type: "singleSelect",
+      type: "boolean",
 
       renderCell: (params) => (
         <Chip

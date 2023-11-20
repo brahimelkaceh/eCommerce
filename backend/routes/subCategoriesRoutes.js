@@ -24,10 +24,9 @@ Router.get("/subcategories/", getAllSubcategories);
 Router.get("/subcategories/:id", getSubCategoryById);
 Router.put(
   "/subcategories/:id",
-  TokenCheck,
   ValidatorSanitizer.validate,
   updateSubCategory
 );
-Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
+Router.delete("/subcategories/:id", deleteSubCategory);
 
 module.exports = Router;

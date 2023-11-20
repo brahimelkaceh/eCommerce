@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { createProduct } from "./Services";
+import { createProduct, updateProduct } from "./Services";
 
 export const ProductContext = createContext();
 
@@ -34,48 +34,60 @@ export const ProductProvider = ({ children }) => {
   // };
 
   const addNewProduct = async (productData) => {
-    console.log(productData);
-    // return;
     try {
       const addedProduct = await createProduct(productData);
-      console.log(addedProduct);
-      setProducts((prevData) => [...prevData, { ...addedProduct }]);
+      console.log(addedProduct.data._id);
+      setProducts((prevData) => [
+        ...prevData,
+        { ...addedProduct, id: addedProduct.data._id },
+      ]);
     } catch (error) {
       console.error("Error adding Product:", error);
     }
   };
-  const editProduct = async (productId, updatedProduct) => {
-    console.log(productId);
+
+  // const editProduct = async (productId, updatedProduct) => {
+  //   try {
+  //     const response = await axios.put(
+  //       `http://localhost:5000/products/${productId}`,
+  //       updatedProduct,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${JSON.parse(
+  //             localStorage.getItem("userT")
+  //           )}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status !== 200) {
+  //       throw new Error(`Failed to edit product: ${response.statusText}`);
+  //     }
+
+  //     const updatedData = response.data.data;
+
+  //     setProducts((prevProducts) =>
+  //       prevProducts.map((product) =>
+  //         product.id === productId ? { ...product, ...updatedData } : product
+  //       )
+  //     );
+
+  //     return updatedData;
+  //   } catch (error) {
+  //     console.error(`Error editing product with ID ${productId}:`, error);
+  //     return null;
+  //   }
+  // };
+  const editProduct = async (id, updatedOrderData) => {
+    // return;
     try {
-      const response = await axios.put(
-        `http://localhost:5000/products/${productId}`,
-        updatedProduct,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`Failed to edit product: ${response.statusText}`);
-      }
-
-      const updatedData = response.data.data;
-
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product.id === productId ? { ...product, ...updatedData } : product
-        )
-      );
-
-      return updatedData;
+      const updatedOrder = await updateProduct(id, updatedOrderData);
+      setProducts(updatedOrder);
     } catch (error) {
-      console.error(`Error editing product with ID ${productId}:`, error);
-      return null;
+      console.error("Error updating order:", error);
     }
   };
-
   const deleteProduct = async (productId) => {
     console.log(`Deleting ${productId}`);
     try {
@@ -105,6 +117,7 @@ export const ProductProvider = ({ children }) => {
         const data = await response.json();
         const productsWithId = data.data.map((product) => ({
           ...product,
+          id: product._id,
         }));
         setProducts(productsWithId);
       } catch (error) {
