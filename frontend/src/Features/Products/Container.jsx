@@ -27,22 +27,22 @@ const Container = () => {
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <ProductProvider>
-          <SubcategoryProvider>
-            <ProductsModal
-              handleCloseFormModal={handleCloseFormModal}
-              isFormModalOpen={isFormModalOpen}
-            />
-            <div>
-              {selectedProductId ? (
-                <ProductDetails
-                  productId={selectedProductId}
-                  setSelectedProductId={handleProductClick}
-                />
-              ) : (
-                <AllProducts />
-              )}
-            </div>
-          </SubcategoryProvider>
+          {/* <SubcategoryProvider> */}
+          <ProductsModal
+            handleCloseFormModal={handleCloseFormModal}
+            isFormModalOpen={isFormModalOpen}
+          />
+          <div>
+            {selectedProductId ? (
+              <ProductDetails
+                productId={selectedProductId}
+                setSelectedProductId={handleProductClick}
+              />
+            ) : (
+              <AllProducts />
+            )}
+          </div>
+          {/* </SubcategoryProvider> */}
         </ProductProvider>
       </Box>
     </Box>

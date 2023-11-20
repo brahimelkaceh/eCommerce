@@ -28,7 +28,7 @@ export const DataProvider = ({ children }) => {
     };
 
     fetchDataFromApi();
-  }, [data]);
+  }, []);
   const getOrderById = async (id) => {
     try {
       const fetchedOrder = await fetchOrderById(id);
@@ -38,6 +38,8 @@ export const DataProvider = ({ children }) => {
     }
   };
   const updateOrder = async (id, updatedOrderData) => {
+    console.log(id, updatedOrderData);
+    // return;
     try {
       const updatedOrder = await updateOrderById(id, updatedOrderData);
       setOrder(updatedOrder);

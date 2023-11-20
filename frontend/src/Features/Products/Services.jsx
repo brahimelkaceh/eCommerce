@@ -11,40 +11,41 @@ const apiService = axios.create({
   },
 });
 
-export const fetchProductData = async (endpoint) => {
+const getToken = () => {
+  const token = localStorage.getItem("userT");
+  if (!token) {
+    throw new Error("Token not available");
+  }
+  return token;
+};
+
+const handleRequest = async (method, endpoint, data = null) => {
   try {
-    const response = await apiService.get(endpoint);
+    const headers = {
+      Authorization: `Bearer ${getToken()}`,
+      // Add other headers if needed
+    };
+
+    const response = await apiService({
+      method,
+      url: endpoint,
+      data,
+      headers,
+    });
+
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const fetchProductById = async (id) => {
-  const endpoint = `${id}`;
-  try {
-    const response = await apiService.get(endpoint);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const fetchProductData = async (endpoint) =>
+  handleRequest("get", endpoint);
 
-export const updateProduct = async (id, updatedProductData) => {
-  const endpoint = `${id}`;
-  try {
-    const response = await apiService.put(endpoint, updatedProductData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const fetchProductById = async (id) => fetchProductData(`${id}`);
 
-export const createProduct = async (newProductData) => {
-  try {
-    const response = await apiService.post("/", newProductData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const updateProduct = async (id, updatedProductData) =>
+  handleRequest("put", `${id}`, updatedProductData);
+
+export const createProduct = async (newProductData) =>
+  handleRequest("post", "/", newProductData);

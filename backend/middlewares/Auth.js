@@ -12,7 +12,6 @@ exports.TokenCheck = (req, res, next) => {
     });
   }
   const userData = jwt.verify(token, process.env.SECRET_KEY);
-  console.log(userData);
   if (!userData) {
     return res.json({
       message: "error while verifying the token ",

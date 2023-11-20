@@ -103,7 +103,7 @@ export const ProductProvider = ({ children }) => {
       try {
         const response = await fetch("http://localhost:5000/products");
         const data = await response.json();
-        const productsWithId = data.data.map((product, index) => ({
+        const productsWithId = data.data.map((product) => ({
           ...product,
         }));
         setProducts(productsWithId);

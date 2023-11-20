@@ -23,21 +23,21 @@ Router.get("/users/profile", ManagerTokenCheck, (req, res) => {
 Router.post("/users/login", ValidatorSanitizer.validate, login);
 Router.post(
   "/users",
-  TokenCheck,
   upload.array("images", 5),
+  TokenCheck,
+
   ValidatorSanitizer.validate,
   createUser
 );
 Router.put(
   "/users/:id",
-  TokenCheck,
   upload.array("images", 5),
   ValidatorSanitizer.validate,
   updateUser
 );
-Router.delete("/users/:id", TokenCheck, deleteUser);
-Router.get("/users/", TokenCheck, searchUser);
+Router.delete("/users/:id", deleteUser);
+// Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/getallusers/", showAllUsers);//TokenCheck
+Router.get("/users/", showAllUsers); //TokenCheck
 
 module.exports = Router;

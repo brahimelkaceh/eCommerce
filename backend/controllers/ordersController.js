@@ -8,6 +8,7 @@ const CONSTANTS = require("../config/constants");
 const Products = require("../models/Products");
 
 exports.createOrder = catchAsync(async (req, res) => {
+  console.log("hello");
   const response = {};
   try {
     const { customerID, orderItems } = req.body;
@@ -76,46 +77,6 @@ exports.getOrderById = catchAsync(async (req, res) => {
   }
   return res.json({ response });
 });
-exports.updateOrder = catchAsync(async (req, res) => {
-  const response = {};
-  try {
-    const { customerID, orderItems } = req.body;
-    const customer = await Customer.findOne({ _id: customerID });
-
-    if (!customer) {
-      response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
-      response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-      return res.json({ response });
-    }
-    for (let i = 0; i < orderItems.length; i++) {
-      const element = orderItems[i];
-      const product = await Products.findOne({ _id: element.product });
-      if (!product) {
-        response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
-        response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-        return res.json({ response });
-      }
-    }
-    const id = req.params.id;
-    const newOrderData = req.body;
-
-    const updatedOrder = await orders.updateOne(
-      { _id: id },
-      { $set: newOrderData }
-    );
-
-    response.message = CONSTANTS.ORDER_UPDATED;
-    response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
-    // return res.status(201).json({
-    //   status: "success",
-    //   data: updatedOrder,
-    // });
-  } catch (err) {
-    response.message = err.message;
-    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
-  }
-  return res.json({ response });
-});
 exports.listOrders = catchAsync(async (req, res) => {
   const response = {};
   try {
@@ -139,6 +100,45 @@ exports.listOrders = catchAsync(async (req, res) => {
       response.message = CONSTANTS.ORDER_NOT_FOUND;
       response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
     }
+  } catch (err) {
+    response.message = err.message;
+    response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+  }
+  return res.json({ response });
+});
+exports.updateOrder = catchAsync(async (req, res) => {
+  const response = {};
+  try {
+    const { customerID, orderItems } = req.body;
+    const customer = await Customer.findOne({ _id: customerID });
+    if (!customer) {
+      response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
+      response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+      return res.json({ response });
+    }
+    for (let i = 0; i < orderItems.length; i++) {
+      const element = orderItems[i];
+      const product = await Products.findOne({ _id: element.product._id });
+      if (!product) {
+        response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
+        response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
+        return res.json({ response });
+      }
+    }
+    const id = req.params.id;
+    const newOrderData = req.body;
+
+    const updatedOrder = await orders.updateOne(
+      { _id: id },
+      { $set: newOrderData }
+    );
+
+    response.message = CONSTANTS.ORDER_UPDATED;
+    response.status = CONSTANTS.SERVER_UPDATED_HTTP_CODE;
+    // return res.status(201).json({
+    //   status: "success",
+    //   data: updatedOrder,
+    // });
   } catch (err) {
     response.message = err.message;
     response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;

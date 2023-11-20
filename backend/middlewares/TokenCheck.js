@@ -2,6 +2,7 @@ const CONSTANTS = require("../config/constants.js");
 const jwt = require("jsonwebtoken");
 const AppError = require("../helpers/appError");
 exports.TokenCheck = (req, res, next) => {
+  console.log(req.body);
   try {
     // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;
@@ -12,7 +13,8 @@ exports.TokenCheck = (req, res, next) => {
       throw new Error(CONSTANTS.ROUTE_NOT_FOUND);
     }
     const userData = jwt.verify(token, process.env.SECRET_KEY);
-    console.log("user@" + userData);
+    console.log(userData);
+    // console.log("user@" + userData);
     if (!userData) {
       throw new Error("Error while verifying the token");
     }

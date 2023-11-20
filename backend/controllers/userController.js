@@ -17,12 +17,13 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // Find the user by their email
   const user = await User.findOne({ email });
+  // console.log(user);
   if (!user) {
     return next(new AppError("User not found!", 404));
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  // console.log(isPasswordValid)
+  console.log(isPasswordValid);
   if (!isPasswordValid) {
     return next(new AppError("Invalid password", 404));
   }
@@ -92,13 +93,13 @@ exports.createUser = catchAsync(async (req, res, next) => {
   const hashedPassword = await bcrypt.hash(password, 12);
 
   let newUser;
-  if (role.toLowerCase() === "manager" ) {
+  if (role.toLowerCase() === "manager") {
     newUser = new User({
       ...userData,
       userName: userName,
       email: email,
       password: hashedPassword,
-      images: uploadedImages.map((image) => image.imageUrl),
+      // images: uploadedImages.map((image) => image.imageUrl),
       role: role,
     });
   } else if (role.toLowerCase() === "customer") {
