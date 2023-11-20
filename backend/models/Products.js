@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const productOptionsSchema = new mongoose.Schema({
   size: {
-    type: String,
+    type: [String],
     required: true,
   },
   color: {
-    type: String,
+    type: [String],
     required: true,
   },
   availability: {
-    type: String,
-    enum: ["In Stock", "Out of Stock"],
+    type: Boolean,
     required: true,
+    default: true,
   },
   price: {
     type: Number,

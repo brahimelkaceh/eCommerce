@@ -19,6 +19,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
       longDescription,
+      price,
       discountPrice,
       quantity,
       options, // Array of product options
@@ -43,6 +44,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Pass the subcategory ID
       shortDescription,
       longDescription,
+      price,
       images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,
