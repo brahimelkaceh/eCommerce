@@ -19,11 +19,6 @@ const getToken = () => {
   return token;
 };
 
-const getRequestHeaders = () => ({
-  Authorization: `Bearer ${getToken()}`,
-  // Add other headers if needed
-});
-
 const fetchData = async (endpoint) => {
   try {
     const response = await apiService.get(endpoint, {
@@ -34,6 +29,10 @@ const fetchData = async (endpoint) => {
     throw error;
   }
 };
+const getRequestHeaders = () => ({
+  Authorization: `Bearer ${getToken()}`,
+  // Add other headers if needed
+});
 
 const fetchOrderById = async (id) => {
   const endpoint = `${id}`;

@@ -23,7 +23,6 @@ const handleRequest = async (method, endpoint, data = null) => {
   try {
     const headers = {
       Authorization: `Bearer ${getToken()}`,
-      // Add other headers if needed
     };
 
     const response = await apiService({

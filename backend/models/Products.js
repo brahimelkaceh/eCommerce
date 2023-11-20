@@ -10,7 +10,7 @@ const productOptionsSchema = new mongoose.Schema({
     required: true,
   },
   availability: {
-    type: [String],
+    type: String,
     enum: ["In Stock", "Out of Stock"],
     required: true,
   },
