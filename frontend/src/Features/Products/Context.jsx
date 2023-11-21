@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { createProduct, updateProduct } from "./Services";
+import { createProduct, updateProduct, deleteProd } from "./Services";
 
 export const ProductContext = createContext();
 
@@ -36,7 +36,6 @@ export const ProductProvider = ({ children }) => {
   const addNewProduct = async (productData) => {
     try {
       const addedProduct = await createProduct(productData);
-      console.log(addedProduct.data._id);
       setProducts((prevData) => [
         ...prevData,
         { ...addedProduct, id: addedProduct.data._id },
@@ -88,28 +87,11 @@ export const ProductProvider = ({ children }) => {
       console.error("Error updating order:", error);
     }
   };
+
   const deleteProduct = async (productId) => {
-    console.log(`Deleting ${productId}`);
-    try {
-      const response = await axios.delete(
-        `http://localhost:5000/products/` + productId
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`Failed to delete product: ${response.statusText}`);
-      }
-      console.log("deleteds", response.data);
-
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product.id !== productId)
-      );
-
-      return true;
-    } catch (error) {
-      console.error(`Error deleting product with ID ${productId}:`, error);
-      return false;
-    }
+    await deleteProd(productId);
   };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {

@@ -46,8 +46,8 @@ export default function AllProducts({ handleOpen }) {
   const handleDeleteClick = (id) => async () => {
     const deletedProduct = await deleteProduct(id);
     if (deletedProduct) {
-      // return setrows(rows.filter((row) => row.id !== id));
-      return products;
+      return setrows(rows.filter((row) => row.id !== id));
+      // return products;
     }
   };
 

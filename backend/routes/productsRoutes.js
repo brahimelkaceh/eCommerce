@@ -31,6 +31,6 @@ Router.put(
 Router.get("/products/", getAllProducts);
 Router.get("/products/search", searchProducts);
 Router.get("/products/:id", getProductById);
-Router.delete("/products/:id", deleteProduct);
+Router.delete("/products/:id", TokenCheck, deleteProduct);
 
 module.exports = Router;

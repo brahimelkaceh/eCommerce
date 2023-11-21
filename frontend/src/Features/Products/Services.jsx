@@ -12,22 +12,8 @@ const apiService = axios.create({
   },
 });
 
-const getToken = () => {
-  const token = localStorage.getItem("userT");
-  console.log(token);
-  if (!token) {
-    throw new Error("Token not available");
-  }
-  return token;
-};
-
 const handleRequest = async (method, endpoint, data = null) => {
-  console.log(getToken());
   try {
-    const headers = {
-      Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
-    };
-
     const response = await apiService({
       method,
       url: endpoint,
@@ -41,6 +27,10 @@ const handleRequest = async (method, endpoint, data = null) => {
   }
 };
 
+export function getproducts() {
+  return apiService.get("/");
+}
+
 export const fetchProductData = async (endpoint) =>
   handleRequest("get", endpoint);
 
@@ -51,3 +41,7 @@ export const updateProduct = async (id, updatedProductData) =>
 
 export const createProduct = async (newProductData) =>
   handleRequest("post", "/", newProductData);
+
+export const deleteProd = async (id) => apiService.delete(`/${id}`);
+
+export default apiService;
