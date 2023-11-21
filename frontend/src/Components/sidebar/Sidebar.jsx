@@ -11,7 +11,6 @@ import { DrawerHeader, Drawer } from "../mui/MuiStyles";
 import { memo } from "react";
 
 const Sidebar = () => {
-  console.log("entred side bar");
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 

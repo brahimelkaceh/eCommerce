@@ -51,6 +51,7 @@ export const SubcategoryProvider = ({ children }) => {
     // getOrderById,
     // orderDetailsData,
     // updateOrder,
+    test: "test",
   };
 
   return (

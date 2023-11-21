@@ -1,6 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
 import {
   MenuItem,
   FormControl,
@@ -11,66 +13,84 @@ import {
   Typography,
   Checkbox,
   Box,
+  OutlinedInput,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+  IconButton,
 } from "@mui/material";
-import * as yup from "yup";
-import { styled } from "@mui/system";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { useProduct } from "../Context";
 import validationSchema from "./manageProducts/validationSchema";
 import initialValues from "./manageProducts/InitialValues";
 import { useSubCatData } from "../../categories/Context";
-
+import { useTheme } from "@mui/material/styles";
+import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
 // Input styling
 
-const StyledCheckbox = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(1),
-}));
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
-const ProductForm = ({ open, onClose }) => {
-  const { addProduct } = useProduct();
+function getStyles(name, size, theme) {
+  return {
+    fontWeight:
+      size?.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+const ProductForm = () => {
+  const theme = useTheme();
+  const sizes = ["S", "M", "L", "XL"];
+  const colors = ["PINK", "PURPLE", "RED", "GREEN", "BLUE"];
+  const [images, setImages] = useState([]);
+  const { addNewProduct } = useProduct();
   const { SubcatData } = useSubCatData();
-  // console.log(SubcatData);
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      try {
-        console.log(formik.values);
-        console.log("Formik values before submission:", values);
-
-        const formData = new FormData();
-
-        Object.entries(values).forEach(([key, value]) => {
-          console.log(`Appending ${key}: ${value} to FormData`);
-          formData.append(key, value);
-        });
-
-        // Append files to FormData
-        if (values.images) {
-          for (let i = 0; i < values.images.length; i++) {
-            console.log(`Appending image ${i}: ${values.images[i].name}`);
-            formData.append("images", values.images[i]);
-          }
-        }
-
-        await addProduct(formik.values);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
-      onClose();
+    onSubmit: (values) => {
+      console.log(values.options);
+      // addNewProduct({ ...values, images: [values.images[0].name] });
     },
   });
-
+  const [size, setSize] = useState(formik.values.options.size);
+  const [color, setColor] = useState(formik.values.options.color);
+  const handleDeleteImage = (index) => {
+    const updatedImages = [...formik.values.images];
+    updatedImages.splice(index, 1);
+    formik.setFieldValue("images", updatedImages);
+  };
   return (
-    <Box m="20px">
+    <Box
+      m="20px"
+      sx={{
+        position: "relative",
+      }}
+    >
       <h1 className="main-title">add new Product</h1>
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          formik.handleSubmit();
+          console.log("submit");
+        }}
+      >
         <Box
           display="grid"
-          gap="15px"
-          gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+          gap="10px"
+          gridTemplateColumns="repeat(2, minmax(0, 1fr))"
         >
           <TextField
             id="productName"
@@ -86,6 +106,8 @@ const ProductForm = ({ open, onClose }) => {
             }
             helperText={formik.touched.productName && formik.errors.productName}
           />
+          <Box sx={{ gridColumn: "span 2" }}></Box>
+
           <FormControl
             sx={{ gridColumn: "span 1" }}
             size="small"
@@ -133,6 +155,7 @@ const ProductForm = ({ open, onClose }) => {
             error={formik.touched.sku && Boolean(formik.errors.sku)}
             helperText={formik.touched.sku && formik.errors.sku}
           />
+          <Box sx={{ gridColumn: "span 2" }}></Box>
 
           <TextField
             id="shortDescription"
@@ -151,10 +174,15 @@ const ProductForm = ({ open, onClose }) => {
               formik.touched.shortDescription && formik.errors.shortDescription
             }
           />
+
+          <Box sx={{ gridColumn: "span 2" }}></Box>
+
           <TextField
             id="longDescription"
             name="longDescription"
             label="Long Description"
+            multiline
+            rows={4}
             variant="outlined"
             sx={{ gridColumn: "span 2" }}
             size="small"
@@ -168,17 +196,25 @@ const ProductForm = ({ open, onClose }) => {
               formik.touched.longDescription && formik.errors.longDescription
             }
           />
+          <Box sx={{ gridColumn: "span 2" }}></Box>
+
           <TextField
             id="price"
-            name="price"
+            name="options.price"
             label="Price"
             variant="outlined"
-            sx={{ gridColumn: "span 2" }}
+            sx={{ gridColumn: "span 1" }}
             size="small"
-            value={formik.values.price}
+            type="number"
+            value={formik.values.options.price}
             onChange={formik.handleChange}
-            error={formik.touched.price && Boolean(formik.errors.price)}
-            helperText={formik.touched.price && formik.errors.price}
+            // error={
+            //   formik.touched.options.price &&
+            //   Boolean(formik.errors.options.price)
+            // }
+            // helperText={
+            //   formik.touched.options.price && formik.errors.options.price
+            // }
           />
 
           <TextField
@@ -186,7 +222,8 @@ const ProductForm = ({ open, onClose }) => {
             name="discountPrice"
             label="Discount Price"
             variant="outlined"
-            sx={{ gridColumn: "span 2" }}
+            type="number"
+            sx={{ gridColumn: "span 1" }}
             size="small"
             value={formik.values.discountPrice}
             onChange={formik.handleChange}
@@ -198,98 +235,232 @@ const ProductForm = ({ open, onClose }) => {
               formik.touched.discountPrice && formik.errors.discountPrice
             }
           />
-          <TextField
-            id="quantity"
-            name="quantity"
-            label="Quantity"
-            variant="outlined"
-            sx={{ gridColumn: "span 2" }}
-            size="small"
-            value={formik.values.quantity}
-            onChange={formik.handleChange}
-            error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-            helperText={formik.touched.quantity && formik.errors.quantity}
-          />
-          <TextField
-            id="options.size"
-            name="options.size"
-            label="Size"
-            variant="outlined"
-            sx={{ gridColumn: "span 2" }}
-            size="small"
-            value={formik.values.options.size}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.options?.size &&
-              Boolean(formik.errors.options?.size)
-            }
-            helperText={
-              formik.touched.options?.size && formik.errors.options?.size
-            }
-          />
+          <Box sx={{ gridColumn: "span 2" }}></Box>
 
-          <TextField
-            id="options.color"
-            name="options.color"
-            label="Color"
-            variant="outlined"
+          <Box
+            display="grid"
+            gap="10px"
+            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
             sx={{ gridColumn: "span 2" }}
-            size="small"
-            value={formik.values.options.color}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.options?.color &&
-              Boolean(formik.errors.options?.color)
-            }
-            helperText={
-              formik.touched.options?.color && formik.errors.options?.color
-            }
-          />
-
-          <FormControl
-            sx={{ gridColumn: "span 2" }}
-            size="small"
-            variant="outlined"
-            error={
-              formik.touched.options?.availability &&
-              Boolean(formik.errors.options?.availability)
-            }
           >
-            <InputLabel id="availability-label">Availability</InputLabel>
-            <Select
-              labelId="availability-label"
-              id="options.availability"
-              name="options.availability"
-              label="Availability"
-              value={formik.values.options.availability}
+            <TextField
+              id="quantity"
+              name="quantity"
+              label="Quantity"
+              variant="outlined"
+              type="number"
+              sx={{ gridColumn: "span 1" }}
+              size="small"
+              value={formik.values.quantity}
               onChange={formik.handleChange}
-            >
-              <MenuItem value="In Stock">In Stock</MenuItem>
-              <MenuItem value="Out Of Stock">Out Of Stock</MenuItem>
-            </Select>
-          </FormControl>
+              error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+              helperText={formik.touched.quantity && formik.errors.quantity}
+            />
 
-          <StyledCheckbox>
-            <Checkbox
+            <FormControl sx={{ gridColumn: "span 1" }}>
+              <Select
+                multiple
+                displayEmpty
+                id="size"
+                name="options.size"
+                label="Size"
+                variant="outlined"
+                sx={{ gridColumn: "span 1" }}
+                size="small"
+                value={size}
+                onBlur={formik.handleBlur}
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  const {
+                    target: { value },
+                  } = event;
+                  setSize(typeof value === "string" ? value.split(",") : value);
+                }}
+                error={
+                  formik.touched.options?.size &&
+                  Boolean(formik.errors.options?.size)
+                }
+                helperText={
+                  formik.touched.options?.size && formik.errors.options?.size
+                }
+                input={<OutlinedInput />}
+                renderValue={(selected) => {
+                  if (selected?.length === 0) {
+                    return <em>Size</em>;
+                  }
+
+                  return selected?.join(", ");
+                }}
+                MenuProps={MenuProps}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                <MenuItem disabled value="">
+                  <em>Size</em>
+                </MenuItem>
+                {sizes?.map((size) => (
+                  <MenuItem
+                    key={size}
+                    value={size}
+                    style={getStyles(size, formik.values.options.size, theme)}
+                  >
+                    {size}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ gridColumn: "span 1" }}>
+              <Select
+                multiple
+                displayEmpty
+                id="color"
+                name="options.color"
+                label="color"
+                variant="outlined"
+                sx={{ gridColumn: "span 1" }}
+                size="small"
+                value={color}
+                onChange={(event) => {
+                  formik.handleChange(event);
+                  const {
+                    target: { value },
+                  } = event;
+                  setColor(
+                    typeof value === "string" ? value.split(",") : value
+                  );
+                }}
+                error={
+                  formik.touched.options?.color &&
+                  Boolean(formik.errors.options?.color)
+                }
+                helperText={
+                  formik.touched.options?.color && formik.errors.options?.color
+                }
+                input={<OutlinedInput />}
+                renderValue={(selected) => {
+                  if (selected?.length === 0) {
+                    return <em>Color</em>;
+                  }
+
+                  return selected?.join(", ");
+                }}
+                MenuProps={MenuProps}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                <MenuItem disabled value="">
+                  <em>Color</em>
+                </MenuItem>
+                {colors?.map((color) => (
+                  <MenuItem
+                    key={color}
+                    value={color}
+                    style={getStyles(color, formik.values.options.color, theme)}
+                  >
+                    {color}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl
+              sx={{ gridColumn: "span 1" }}
+              size="small"
+              variant="outlined"
+              error={
+                formik.touched.options?.availability &&
+                Boolean(formik.errors.options?.availability)
+              }
+            >
+              <InputLabel id="availability-label">Availability</InputLabel>
+              <Select
+                labelId="availability-label"
+                id="options.availability"
+                name="options.availability"
+                label="Availability"
+                value={formik.values.options.availability}
+                onChange={formik.handleChange}
+              >
+                <MenuItem value="In Stock">In Stock</MenuItem>
+                <MenuItem value="Out of Stock">Out Of Stock</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box sx={{ gridColumn: "span 2" }}></Box>
+          <FormGroup>
+            <FormControlLabel
               id="active"
               name="active"
+              control={<Switch defaultChecked color="warning" />}
+              label="Publish"
               checked={formik.values.active}
               onChange={formik.handleChange}
-              color="primary"
             />
-            <Typography variant="body1">Active</Typography>
-          </StyledCheckbox>
+          </FormGroup>
         </Box>
-        <input
-          id="images"
-          name="images"
-          type="file"
-          onChange={(event) => {
-            formik.setFieldValue("images", event.currentTarget.files);
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-start",
+            width: "fit-content",
           }}
-          multiple
-        />
-        <Box display="flex" justifyContent="end" mt="20px">
+        >
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload Images
+            <VisuallyHiddenInput
+              type="file"
+              multiple
+              name="images"
+              accept="image/*"
+              onChange={(event) => {
+                formik.setFieldValue("images", event.currentTarget.files);
+              }}
+            />
+          </Button>
+          {formik.values.images.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                width: "fit-content",
+              }}
+            >
+              {Array.from(formik.values.images).map((file, index) => (
+                <div
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Uploaded Image ${index}`}
+                    style={{
+                      maxWidth: "100px",
+                      maxHeight: "100px",
+                      margin: "5px",
+                    }}
+                  />
+                  <IconButton
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleDeleteImage(index)}
+                  >
+                    <CancelIcon></CancelIcon>
+                  </IconButton>
+                </div>
+              ))}
+            </div>
+          )}
+        </Box>
+
+        <Box
+          sx={{
+            position: "fixed",
+            left: "99%",
+            top: "98.5%",
+            transform: "translate(-100% , -100%)",
+          }}
+        >
           <Button
             type="submit"
             className="submit-btn"
@@ -297,7 +468,6 @@ const ProductForm = ({ open, onClose }) => {
               color: "var(--white-background)",
             }}
             variant="contained"
-            onClick={() => console.log("Form values:", formik.values)}
           >
             Submit <DoneIcon></DoneIcon>
           </Button>

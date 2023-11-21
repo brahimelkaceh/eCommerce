@@ -7,10 +7,6 @@ const validationSchema = yup.object({
   subCategoryId: yup.string().required("Subcategory ID is required"),
   shortDescription: yup.string().required("Short Description is required"),
   longDescription: yup.string().required("Long Description is required"),
-  price: yup
-    .number()
-    .required("Price is required")
-    .positive("Price must be positive"),
   image: yup.string(),
   discountPrice: yup.number().positive("Discount Price must be positive"),
   quantity: yup
@@ -18,8 +14,12 @@ const validationSchema = yup.object({
     .required("Quantity is required")
     .positive("Quantity must be positive"),
   options: yup.object().shape({
-    size: yup.string().required("Size is required"),
-    color: yup.string().required("Color is required"),
+    // size: yup.string().required("Size is required"),
+    // color: yup.string().required("Color is required"),
+    price: yup
+      .number()
+      .required("Price is required")
+      .positive("Price must be positive"),
     availability: yup.string().required("Availability is required"),
   }),
   active: yup.boolean(),

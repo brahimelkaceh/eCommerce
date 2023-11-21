@@ -17,16 +17,16 @@ Router.post(
   "/subcategories/",
   TokenCheck,
   ValidatorSanitizer.validate,
-  createSubCategory,
+  createSubCategory
 );
-Router.get("/subcategories/search", TokenCheck, searchSubCategory);
+Router.get("/subcategories/search", searchSubCategory);
 Router.get("/subcategories/", getAllSubcategories);
-Router.get("/subcategories/:id", TokenCheck, getSubCategoryById);
+Router.get("/subcategories/:id", getSubCategoryById);
 Router.put(
   "/subcategories/:id",
   TokenCheck,
   ValidatorSanitizer.validate,
-  updateSubCategory,
+  updateSubCategory
 );
 Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
 

@@ -29,13 +29,12 @@ Router.post(
 Router.post("/customers/login", ValidatorSanitizer.validate, login);
 Router.get("/customers/activate", activate);
 Router.get("/customers/", getAllCustomers);
-Router.get("/customers/search", TokenCheck, searchForCustomer);
+Router.get("/customers/search", searchForCustomer);
 Router.get("/customers/:id", getCustomerById);
 Router.put(
   "/customers/:id",
   upload.array("images", 5),
   ValidatorSanitizer.validate,
-  TokenCheck,
   updateCustomer
 );
 Router.delete("/customers/:id", TokenCheck, deleteCustomer);

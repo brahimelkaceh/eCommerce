@@ -5,14 +5,14 @@ const initialValues = {
   subCategoryId: "",
   shortDescription: "",
   longDescription: "",
-  price: "",
   images: "",
   discountPrice: "",
   quantity: "",
   options: {
-    size: "",
-    color: "",
-    availability: "In Stock",
+    price: "",
+    size: [],
+    color: [],
+    availability: "",
   },
   active: false,
 };

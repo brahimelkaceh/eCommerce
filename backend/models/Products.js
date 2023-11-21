@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const productOptionsSchema = new mongoose.Schema({
   size: {
-    type: String,
+    type: [String],
     required: true,
   },
   color: {
-    type: String,
+    type: [String],
     required: true,
   },
   availability: {
@@ -65,7 +65,7 @@ const productSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true, versionKey: false },
+  { timestamps: true, versionKey: false }
 );
 
 module.exports = mongoose.model("ProductModel", productSchema);

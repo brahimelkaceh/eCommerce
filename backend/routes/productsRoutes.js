@@ -1,8 +1,8 @@
 // ! Express.js routes for products
 const express = require("express");
 // const upload = require("../middlewares/multer");
-const multer = require('multer')
-const upload = require("../middlewares/multer")
+const multer = require("multer");
+const upload = require("../middlewares/multer");
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage });
 const Router = express.Router();
@@ -23,21 +23,20 @@ Router.post(
   "/products",
   upload.array("image"),
   // TokenCheck,
-  //ValidatorSanitizer.validate,
-  createProduct,
+  ValidatorSanitizer.validate,
+  createProduct
 );
 Router.put(
   "/products/:id",
   upload.array("images", 5),
-  // TokenCheck,
-  // ValidatorSanitizer.validate,
-  updateProduct,
+  ValidatorSanitizer.validate,
+  updateProduct
 );
 
 // TokenCheck
 Router.get("/products/", getAllProducts);
 Router.get("/products/search", TokenCheck, searchProducts);
-Router.get("/products/:id", getProductById);
+Router.get("/products/:id", TokenCheck, getProductById);
 Router.delete("/products/:id", deleteProduct);
 
 module.exports = Router;
