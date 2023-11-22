@@ -18,7 +18,7 @@ export function getUsers() {
   return api.get("/users");
 }
 export function createUser(body) {
-  return api.post("/users", body, config);
+  return api.post("/users", body,config);
 }
 export function DeleteUser(body) {
   return api.delete(`/users/${body}`);

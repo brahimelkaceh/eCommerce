@@ -31,6 +31,7 @@ Router.post(
 Router.put(
   "/users/:id",
   upload.array("images", 5),
+  TokenCheck,
   ValidatorSanitizer.validate,
   updateUser
 );

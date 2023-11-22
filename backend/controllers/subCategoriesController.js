@@ -88,7 +88,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
 
 exports.updateSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-  const { subCategoryName, active } = req.body;
+  const {categoryId,subCategoryName, active } = req.body;
 
   // Validate the request body
   if (!subCategoryName) {
@@ -108,7 +108,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   // Update the subcategory properties
   subcategory.subCategoryName = subCategoryName;
   subcategory.active = active || false; // Set to false if not provided
-
+  subcategory.categoryId = categoryId;
   // Save the updated subcategory
   await subcategory.save();
 

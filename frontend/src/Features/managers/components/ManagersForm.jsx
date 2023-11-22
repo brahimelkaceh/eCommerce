@@ -16,7 +16,7 @@ const initialValues = {
 };
 const checkoutSchema = yup.object().shape({
   firstName: yup.string().required("required"),
- role: yup.string().required("required"),
+  role: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   userName: yup.string().required("required"),

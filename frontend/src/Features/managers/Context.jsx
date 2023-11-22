@@ -16,7 +16,7 @@ export const ManagerProvider = ({ children }) => {
         //   },
         // });
         const Response = await getUsers();
-        console.log("Hello",Response);
+        // console.log("Hello",Response);
         // const data = await response.json();
         // console.log(data);
         const formatDate = (dateString) => {
