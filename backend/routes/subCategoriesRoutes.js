@@ -28,6 +28,6 @@ Router.put(
   ValidatorSanitizer.validate,
   updateSubCategory
 );
-Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
+Router.delete("/subcategories/:id", deleteSubCategory);//TokenCheck
 
 module.exports = Router;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
+import {getUsers} from "./service"
 export const ManagerContext = createContext();
 
 export const ManagerProvider = ({ children }) => {
@@ -8,15 +8,23 @@ export const ManagerProvider = ({ children }) => {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/users");
-        const data = await response.json();
-
+        // const response = await fetch("http://localhost:5000/users", {
+        //   headers: {
+        //     Authorization: ` Bearer ${JSON.parse(
+        //       localStorage.getItem("userT")
+        //     )}`,
+        //   },
+        // });
+        const Response = await getUsers();
+        console.log("Hello",Response);
+        // const data = await response.json();
+        // console.log(data);
         const formatDate = (dateString) => {
           const utcDate = new Date(dateString); // Original date in UTC
           return utcDate; // Convert to string in the desired format
         };
 
-        const managersWithId = data.map((manager) => ({
+        const managersWithId = Response.data.data.map((manager) => ({
           id: manager._id,
           userName: manager.userName,
           lastName: manager.lastName,

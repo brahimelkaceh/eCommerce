@@ -25,7 +25,6 @@ Router.post(
   "/users",
   upload.array("images", 5),
   TokenCheck,
-
   ValidatorSanitizer.validate,
   createUser
 );
@@ -35,7 +34,7 @@ Router.put(
   ValidatorSanitizer.validate,
   updateUser
 );
-Router.delete("/users/:id", deleteUser);
+Router.delete("/users/:id",TokenCheck,deleteUser);
  Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
 Router.get("/users/",TokenCheck ,showAllUsers); //TokenCheck

@@ -128,8 +128,9 @@ exports.deleteSubCategory = catchAsync(async (req, res, next) => {
     return next(new AppError("Can't find the specified subcategory", 404));
   }
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     data: null,
+    message: "SubCategory deleted Successfully"
   });
 });
