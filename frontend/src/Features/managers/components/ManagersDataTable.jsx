@@ -110,6 +110,8 @@ export default function allManagers() {
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     const ID = updatedRow.id;
     delete updatedRow.isNew;
+    delete updatedRow.password;
+    delete updatedRow.confirmPassword;
     try {
       Swal.fire({
         title: "Do you want to save the changes?",
@@ -121,6 +123,7 @@ export default function allManagers() {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           Swal.fire("Saved!", "", "success");
+          console.log(updatedRow);
           editUser(ID, updatedRow)
             .then((response) => {
               console.log(response);
