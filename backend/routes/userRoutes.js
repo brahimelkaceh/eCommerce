@@ -36,8 +36,8 @@ Router.put(
   updateUser
 );
 Router.delete("/users/:id",TokenCheck,deleteUser);
- Router.get("/users/", TokenCheck, searchUser);
+ Router.get("/users/", TokenCheck, searchUser); 
 Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/users/",TokenCheck ,showAllUsers); //TokenCheck
+//Router.get("/users/",TokenCheck ,showAllUsers); //TokenCheck
 
 module.exports = Router;

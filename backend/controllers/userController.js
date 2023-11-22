@@ -167,9 +167,7 @@ exports.searchUser = async (req, res, next) => {
   try {
     const searchParams = req.query;
     console.log(searchParams);
-    const allUsers = await User.find(searchParams)
-      .sort({ _id: "descending" })
-      .limit(10);
+    const allUsers = await User.find(searchParams);
     if (!allUsers.length) {
       return next(new AppError("User not found", 404));
     } else {
@@ -208,7 +206,8 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.showAllUsers = async (req, res) => {
   try {
-    const users = await User.find().sort({ _id: "descending" }).limit(10); // This assumes you have a User model defined
+    console.log("hello")
+    const users = await User.find(); // This assumes you have a User model defined
     res.json(users);
   } catch (err) {
     console.error(err);

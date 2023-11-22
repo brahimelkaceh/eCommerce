@@ -32,7 +32,7 @@ const randomActive = () => {
 
 export default function allManagers() {
   const ManagerContext = useManager();
-
+  console.log(ManagerContext.managers)
   const [rows, setrows] = React.useState([]);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
   React.useEffect(() => {
@@ -307,6 +307,10 @@ export default function allManagers() {
         // slotProps={{
         //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
         // }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
         disableColumnFilter
         disableDensitySelector
         filterModel={filterModel}

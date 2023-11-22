@@ -5,7 +5,7 @@ const api = axios.create({
   headers: {
     // "Content-Type": "application/json",
     "Content-Type": "multipart/form-data",
-    Authorization:` Bearer ${JSON.parse(localStorage.getItem("userT"))}`
+    Authorization: ` Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 const config = {
@@ -18,10 +18,10 @@ export function getUsers() {
   return api.get("/users");
 }
 export function createUser(body) {
-  return api.post("/users", body,config);
+  return api.post("/users", body, config);
 }
-export function DeleteUser(body) {
-  return api.delete(`/users/${body}`);
+export function DeleteUser(id) {
+  return api.delete(`/users/${id}`);
 }
 
 export function editUser(id, body) {

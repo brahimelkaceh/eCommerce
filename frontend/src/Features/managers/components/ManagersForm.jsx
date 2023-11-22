@@ -3,7 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
+import Swal from "sweetalert2";
 import { createUser } from "../service";
+import { useManager } from "../Context";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -30,16 +32,22 @@ const checkoutSchema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Password confirmation is required"),
 });
-
-const Formm = () => {
+const Formm = ({ open, onClose }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
+  const { setRefresh } = useManager();
   const handleFormSubmit = (values, { resetForm }) => {
     console.log(values);
     try {
       createUser(values)
         .then((response) => {
+          onClose();
+          Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success",
+          });
           console.log(response);
+          setRefresh(new Date().toISOString());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
