@@ -122,10 +122,14 @@ exports.createUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res) => {
   const response = {};
   const images = req.files;
+
   const uploadedImages = await addImages(images);
   try {
     const id = req.params.id;
     const user = await checkingID(id);
+    //doing some magic 
+   // do the magic here !!!
+    // finishing the magic
     if (!user) {
       response.message = CONSTANTS.USER_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
@@ -154,7 +158,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     const updateData = {
       lastUpdate: Date.now(),
       ...newUserData,
-      images: uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.length? uploadedImages.map((image) => image.imageUrl):newUserData.images
     };
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
