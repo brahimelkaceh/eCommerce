@@ -13,18 +13,6 @@ export const ManagerProvider = ({ children }) => {
           const utcDate = new Date(dateString); // Original date in UTC
           return utcDate; // Convert to string in the desired format
         };
-        // const managersWithId = Response.data.data.map((manager) => ({
-        //   id: manager._id,
-        //   userName: manager.userName,
-        //   lastName: manager.lastName,
-        //   firstName: manager.firstName,
-        //   email: manager.email,
-        //   creationDate: formatDate(manager.creationDate),
-        //   lastLogin: formatDate(manager.lastLogin),
-        //   lastUpdate: formatDate(manager.lastUpdate),
-        //   role: manager.role,
-        //   images:manager.images
-        // }));
         const managersWithId = Response.data.data.map((manager) => ({
           ...manager,
           id: manager._id,

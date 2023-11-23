@@ -51,7 +51,7 @@ const ProductList = () => {
   const [editModeRows, setEditModeRows] = useState(new Set());
   const [rows, setRows] = useState(products);
   const [rowModesModel, setRowModesModel] = useState({});
-  // console.log(products);
+   
   useEffect(() => {
     setRows(
       products.map((product) => ({ ...product, isNew: false, id: product._id }))

@@ -95,7 +95,7 @@ export const ProductProvider = ({ children }) => {
     const fetchProducts = async () => {
       try {
         const response = await getProducts();
-        console.log(response.data);
+        console.log("hello I am data",response.data);
         const productsWithId = response.data.data.map((product) => ({
           id: product._id,
           ...product,

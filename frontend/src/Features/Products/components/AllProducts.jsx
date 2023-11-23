@@ -78,10 +78,6 @@ export default function AllProducts({ handleOpen }) {
              });
            }
          });
-      // deleteP(id).then((response) => {
-      //   console.log(response);
-      // });
-      // setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
       throw err;
     }
@@ -108,14 +104,6 @@ export default function AllProducts({ handleOpen }) {
     const ID = updatedRow.id;
     delete updatedRow.isNew;
     try {
-      // console.log(updatedRow.images);
-      // editP(ID, {...updatedRow, images: updatedRow.images[0]})
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error occurred: while editing product", error);
-      //   });
        Swal.fire({
          title: "Do you want to save the changes?",
          showDenyButton: true,
@@ -191,6 +179,7 @@ export default function AllProducts({ handleOpen }) {
         <div className="product-name">
           <span className="name">{params.value}</span>
           <span className="subcategory">
+            {console.log("i am params row",params.row.subCategoryId.subCategoryName)}
             {params.row.subCategoryId.subCategoryName}
           </span>
         </div>
