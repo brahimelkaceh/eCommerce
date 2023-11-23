@@ -9,7 +9,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { deleteP, editP } from "../Services";
 import { useProduct } from "../Context";
-import { toast } from "react-toastify";
 import {
   GridRowModes,
   DataGrid,
@@ -59,7 +58,6 @@ export default function AllProducts({ handleOpen }) {
     try {
       deleteP(id).then((response) => {
         console.log(response);
-        toast.success("Product deleted successfully");
       });
       setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
@@ -92,11 +90,9 @@ export default function AllProducts({ handleOpen }) {
       editP(ID, {...updatedRow, images: updatedRow.images[0]})
         .then((response) => {
           console.log(response);
-          toast.success("Product updated successfully");
         })
         .catch((error) => {
           console.error("Error occurred: while editing product", error);
-          toast.error("Error occurred: while editing product");
         });
     } catch (error) {
       throw error;

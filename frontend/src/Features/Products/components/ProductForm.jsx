@@ -28,8 +28,6 @@ import initialValues from "./manageProducts/InitialValues";
 import { useSubCatData } from "../../categories/Context";
 import { useTheme } from "@mui/material/styles";
 import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 // Input styling
 
@@ -67,18 +65,14 @@ const ProductForm = ({ open, onClose }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values.images);
-      // addNewProduct({ ...values, id: values._id });
-      // toast.success("Successfully added")
       createP({ ...values, images: values.images[0] })
         .then((createdProduct) => {
-          toast.success("Success Notification !");
           console.log("close product");
           setRefresh(new Date().toISOString());
           onClose();
         })
         .catch((error) => {
           console.log(error);
-          toast.error("Something went wrong");
         });
     },
   });
