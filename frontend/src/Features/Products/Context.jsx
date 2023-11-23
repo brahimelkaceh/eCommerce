@@ -50,8 +50,7 @@ export const ProductProvider = ({ children }) => {
       );
       return updatedData;
     } catch (error) {
-      console.error(`Error editing product with ID ${productId}:`, error);
-      return null;
+      console.error("Error updating order:", error);
     }
   };
 
@@ -100,6 +99,7 @@ export const ProductProvider = ({ children }) => {
         const productsWithId = response.data.data.map((product) => ({
           id: product._id,
           ...product,
+          id: product._id,
         }));
         setProducts(productsWithId);
       } catch (error) {

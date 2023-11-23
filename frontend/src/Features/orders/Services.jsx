@@ -1,4 +1,3 @@
-// apiService.js
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:5000/orders/";
@@ -8,55 +7,28 @@ const apiService = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 
-const getToken = () => {
-  const token = localStorage.getItem("userT");
-  if (!token) {
-    throw new Error("Token not available");
-  }
-  return token;
-};
-
-const fetchData = async (endpoint) => {
+const handleRequest = async (method, endpoint, data = null) => {
   try {
-    const response = await apiService.get(endpoint, {
-      headers: getRequestHeaders(),
+    const response = await apiService({
+      method,
+      url: endpoint,
+      data,
     });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-const getRequestHeaders = () => ({
-  Authorization: `Bearer ${getToken()}`,
-  // Add other headers if needed
-});
 
-const fetchOrderById = async (id) => {
-  const endpoint = `${id}`;
-  try {
-    const response = await apiService.get(endpoint, {
-      headers: getRequestHeaders(),
-    });
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+const fetchData = async (endpoint) => handleRequest("get", endpoint);
 
-const updateOrderById = async (id, updatedOrderData) => {
-  const endpoint = `${id}`;
-  try {
-    const response = await apiService.put(endpoint, updatedOrderData, {
-      headers: getRequestHeaders(),
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+const fetchOrderById = async (id) => fetchData(`${id}`);
+
+const updateOrderById = async (id, updatedOrderData) =>
+  handleRequest("put", `${id}`, updatedOrderData);
 
 export { fetchData, fetchOrderById, updateOrderById };

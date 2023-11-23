@@ -11,8 +11,6 @@ const SubCategory = require("../models/SubCategories");
 const { addImages } = require("../helpers/addImage");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  console.log(req.body.options);
-
   try {
     const {
       sku,
@@ -20,6 +18,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Now you pass the subcategory ID
       shortDescription,
       longDescription,
+      price,
       discountPrice,
       quantity,
       options, // Array of product options
@@ -46,6 +45,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       subCategoryId, // Pass the subcategory ID
       shortDescription,
       longDescription,
+      price,
       images: uploadedImages.map((image) => image.imageUrl),
       discountPrice,
       quantity,

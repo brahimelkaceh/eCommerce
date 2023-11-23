@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { ProductProvider } from "./Context";
-import { SubcategoryProvider } from "../categories/Context";
 import ProductDetails from "./components/ProductsDetails";
 import { Box } from "@mui/material";
 import "./style.css";
@@ -8,7 +6,8 @@ import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import ProductsModal from "./components/ProductsModal";
 import AllProducts from "./components/AllProducts";
-import { useProduct } from "./Context";
+import { ProductProvider, useProduct } from "./Context";
+import { SubcategoryProvider } from "../categories/Context";
 
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);

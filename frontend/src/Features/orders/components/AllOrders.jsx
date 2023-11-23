@@ -131,8 +131,8 @@ export default function AllOrders({ handleOpen }) {
 
       headerAlign: "left",
       renderCell: (params) => {
-        // console.log();
-        setcustomer(params.value._id);
+        console.log(params.value?._id);
+        setcustomer(params.value?._id);
         return (
           <span className="customer-name"> {singleCustomer?.userName}</span>
         );

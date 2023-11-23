@@ -23,7 +23,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
       active,
     });
 
-    await createdSubcategory.save();
+    createdSubcategory.save();
 
     res.status(201).json({
       status: "success",
@@ -38,7 +38,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 exports.getAllSubcategories = async (req, res) => {
   const subcategories = await Subcategory.find({}).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
   res.json({
     status: "success",
@@ -52,7 +52,7 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
 
   const subCategories = await Subcategory.find(searchParams).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subCategories.length) {
@@ -62,7 +62,7 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
   return res.json({
     status: "success",
     data: subCategories.map((subCategory) =>
-      subCategory.toObject({ getters: true }),
+      subCategory.toObject({ getters: true })
     ),
   });
 });
@@ -73,7 +73,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   // Find the subcategory by its ID
   const subcategory = await Subcategory.findById(subcategoryId).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subcategory) {
@@ -88,7 +88,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
 
 exports.updateSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-  const {categoryId,subCategoryName, active } = req.body;
+  const { subCategoryName, categoryId, active } = req.body;
 
   // Validate the request body
   if (!subCategoryName) {
@@ -98,7 +98,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   // Find the subcategory by its ID
   const subcategory = await Subcategory.findById(subcategoryId).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subcategory) {
@@ -123,14 +123,12 @@ exports.deleteSubCategory = catchAsync(async (req, res, next) => {
 
   // Find the subcategory by its ID and remove it
   const result = await Subcategory.deleteOne({ _id: subcategoryId });
-
   if (result.deletedCount === 0) {
     return next(new AppError("Can't find the specified subcategory", 404));
   }
-
   res.status(200).json({
-    status: "success",
+    status: 204,
+    message: "Subcategory deleted successfully",
     data: null,
-    message: "SubCategory deleted Successfully"
   });
 });
