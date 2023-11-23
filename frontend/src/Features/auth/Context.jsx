@@ -7,6 +7,7 @@ export const UserState = ({ children }) => {
   const [username, setusername] = useState("");
   const [role, setrole] = useState("");
   const [loading, setloading] = useState(false);
+  const [userData, setUserData] = useState([]);
   useEffect(() => {
     fetch("http://localhost:5000/users/profile", {
       withCredentials: "include",
@@ -21,10 +22,10 @@ export const UserState = ({ children }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        setUserData(data);
         setusername(data.username);
         setrole(data.role);
         setloading(false);
-        console.log(data);
       });
   }, []);
   return (
@@ -35,6 +36,7 @@ export const UserState = ({ children }) => {
         role,
         setrole,
         loading,
+        userData,
       }}
     >
       {children}

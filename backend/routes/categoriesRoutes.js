@@ -4,6 +4,7 @@ const Router = express.Router();
 
 const validatorSanitizer = require("../middlewares/validator");
 const { TokenCheck } = require("../middlewares/TokenCheck");
+const { ManagerTokenCheck } = require("../middlewares/ManagerTokenCheck");
 
 const ValidatorSanitizer = new validatorSanitizer();
 const {
@@ -18,17 +19,17 @@ const {
 Router.get("/categories/search", TokenCheck, searchCategory);
 Router.post(
   "/categories",
-  TokenCheck,
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   createCategory
 );
 Router.put(
   "/categories/:id",
-  TokenCheck,
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   updateCategory
 );
-Router.delete("/categories/:id", TokenCheck, deleteCategory);
-Router.get("/categories/", TokenCheck, showAllCategories);
-Router.get("/categories/:id", TokenCheck, getCategoryById);
+Router.delete("/categories/:id", ManagerTokenCheck, deleteCategory);
+Router.get("/categories/", ManagerTokenCheck, showAllCategories);
+Router.get("/categories/:id", ManagerTokenCheck, getCategoryById);
 module.exports = Router;

@@ -11,7 +11,6 @@ const Container = () => {
   const [formdata, setformdata] = useState(null);
   const handlesubmit = async (e) => {
     e.preventDefault();
-    console.log(formdata);
     axios
       .post(`http://localhost:5000/users/login`, formdata)
       .then((response) => {

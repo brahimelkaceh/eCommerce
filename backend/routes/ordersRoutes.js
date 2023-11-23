@@ -11,10 +11,11 @@ const {
 //const ValidatorSanitizer = new validatorSanitizer();
 const { TokenCheck } = require("../middlewares/TokenCheck");
 const { CustomerTokenCheck } = require("../middlewares/CustomerTokenCheck");
+const { ManagerTokenCheck } = require("../middlewares/ManagerTokenCheck");
 
 Router.post("/orders", createOrder);
-Router.get("/orders/:id", TokenCheck, getOrderById);
-Router.put("/orders/:id", TokenCheck, updateOrder);
-Router.get("/orders", TokenCheck, listOrders);
+Router.get("/orders/:id", ManagerTokenCheck, getOrderById);
+Router.put("/orders/:id", ManagerTokenCheck, updateOrder);
+Router.get("/orders", ManagerTokenCheck, listOrders);
 
 module.exports = Router;

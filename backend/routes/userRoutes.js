@@ -17,7 +17,6 @@ const {
 } = require("../controllers/userController");
 
 Router.get("/users/profile", ManagerTokenCheck, (req, res) => {
-  console.log("user", req.user);
   res.status(200).json(req.user);
 });
 Router.post("/users/login", ValidatorSanitizer.validate, login);
@@ -36,8 +35,7 @@ Router.put(
   updateUser
 );
 Router.delete("/users/:id", deleteUser);
-// Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/users/", showAllUsers); //TokenCheck
+Router.get("/users/", showAllUsers);
 
 module.exports = Router;
