@@ -12,11 +12,13 @@ const productOptionsSchema = new mongoose.Schema({
   availability: {
     type: String,
     enum: ["In Stock", "Out of Stock"],
+    default: "In Stock",
     required: true,
   },
   price: {
     type: Number,
     required: true,
+    default: 0,
     min: 0, // Ensure price is non-negative
   },
 });
@@ -65,7 +67,7 @@ const productSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false },
 );
 
 module.exports = mongoose.model("ProductModel", productSchema);
