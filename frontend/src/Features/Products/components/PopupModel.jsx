@@ -5,27 +5,21 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-
-import ProductForm from "./ProductForm";
+import ManagerForm from "../components/ProductForm";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "80%",
-  height: "95%",
+  width: 800,
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: " var(--border-radius)",
   p: 1,
-  overflow: "scroll",
 };
 
-export default function ProductsModal({
-  handleCloseFormModal,
-  isFormModalOpen,
-}) {
+export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -46,7 +40,7 @@ export default function ProductsModal({
           alignSelf: "flex-end",
         }}
       >
-        Add new Product <AddBoxIcon></AddBoxIcon>
+        Add new Manager <PersonAddIcon></PersonAddIcon>
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -63,7 +57,9 @@ export default function ProductsModal({
       >
         <Fade in={open}>
           <Box sx={style}>
-            <ProductForm open={isFormModalOpen} onClose={handleClose} />
+            <Typography>
+              <ManagerForm />
+            </Typography>
           </Box>
         </Fade>
       </Modal>

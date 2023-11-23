@@ -8,6 +8,10 @@ import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import ProductsModal from "./components/ProductsModal";
 import AllProducts from "./components/AllProducts";
+import { useProduct } from "./Context";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isFormModalOpen, setFormModalOpen] = useState(false);
@@ -22,30 +26,33 @@ const Container = () => {
   console.log("inside container");
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Sidebar />
-      <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <ProductProvider>
-          <SubcategoryProvider>
-            <ProductsModal
-              handleCloseFormModal={handleCloseFormModal}
-              isFormModalOpen={isFormModalOpen}
-            />
-            <div>
-              {selectedProductId ? (
-                <ProductDetails
-                  productId={selectedProductId}
-                  setSelectedProductId={handleProductClick}
-                />
-              ) : (
-                <AllProducts />
-              )}
-            </div>
-          </SubcategoryProvider>
-        </ProductProvider>
+    <>
+      <ToastContainer />
+      <Box sx={{ display: "flex" }}>
+        <Sidebar />
+        <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          <ProductProvider>
+            <SubcategoryProvider>
+              <ProductsModal
+                handleCloseFormModal={handleCloseFormModal}
+                isFormModalOpen={isFormModalOpen}
+              />
+              <div>
+                {selectedProductId ? (
+                  <ProductDetails
+                    productId={selectedProductId}
+                    setSelectedProductId={handleProductClick}
+                  />
+                ) : (
+                  <AllProducts />
+                )}
+              </div>
+            </SubcategoryProvider>
+          </ProductProvider>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
