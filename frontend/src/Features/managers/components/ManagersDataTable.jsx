@@ -75,10 +75,6 @@ export default function allManagers() {
           });
         }
       });
-      // DeleteUser(id).then((response) => {
-      //   console.log(response);
-      // });
-      // setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
       Swal.fire({
         icon: "error",
