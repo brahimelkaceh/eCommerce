@@ -1,33 +1,44 @@
+/* eslint-disable no-useless-catch */
 import * as React from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-
+import { deleteP, editP } from "../Services";
+import { useProduct } from "../Context";
 import {
   GridRowModes,
   DataGrid,
-  GridActionsCellItem,
+  GridToolbarContainer,
   GridToolbar,
+  GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
+import Swal from "sweetalert2";
+import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
-import { useProduct } from "../Context";
-import { useEffect } from "react";
-import { useState } from "react";
+
+const roles = ["manager", "admin"];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+const active = [true, false];
+const randomActive = () => {
+  return randomArrayItem(active);
+};
 
 export default function AllProducts({ handleOpen }) {
-  const { products, getProductById, editProduct, deleteProduct } = useProduct();
-  const [rows, setrows] = useState(products && products);
-  const [rowModesModel, setrowmodesmodel] = useState({});
-  // console.log("inside all products", products);
+  const { products, getProductById, editProduct, deleteProductById } =
+    useProduct();
 
-  useEffect(() => {
+  const [rows, setrows] = React.useState(products && products);
+  const [rowModesModel, setrowsmodesmodel] = React.useState({});
+  React.useEffect(() => {
     setrows(products);
-  }, []);
+  }, [products, setrows]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -36,23 +47,44 @@ export default function AllProducts({ handleOpen }) {
   };
 
   const handleEditClick = (id) => () => {
-    setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
-    setrowmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (id) => async () => {
-    const deletedProduct = await deleteProduct(id);
-    if (deletedProduct) {
-      // return setrows(rows.filter((row) => row.id !== id));
-      return products;
+    console.log("first entred", id);
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteP(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      throw err;
     }
   };
 
   const handleCancelClick = (id) => () => {
-    setrowmodesmodel({
+    setrowsmodesmodel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
@@ -63,16 +95,48 @@ export default function AllProducts({ handleOpen }) {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
+  const processRowUpdate = (newRow) => {
+    const updatedRow = {
+      ...newRow,
+      isNew: false,
+    };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    const ID = updatedRow.id;
     delete updatedRow.isNew;
-    const updatedProd = await editProduct(updatedRow._id, updatedRow);
-
+    try {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          console.log(updatedRow.images);
+          editP(ID, { ...updatedRow, images: updatedRow.images[0] })
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing product", error);
+              console.error("Error occurred: while editing product", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+    // console.log(updatedRow);
+    // console.log(updatedRow.id);
     return updatedRow;
   };
+
   const handleRowModesModelChange = (newRowModesModel) => {
-    setrowmodesmodel(newRowModesModel);
+    setrowsmodesmodel(newRowModesModel);
   };
 
   const columns = [
@@ -98,8 +162,8 @@ export default function AllProducts({ handleOpen }) {
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover", // You can adjust this property based on your layout requirements
-                borderRadius: "5px", // Optional: Add border radius for rounded corners
+                objectFit: "cover",
+                borderRadius: "5px",
               }}
             />
           </div>
@@ -114,10 +178,7 @@ export default function AllProducts({ handleOpen }) {
       renderCell: (params) => (
         <div className="product-name">
           <span className="name">{params.value}</span>
-          <span
-            className="subcategory"
-            // sx
-          >
+          <span className="subcategory">
             {params.row.subCategoryId.subCategoryName}
           </span>
         </div>
@@ -256,41 +317,56 @@ export default function AllProducts({ handleOpen }) {
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
+        const rowMode = rowModesModel[id];
+        // console.log(rowMode);
+        // if (!rowMode) {
+        //   // Handle the case where rowModesModel[id] is undefined
+        //   return [];
+        // }
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: "#11DD62",
-                backgroundColor: "#E7FCEF",
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={
-                <CancelIcon
-                  sx={{
-                    color: "#E01E1E",
-                  }}
-                />
-              }
-              sx={{
-                backgroundColor: "#FCE9E9",
-                color: "#E96262",
-              }}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
+        if (rowMode) {
+          const isInEditMode = rowMode.mode === GridRowModes.Edit;
+
+          if (isInEditMode) {
+            return [
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                label="Save"
+                sx={{
+                  color: "#11DD62",
+                  backgroundColor: "#E7FCEF",
+                }}
+                onClick={handleSaveClick(id)}
+                key={id}
+              />,
+              <GridActionsCellItem
+                key={id}
+                icon={
+                  <CancelIcon
+                    sx={{
+                      color: "#E01E1E",
+                    }}
+                  />
+                }
+                sx={{
+                  backgroundColor: "#FCE9E9",
+                  color: "#E96262",
+                }}
+                label="Cancel"
+                className="textPrimary"
+                onClick={handleCancelClick(id)}
+                color="inherit"
+              />,
+            ];
+          }
+
+          // ... rest of your code
         }
 
         return [
           <GridActionsCellItem
+            key={id}
             icon={
               <EditIcon
                 sx={{
@@ -303,6 +379,7 @@ export default function AllProducts({ handleOpen }) {
             onClick={handleEditClick(id)}
           />,
           <GridActionsCellItem
+            key={id}
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
@@ -321,24 +398,39 @@ export default function AllProducts({ handleOpen }) {
     quickFilterValues: [""],
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
-
   return (
-    rows && (
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
+        backgroundColor: "#fff",
+        p: 1,
+        borderRadius: 2,
+        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+      }}
+    >
       <DataGrid
-        className="dataGrid"
-        rows={products && products}
+        rows={rows}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slotProps={{
-          toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
+        slots={{
+          toolbar: GridToolbar,
         }}
+        // slotProps={{
+        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+        // }}
         disableColumnFilter
         disableDensitySelector
-        slots={{ toolbar: GridToolbar }}
         filterModel={filterModel}
         onFilterModelChange={(newModel) => setFilterModel(newModel)}
         columnVisibilityModel={columnVisibilityModel}
@@ -346,6 +438,6 @@ export default function AllProducts({ handleOpen }) {
           setColumnVisibilityModel(newModel)
         }
       />
-    )
+    </Box>
   );
 }
