@@ -60,28 +60,43 @@ const ProductForm = ({ open, onClose }) => {
   const [images, setImages] = useState([]);
   const { addNewProduct, setRefresh } = useProduct();
   const { SubcatData } = useSubCatData();
-// SweatAlert
+  // SweatAlert
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values.images);
-      createP({ ...values, images: values.images[0] })
-        .then((createdProduct) => {
-          console.log("close product");
-          setRefresh(new Date().toISOString());
-          onClose();
-            Swal.fire({
-              title: "Good job!",
-              text: "You clicked the button!",
-              icon: "success",
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+
+        const optionsArray = [values.options];
+
+        Object.entries(values).forEach(([key, value]) => {
+          if (key === "images") {
+            for (let i = 0; i < value.length; i++) {
+              formData.append("images", value[i]);
+            }
+          } else if (key === "options") {
+            optionsArray.forEach((option, index) => {
+              Object.entries(option).forEach(([optionKey, optionValue]) => {
+                formData.append(`options[${index}][${optionKey}]`, optionValue);
+              });
             });
-        })
-        .catch((error) => {
-          console.log(error);
+          } else {
+            console.log("key", key, value);
+            formData.append(key, value);
+          }
         });
+
+        // console.log("values: ", values.options);
+        await createP(formData);
+        onClose();
+        setRefresh(new Date().toISOString());
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     },
   });
+
   const [size, setSize] = useState(formik.values.options.size);
   const [color, setColor] = useState(formik.values.options.color);
   const handleDeleteImage = (index) => {
@@ -396,8 +411,8 @@ const ProductForm = ({ open, onClose }) => {
                 value={formik.values.options.availability}
                 onChange={formik.handleChange}
               >
-                <MenuItem value={true}>In Stock</MenuItem>
-                <MenuItem value={false}>Out Of Stock</MenuItem>
+                <MenuItem value="In Stock">In Stock</MenuItem>
+                <MenuItem value="Out of Stock">Out Of Stock</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -428,7 +443,7 @@ const ProductForm = ({ open, onClose }) => {
             Upload Images
             <VisuallyHiddenInput
               type="file"
-              // multiple
+              multiple
               name="images"
               onChange={(event) => {
                 formik.setFieldValue("images", event.target.files);

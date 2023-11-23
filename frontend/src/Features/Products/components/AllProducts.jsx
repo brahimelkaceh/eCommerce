@@ -53,31 +53,31 @@ export default function AllProducts({ handleOpen }) {
   const handleSaveClick = (id) => () => {
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-// sweatAlert
+  // sweatAlert
   const handleDeleteClick = (id) => async () => {
     console.log("first entred", id);
     try {
-         Swal.fire({
-           title: "Are you sure?",
-           text: "You won't be able to revert this!",
-           icon: "warning",
-           showCancelButton: true,
-           confirmButtonColor: "#3085d6",
-           cancelButtonColor: "#d33",
-           confirmButtonText: "Yes, delete it!",
-         }).then((result) => {
-           if (result.isConfirmed) {
-              deleteP(id).then((response) => {
-               console.log(response);
-              });
-             setrows(rows.filter((row) => row.id !== id));
-             Swal.fire({
-               title: "Deleted!",
-               text: "Your file has been deleted.",
-               icon: "success",
-             });
-           }
-         });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteP(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
     } catch (err) {
       throw err;
     }
@@ -94,7 +94,7 @@ export default function AllProducts({ handleOpen }) {
       setrows(rows.filter((row) => row.id !== id));
     }
   };
-//SweatAlert
+  //SweatAlert
   const processRowUpdate = (newRow) => {
     const updatedRow = {
       ...newRow,
@@ -104,29 +104,29 @@ export default function AllProducts({ handleOpen }) {
     const ID = updatedRow.id;
     delete updatedRow.isNew;
     try {
-       Swal.fire({
-         title: "Do you want to save the changes?",
-         showDenyButton: true,
-         showCancelButton: true,
-         confirmButtonText: "Save",
-         denyButtonText: `Don't save`,
-       }).then((result) => {
-         /* Read more about isConfirmed, isDenied below */
-         if (result.isConfirmed) {
-           Swal.fire("Saved!", "", "success");
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
           console.log(updatedRow.images);
-      editP(ID, {...updatedRow, images: updatedRow.images[0]})
-        .then((response) => {
-          console.log(response);
-        })
-             .catch((error) => {
-               Swal.fire("Error occurred: while editing product", error);
+          editP(ID, { ...updatedRow, images: updatedRow.images[0] })
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing product", error);
               console.error("Error occurred: while editing product", error);
-             });
-         } else if (result.isDenied) {
-           Swal.fire("Changes are not saved", "", "info");
-         }
-       });
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
     } catch (error) {
       throw error;
     }
@@ -179,7 +179,10 @@ export default function AllProducts({ handleOpen }) {
         <div className="product-name">
           <span className="name">{params.value}</span>
           <span className="subcategory">
-            {console.log("i am params row",params.row.subCategoryId.subCategoryName)}
+            {console.log(
+              "i am params row",
+              params.row.subCategoryId.subCategoryName
+            )}
             {params.row.subCategoryId.subCategoryName}
           </span>
         </div>
@@ -192,7 +195,7 @@ export default function AllProducts({ handleOpen }) {
       flex: 1,
       renderCell: (params) => (
         <Chip
-          label={params.value > 0 ? "in Stock" : "out stock"}
+          label={params.value > 0 ? "In Stock" : "Out of Stock"}
           size="small"
           style={{
             backgroundColor: params.value > 0 ? "#CFF8E0" : "#eee",

@@ -25,6 +25,8 @@ export const ProductProvider = ({ children }) => {
   };
 
   const addNewProduct = async (productData) => {
+    console.log("enterd context ", productData);
+
     try {
       const addedProduct = await createP(productData)
         .then((res) => {
