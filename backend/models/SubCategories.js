@@ -5,10 +5,11 @@ const subCategorySchema = new mongoose.Schema({
   subCategoryName: {
     type: String,
     required: true,
+    unique: true,
   },
-   categoryId: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref:'CategoryModel',
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CategoryModel",
     required: true,
   },
   active: {

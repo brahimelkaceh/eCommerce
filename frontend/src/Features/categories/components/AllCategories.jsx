@@ -13,45 +13,20 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomTraderName,
-  randomId,
-  randomBoolean,
-} from "@mui/x-data-grid-generator";
 
-const initialRows = [
-  {
-    id: randomId(),
-    category: randomTraderName(),
-    status: randomBoolean(),
-  },
-];
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Category
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+import { useSubCatData } from "../Context";
+import { useEffect } from "react";
+import { Chip } from "@mui/material";
 
 export default function AllCategories() {
-  const [rows, setRows] = React.useState(initialRows);
+  const { catData, deleteCat, updateCat } = useSubCatData();
+
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
+  useEffect(() => {
+    setRows(catData);
+  }, [catData]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -66,7 +41,8 @@ export default function AllCategories() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
+  const handleDeleteClick = (id) => async () => {
+    await deleteCat(id);
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -82,9 +58,11 @@ export default function AllCategories() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    delete updatedRow.isNew;
+    await updateCat(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
@@ -101,18 +79,31 @@ export default function AllCategories() {
       width: 200,
     },
     {
-      field: "category",
+      field: "categoryName",
       headerName: "Category Name",
       align: "center",
       editable: true,
       width: 200,
     },
     {
-      field: "status",
+      field: "active",
       headerName: "Active",
-      type: "boolean",
-      align: "center",
       editable: true,
+      valueOptions: [true, false],
+      type: "boolean",
+
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
@@ -130,12 +121,23 @@ export default function AllCategories() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -146,17 +148,25 @@ export default function AllCategories() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            sx={{
+              color: "#E33434",
+            }}
           />,
         ];
       },
@@ -185,9 +195,6 @@ export default function AllCategories() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}

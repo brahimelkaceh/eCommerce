@@ -20,13 +20,14 @@ Router.post(
   createSubCategory
 );
 Router.get("/subcategories/search", searchSubCategory);
-Router.get("/subcategories/", getAllSubcategories);
-Router.get("/subcategories/:id", getSubCategoryById);
+Router.get("/subcategories/", TokenCheck, getAllSubcategories);
+Router.get("/subcategories/:id", TokenCheck, getSubCategoryById);
 Router.put(
   "/subcategories/:id",
+  TokenCheck,
   ValidatorSanitizer.validate,
   updateSubCategory
 );
-Router.delete("/subcategories/:id", deleteSubCategory);
+Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
 
 module.exports = Router;

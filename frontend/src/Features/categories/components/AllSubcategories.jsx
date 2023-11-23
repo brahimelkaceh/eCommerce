@@ -9,51 +9,29 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomTraderName,
-  randomId,
-  randomBoolean,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
+import { randomId, randomArrayItem } from "@mui/x-data-grid-generator";
 import { useSubCatData } from "../Context";
 import { useEffect } from "react";
 import { Chip } from "@mui/material";
-
-const categoryName = ["Market", "Finance", "Development"];
-const randomCategory = () => {
-  return randomArrayItem(categoryName);
-};
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Subcategory
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+import EditSubCategoryModal from "./subcategories/EditModal";
 
 export default function AllSubcategories() {
-  const { SubcatData, updateSubCat } = useSubCatData();
+  const {
+    SubcatData,
+    updateSubCat,
+    getSubcategoryById,
+    deleteSubCat,
+    catData,
+  } = useSubCatData();
   const [rows, setRows] = React.useState([]);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [open, setOpen] = React.useState(false);
+  const [subcategoryId, setSubcategoryId] = React.useState(null);
 
+  const [rowModesModel, setRowModesModel] = React.useState({});
+  const categories = catData.map((item) => item.categoryName);
   useEffect(() => {
     setRows(SubcatData);
   }, [SubcatData]);
@@ -71,8 +49,9 @@ export default function AllSubcategories() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id) => async () => {
+    await deleteSubCat(id);
+    return setRows(rows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
@@ -90,8 +69,6 @@ export default function AllSubcategories() {
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    delete updatedRow.isNew;
-    const updatedProd = await updateSubCat(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
@@ -118,8 +95,11 @@ export default function AllSubcategories() {
       headerName: "Category Name",
       align: "center",
       width: 150,
+      editable: false,
+      // valueOptions: categories,
+      type: "singleSelect",
       renderCell: (params) => {
-        return <Chip label={params.value.categoryName}></Chip>;
+        return <Chip label={params?.value?.categoryName}></Chip>;
       },
     },
     {
@@ -194,7 +174,12 @@ export default function AllSubcategories() {
             }
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            // onClick={handleEditClick(id)}
+            onClick={() => {
+              setOpen(true);
+              setSubcategoryId(id);
+              getSubcategoryById(id);
+            }}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
@@ -211,34 +196,41 @@ export default function AllSubcategories() {
   ];
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
-      className="dashboard-card"
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
+    <>
+      {open && (
+        <EditSubCategoryModal
+          open={open}
+          setOpen={setOpen}
+          id={subcategoryId}
+        />
+      )}
+
+      <Box
+        sx={{
+          height: 500,
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      />
-    </Box>
+        className="dashboard-card"
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slotProps={{
+            toolbar: { setRows, setRowModesModel },
+          }}
+        />
+      </Box>
+    </>
   );
 }

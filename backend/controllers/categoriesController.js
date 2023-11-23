@@ -10,7 +10,7 @@ exports.createCategory = catchAsync(async (req, res, next) => {
     const { categoryName, ...categoryData } = req.body;
     const CategoryData = await Category.findOne({ categoryName: categoryName });
     if (CategoryData) {
-      res.json("category already exists");
+      res.json({ status: "duplicated", message: "category already exists" });
     } else {
       const newCategory = new Category({
         ...categoryData,
@@ -113,9 +113,7 @@ exports.searchCategory = async (req, res, next) => {
 
 exports.showAllCategories = async (req, res) => {
   try {
-    const Categories = await Category.find()
-      .sort({ _id: "descending" })
-      .limit(10);
+    const Categories = await Category.find().sort({ _id: "descending" });
     res.json({ data: Categories.map((p) => p.toObject({ getters: true })) });
   } catch (err) {
     console.error(err);
