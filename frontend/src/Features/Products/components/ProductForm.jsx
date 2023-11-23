@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
+import { useNavigate } from "react-router-dom";
 import {
   MenuItem,
   FormControl,
@@ -22,11 +22,13 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useProduct } from "../Context";
+import { createP } from "../Services";
 import validationSchema from "./manageProducts/validationSchema";
 import initialValues from "./manageProducts/InitialValues";
 import { useSubCatData } from "../../categories/Context";
 import { useTheme } from "@mui/material/styles";
 import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
+
 // Input styling
 
 const ITEM_HEIGHT = 48;
@@ -49,20 +51,29 @@ function getStyles(name, size, theme) {
   };
 }
 
-const ProductForm = () => {
+const ProductForm = ({ open, onClose }) => {
   const theme = useTheme();
   const sizes = ["S", "M", "L", "XL"];
   const colors = ["PINK", "PURPLE", "RED", "GREEN", "BLUE"];
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const { addNewProduct } = useProduct();
+  const { addNewProduct, setRefresh } = useProduct();
   const { SubcatData } = useSubCatData();
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values.options);
-      // addNewProduct({ ...values, images: [values.images[0].name] });
+      console.log(values.images);
+      createP({ ...values, images: values.images[0] })
+        .then((createdProduct) => {
+          console.log("close product");
+          setRefresh(new Date().toISOString());
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   });
   const [size, setSize] = useState(formik.values.options.size);
@@ -411,11 +422,10 @@ const ProductForm = () => {
             Upload Images
             <VisuallyHiddenInput
               type="file"
-              multiple
+              // multiple
               name="images"
-              accept="image/*"
               onChange={(event) => {
-                formik.setFieldValue("images", event.currentTarget.files);
+                formik.setFieldValue("images", event.target.files);
               }}
             />
           </Button>

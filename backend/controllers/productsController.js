@@ -35,7 +35,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 
     // Handle image uploads here
     const images = req.files;
-    // console.log(req.files);
+     console.log("hello",req.files);
+
 
     // const images = req.body.images;
     const uploadedImages = await addImages(images);
@@ -163,7 +164,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       id,
       {
         ...newProductData,
-        images: uploadedImages.map((image) => image.imageUrl),
+         images: uploadedImages.length ? uploadedImages.map((image) => image.imageUrl):newProductData.images,
       },
       {
         new: true, // Return the updated document
@@ -184,6 +185,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteProduct = catchAsync(async (req, res) => {
+  console.log('entered')
   const response = {};
   try {
     const { id } = req.params;

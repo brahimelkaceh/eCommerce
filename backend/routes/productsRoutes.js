@@ -21,15 +21,14 @@ const { TokenCheck } = require("../middlewares/TokenCheck");
 
 Router.post(
   "/products",
-  upload.array("image"),
-  // TokenCheck,
-  ValidatorSanitizer.validate,
+  upload.array("images"),
+  TokenCheck,
   createProduct
 );
 Router.put(
   "/products/:id",
-  upload.array("images", 5),
-  ValidatorSanitizer.validate,
+  upload.array("images"),
+  TokenCheck,
   updateProduct
 );
 
@@ -37,6 +36,6 @@ Router.put(
 Router.get("/products/", getAllProducts);
 Router.get("/products/search", TokenCheck, searchProducts);
 Router.get("/products/:id", TokenCheck, getProductById);
-Router.delete("/products/:id", deleteProduct);
+Router.delete("/products/:id", TokenCheck,deleteProduct);
 
 module.exports = Router;
