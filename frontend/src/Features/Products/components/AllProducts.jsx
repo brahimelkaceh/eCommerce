@@ -9,6 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { deleteP, editP } from "../Services";
 import { useProduct } from "../Context";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -20,14 +21,14 @@ import {
 import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
 
-const roles = ["manager", "admin"];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-const active = [true, false];
-const randomActive = () => {
-  return randomArrayItem(active);
-};
+// const roles = ["manager", "admin"];
+// const randomRole = () => {
+//   return randomArrayItem(roles);
+// };
+// const active = [true, false];
+// const randomActive = () => {
+//   return randomArrayItem(active);
+// };
 
 export default function AllProducts({ handleOpen }) {
   const { products, getProductById, editProduct, deleteProductById } =
@@ -52,14 +53,35 @@ export default function AllProducts({ handleOpen }) {
   const handleSaveClick = (id) => () => {
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
+// sweatAlert
   const handleDeleteClick = (id) => async () => {
     console.log("first entred", id);
     try {
-      deleteP(id).then((response) => {
-        console.log(response);
-      });
-      setrows(rows.filter((row) => row.id !== id));
+         Swal.fire({
+           title: "Are you sure?",
+           text: "You won't be able to revert this!",
+           icon: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#3085d6",
+           cancelButtonColor: "#d33",
+           confirmButtonText: "Yes, delete it!",
+         }).then((result) => {
+           if (result.isConfirmed) {
+              deleteP(id).then((response) => {
+               console.log(response);
+              });
+             setrows(rows.filter((row) => row.id !== id));
+             Swal.fire({
+               title: "Deleted!",
+               text: "Your file has been deleted.",
+               icon: "success",
+             });
+           }
+         });
+      // deleteP(id).then((response) => {
+      //   console.log(response);
+      // });
+      // setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
       throw err;
     }
@@ -76,7 +98,7 @@ export default function AllProducts({ handleOpen }) {
       setrows(rows.filter((row) => row.id !== id));
     }
   };
-
+//SweatAlert
   const processRowUpdate = (newRow) => {
     const updatedRow = {
       ...newRow,
@@ -86,14 +108,37 @@ export default function AllProducts({ handleOpen }) {
     const ID = updatedRow.id;
     delete updatedRow.isNew;
     try {
-      console.log(updatedRow.images);
+      // console.log(updatedRow.images);
+      // editP(ID, {...updatedRow, images: updatedRow.images[0]})
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error occurred: while editing product", error);
+      //   });
+       Swal.fire({
+         title: "Do you want to save the changes?",
+         showDenyButton: true,
+         showCancelButton: true,
+         confirmButtonText: "Save",
+         denyButtonText: `Don't save`,
+       }).then((result) => {
+         /* Read more about isConfirmed, isDenied below */
+         if (result.isConfirmed) {
+           Swal.fire("Saved!", "", "success");
+          console.log(updatedRow.images);
       editP(ID, {...updatedRow, images: updatedRow.images[0]})
         .then((response) => {
           console.log(response);
         })
-        .catch((error) => {
-          console.error("Error occurred: while editing product", error);
-        });
+             .catch((error) => {
+               Swal.fire("Error occurred: while editing product", error);
+              console.error("Error occurred: while editing product", error);
+             });
+         } else if (result.isDenied) {
+           Swal.fire("Changes are not saved", "", "info");
+         }
+       });
     } catch (error) {
       throw error;
     }

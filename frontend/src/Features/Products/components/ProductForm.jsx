@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   MenuItem,
   FormControl,
@@ -59,7 +60,7 @@ const ProductForm = ({ open, onClose }) => {
   const [images, setImages] = useState([]);
   const { addNewProduct, setRefresh } = useProduct();
   const { SubcatData } = useSubCatData();
-
+// SweatAlert
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -70,6 +71,11 @@ const ProductForm = ({ open, onClose }) => {
           console.log("close product");
           setRefresh(new Date().toISOString());
           onClose();
+            Swal.fire({
+              title: "Good job!",
+              text: "You clicked the button!",
+              icon: "success",
+            });
         })
         .catch((error) => {
           console.log(error);
