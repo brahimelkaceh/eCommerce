@@ -58,7 +58,7 @@ export default function TransitionsModal() {
         <Fade in={open}>
           <Box sx={style}>
             <Typography>
-              <CustomersForm />
+              <CustomersForm open={handleOpen} onClose={handleClose} />
             </Typography>
           </Box>
         </Fade>

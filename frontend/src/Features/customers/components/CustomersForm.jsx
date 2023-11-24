@@ -3,7 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
-// import { createCustomer } from "../service";
+import { createCustomer } from "../service";
+ import Swal from "sweetalert2"
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -31,7 +32,7 @@ const checkoutSchema = yup.object().shape({
     .required("Password confirmation is required"),
 });
 
-const Formm = () => {
+const Formm = ({open,onClose}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleFormSubmit = (values, { resetForm }) => {
@@ -39,7 +40,14 @@ const Formm = () => {
     try {
       createCustomer(values)
         .then((response) => {
+          onClose();
+          Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success",
+          });
           console.log(response);
+          setRefresh(new Date().toISOString());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
@@ -185,14 +193,14 @@ const Formm = () => {
                       }}
                     />
                     <ErrorMessage name="images" component="div" />
-                    {/* Display the uploaded image
+                    Display the uploaded image
                     {values.images && typeof values.images === "object" && (
                       <img
                         src={URL.createObjectURL(values.images)}
                         alt="Uploaded"
                         style={{ width: "100px", height: "100px" }}
                       />
-                    )} */}
+                    )}
                   </div>
                 )}
               />
