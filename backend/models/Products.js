@@ -68,12 +68,4 @@ const productSchema = new mongoose.Schema(
   { timestamps: true, versionKey: false },
 );
 
-productSchema.pre("remove", async function (next) {
-  // Remove all products with this subcategory
-  await this.model("ProductModel")
-    .deleteMany({ subCategoryId: this.subCategoryId })
-    .exec();
-  next();
-});
-
 module.exports = mongoose.model("ProductModel", productSchema);
