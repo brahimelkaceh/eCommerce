@@ -30,18 +30,18 @@ import {
       onSubmit: (values) => {
         createCat(values)
           .then((response) => {
+            onClose();
+            setRefresh(new Date().toISOString());
             Swal.fire({
               title: "Good job!",
               text: "You clicked the button!",
               icon: "success",
             });
-            console.log(response);
-                onClose();
           })
           .catch((error) => {
             console.error("Error occurred: while creating user", error);
           });
-        setRefresh(new Date().toISOString());
+        // setRefresh(new Date().toISOString());
     
       },
     });

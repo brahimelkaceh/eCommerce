@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 // apiService.js
 import axios from "axios";
 
@@ -19,6 +20,7 @@ const handleRequest = async (method, endpoint, data = null) => {
       url: endpoint,
       data,
     });
+    console.log(response);
     return response.data;
   } catch (error) {
     throw error;
