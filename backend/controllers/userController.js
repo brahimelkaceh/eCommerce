@@ -219,22 +219,16 @@ exports.showAllUsers = async (req, res) => {
 
 exports.profile = catchAsync(async (req, res, next) => {
   console.log(req._id);
-  try {
-    const user = await User.findById({ _id: req._id });
-    if (user) {
-      console.log(user);
-      return res.status(200).json({
-        status: "success",
-        data: user,
-      });
-    } else {
-      res.status(400).json({
-        message: "user not found",
-      });
-    }
-  } catch (error) {
+  const user = await User.findById({ _id: req._id });
+  if (user) {
+    console.log(user);
+    return res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } else {
     res.status(400).json({
-      message: error.message,
+      message: "user not found",
     });
   }
 });
