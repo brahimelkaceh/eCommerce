@@ -17,10 +17,4 @@ const subCategorySchema = new mongoose.Schema({
   },
 });
 
-subCategorySchema.pre("remove", async function (next) {
-  // Remove all products with this subcategory
-  await ProductModel.deleteMany({ subCategoryId: this._id }).exec();
-  next();
-});
-
 module.exports = mongoose.model("SubCategoryModel", subCategorySchema);

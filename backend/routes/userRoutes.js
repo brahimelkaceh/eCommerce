@@ -19,20 +19,8 @@ const {
 
 Router.get("/users/profile", ManagerTokenCheck, profile);
 Router.post("/users/login", ValidatorSanitizer.validate, login);
-Router.post(
-  "/users",
-  upload.array("images", 5),
-  TokenCheck,
-
-  ValidatorSanitizer.validate,
-  createUser,
-);
-Router.put(
-  "/users/:id",
-  upload.array("images", 5),
-  ValidatorSanitizer.validate,
-  updateUser,
-);
+Router.post("/users", upload.array("images"), TokenCheck, createUser);
+Router.put("/users/:id", upload.array("images"), updateUser);
 Router.delete("/users/:id", deleteUser);
 // Router.get("/users/", TokenCheck, searchUser);
 Router.get("/users/:id", TokenCheck, getUserById);
