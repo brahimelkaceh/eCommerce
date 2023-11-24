@@ -11,15 +11,13 @@ const {
   createUser,
   updateUser,
   searchUser,
+  profile,
   getUserById,
   deleteUser,
   showAllUsers,
 } = require("../controllers/userController");
 
-Router.get("/users/profile", ManagerTokenCheck, (req, res) => {
-  console.log("user", req.user);
-  res.status(200).json(req.user);
-});
+Router.get("/users/profile", ManagerTokenCheck, profile);
 Router.post("/users/login", ValidatorSanitizer.validate, login);
 Router.post(
   "/users",
@@ -27,13 +25,13 @@ Router.post(
   TokenCheck,
 
   ValidatorSanitizer.validate,
-  createUser
+  createUser,
 );
 Router.put(
   "/users/:id",
   upload.array("images", 5),
   ValidatorSanitizer.validate,
-  updateUser
+  updateUser,
 );
 Router.delete("/users/:id", deleteUser);
 // Router.get("/users/", TokenCheck, searchUser);
