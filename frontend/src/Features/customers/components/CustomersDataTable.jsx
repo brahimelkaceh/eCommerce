@@ -6,7 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-// import { DeleteCustomer, editCustomer } from "../service";
+import { DeleteCustomer, editCustomer } from "../service";
+import Swal from "sweetalert2";
 import { useCustomer } from "../Context";
 import {
   GridRowModes,
@@ -47,14 +48,37 @@ export default function allCustomers() {
   };
 
   const handleDeleteClick = (id) => () => {
-    try {
-      DeleteCustomer(id).then((response) => {
-        console.log(response);
-      });
-      setrows(rows.filter((row) => row.id !== id));
-    } catch (err) {
-      throw err;
-    }
+      try {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            DeleteCustomer(id).then((response) => {
+              console.log(response);
+            });
+            setrows(rows.filter((row) => row.id !== id));
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<a href="#">Why do I have this issue?</a>',
+        });
+        throw err;
+      }
   };
 
   const handleCancelClick = (id) => () => {
@@ -77,17 +101,34 @@ export default function allCustomers() {
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     const ID = updatedRow.id;
     delete updatedRow.isNew;
-    try {
-      editCustomer(ID, updatedRow)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("Error occurred: while editing user", error);
-        });
-    } catch (error) {
-      throw error;
-    }
+    delete updatedRow.password;
+     try {
+       Swal.fire({
+         title: "Do you want to save the changes?",
+         showDenyButton: true,
+         showCancelButton: true,
+         confirmButtonText: "Save",
+         denyButtonText: `Don't save`,
+       }).then((result) => {
+         /* Read more about isConfirmed, isDenied below */
+         if (result.isConfirmed) {
+           Swal.fire("Saved!", "", "success");
+           console.log(updatedRow);
+           editCustomer(ID, updatedRow)
+             .then((response) => {
+               console.log(response);
+             })
+             .catch((error) => {
+               Swal.fire("Error occurred: while editing Customer", error);
+               console.error("Error occurred: while editing Customer", error);
+             });
+         } else if (result.isDenied) {
+           Swal.fire("Changes are not saved", "", "info");
+         }
+       });
+     } catch (error) {
+       throw error;
+     }
     console.log(updatedRow);
     console.log(updatedRow.id);
     return updatedRow;
@@ -245,9 +286,9 @@ export default function allCustomers() {
         slots={{
           toolbar: GridToolbar,
         }}
-        slotProps={{
-          toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
-        }}
+        // slotProps={{
+        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+        // }}
         disableColumnFilter
         disableDensitySelector
         filterModel={filterModel}

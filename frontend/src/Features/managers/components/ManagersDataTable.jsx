@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState} from "react"
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,6 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { DeleteUser, editUser } from "../service";
 import { useManager } from "../Context";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -30,7 +32,7 @@ const randomActive = () => {
 
 export default function allManagers() {
   const ManagerContext = useManager();
-
+  console.log(ManagerContext.managers)
   const [rows, setrows] = React.useState([]);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
   React.useEffect(() => {
@@ -52,11 +54,34 @@ export default function allManagers() {
 
   const handleDeleteClick = (id) => () => {
     try {
-      DeleteUser(id).then((response) => {
-        console.log(response);
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          DeleteUser(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
       });
-      setrows(rows.filter((row) => row.id !== id));
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
       throw err;
     }
   };
@@ -81,14 +106,33 @@ export default function allManagers() {
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     const ID = updatedRow.id;
     delete updatedRow.isNew;
+    delete updatedRow.password;
+    delete updatedRow.confirmPassword;
     try {
-      editUser(ID, updatedRow)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("Error occurred: while editing user", error);
-        });
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          console.log(updatedRow);
+          editUser(ID, updatedRow)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing user", error);
+              console.error("Error occurred: while editing user", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+  
     } catch (error) {
       throw error;
     }
@@ -259,9 +303,13 @@ export default function allManagers() {
         slots={{
           toolbar: GridToolbar,
         }}
-        slotProps={{
-          toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+        // slotProps={{
+        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+        // }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
         }}
+        pageSizeOptions={[5, 10, 25]}
         disableColumnFilter
         disableDensitySelector
         filterModel={filterModel}

@@ -4,7 +4,7 @@ export const ManagerContext = createContext();
 
 export const ManagerProvider = ({ children }) => {
   const [managers, setManagers] = useState([]);
-
+  const [refresh, setRefresh] = useState(new Date().toISOString());
   useEffect(() => {
     const fetchManagers = async () => {
       try {
@@ -36,11 +36,12 @@ export const ManagerProvider = ({ children }) => {
     };
 
     fetchManagers();
-  }, []);
+  }, [refresh]);
 
   const managerContextValue = {
     managers,
     setManagers,
+    setRefresh
   };
 
   return (
