@@ -31,10 +31,22 @@ export const CustomerProvider = ({ children }) => {
     fetchCustomers();
   }, [refresh]);
 
+  const getCustomerById = async (customerId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/customers/${customerId}`);
+      const data = await response.json();
+      // console.log('customer: ', data.data);
+      return data.data;
+    } catch (error) {
+      console.error("Error fetching customer by ID:", error);
+    }
+  };
+
   const customerContextValue = {
     customers,
     setCustomers,
     setRefresh,
+    getCustomerById
   };
 
   return (
