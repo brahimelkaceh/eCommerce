@@ -1,6 +1,7 @@
 // ! Controller handling Categories-related logic
 const Category = require("../models/Categories");
 const Subcategory = require("../models/SubCategories");
+const Product = require("../models/Products");
 const catchAsync = require("../helpers/catchAsync");
 const SubCategory = require("../models/SubCategories");
 const AppError = require("../helpers/appError");
@@ -65,6 +66,10 @@ exports.deleteCategory = catchAsync(async (req, res) => {
   const category = await Category.findById(id);
   if (!category) {
     res.status(400).json({ message: "Category not found" });
+  }
+  const subcategories = await Subcategory.find({ categoryId: id });
+  for (const subcategory of subcategories) {
+    await Product.deleteMany({ subCategoryId: subcategory._id });
   }
   await Subcategory.deleteMany({ categoryId: id });
   await Category.findByIdAndDelete(id);
