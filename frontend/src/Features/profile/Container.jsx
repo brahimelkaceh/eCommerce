@@ -3,7 +3,7 @@ import React from "react";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import ProfileTabs from "./components/ProfilesTabs";
-
+import "./style.css";
 const Container = () => {
   return (
     <Box

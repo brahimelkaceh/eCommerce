@@ -5,10 +5,12 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { UserC } from "../../Features/auth/Context";
-import { Avatar, Box, Menu, MenuItem, Typography } from "@mui/material";
+import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { StyledBadge } from "../mui/MuiStyles";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -30,6 +32,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Navbar = ({ handleDrawerOpen, open }) => {
+  const { userData } = UserC();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -63,20 +66,34 @@ const Navbar = ({ handleDrawerOpen, open }) => {
 
         <div>
           <IconButton
+            direction="row"
+            spacing={2}
+            onClick={handleMenu}
             size="large"
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            onClick={handleMenu}
             color="inherit"
           >
-            <AccountCircle />
+            <Stack>
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+              >
+                <Avatar
+                  alt="Remy Sharp"
+                  src={userData?.images && userData?.images[0]}
+                />
+              </StyledBadge>
+            </Stack>
           </IconButton>
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             keepMounted
@@ -88,9 +105,13 @@ const Navbar = ({ handleDrawerOpen, open }) => {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">
+                Profile <AccountCircle></AccountCircle>
+              </Link>
             </MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleClose}>
+              Logout <LogoutIcon></LogoutIcon>
+            </MenuItem>
           </Menu>
         </div>
       </Toolbar>

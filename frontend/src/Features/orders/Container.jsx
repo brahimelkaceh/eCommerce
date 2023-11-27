@@ -14,8 +14,15 @@ const Container = () => {
       <Sidebar />
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <h1 className="main-title">Orders List</h1>
-
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "end",
+          }}
+        >
+          <h5>Orders management</h5>
+        </div>
         <DetailsOrderModal
           handleOpen={handleOpen}
           handleClose={handleClose}

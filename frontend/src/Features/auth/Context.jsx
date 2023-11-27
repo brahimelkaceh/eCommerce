@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { getProfile } from "./Service";
 
 const UserContext = createContext();
 
@@ -9,25 +10,21 @@ export const UserState = ({ children }) => {
   const [loading, setloading] = useState(false);
   const [userData, setUserData] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/users/profile", {
-      withCredentials: "include",
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${
-          localStorage.getItem("userT") === null
-            ? null
-            : JSON.parse(localStorage.getItem("userT"))
-        }`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUserData(data);
-        setusername(data.username);
-        setrole(data.role);
+    const fetchProfile = async () => {
+      setloading(true);
+      try {
+        const response = await getProfile();
+        console.log(response);
+        setUserData(response.data?.data);
         setloading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching User Profile:", error);
+        setloading(false);
+      }
+    };
+    fetchProfile();
   }, []);
+
   return (
     <UserContext.Provider
       value={{

@@ -14,28 +14,29 @@ const {
   getUserById,
   deleteUser,
   showAllUsers,
+  profile,
 } = require("../controllers/userController");
 
-Router.get("/users/profile", ManagerTokenCheck, (req, res) => {
-  res.status(200).json(req.user);
-});
+Router.get("/users/profile", ManagerTokenCheck, profile);
+
 Router.post("/users/login", ValidatorSanitizer.validate, login);
 Router.post(
   "/users",
   upload.array("images", 5),
-  TokenCheck,
-
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   createUser
 );
 Router.put(
   "/users/:id",
   upload.array("images", 5),
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   updateUser
 );
-Router.delete("/users/:id", deleteUser);
-Router.get("/users/:id", TokenCheck, getUserById);
-Router.get("/users/", showAllUsers);
+Router.delete("/users/:id", ManagerTokenCheck, deleteUser);
+// Router.get("/users/", ManagerTokenCheck, searchUser);
+Router.get("/users/:id", ManagerTokenCheck, getUserById);
+Router.get("/users/", ManagerTokenCheck, showAllUsers); //TokenCheck
 
 module.exports = Router;

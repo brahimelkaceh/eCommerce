@@ -19,10 +19,8 @@ import { Link, NavLink } from "react-router-dom";
 import "./style.css";
 import { UserC } from "../../Features/auth/Context";
 const Lists = ({ open }) => {
-  const { role } = UserC();
-  console.log(role);
-
-  return role === "admin" ? (
+  const { userData } = UserC();
+  return userData.role === "admin" ? (
     <List>
       <NavLink to="/">
         <ListItem disablePadding>

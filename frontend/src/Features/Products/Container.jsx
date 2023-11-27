@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ProductProvider } from "./Context";
 import ProductDetails from "./components/ProductsDetails";
 import { Box } from "@mui/material";
 import "./style.css";
@@ -7,6 +6,9 @@ import Sidebar from "../../Components/sidebar/Sidebar";
 import { DrawerHeader } from "../../Components/mui/MuiStyles";
 import ProductsModal from "./components/ProductsModal";
 import AllProducts from "./components/AllProducts";
+import { ProductProvider, useProduct } from "./Context";
+import { SubcategoryProvider } from "../categories/Context";
+
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isFormModalOpen, setFormModalOpen] = useState(false);
@@ -21,28 +23,42 @@ const Container = () => {
   console.log("inside container");
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Sidebar />
-      <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <ProductProvider>
-          <ProductsModal
-            handleCloseFormModal={handleCloseFormModal}
-            isFormModalOpen={isFormModalOpen}
-          />
-          <div>
-            {selectedProductId ? (
-              <ProductDetails
-                productId={selectedProductId}
-                setSelectedProductId={handleProductClick}
-              />
-            ) : (
-              <AllProducts />
-            )}
-          </div>
-        </ProductProvider>
+    <>
+      <Box sx={{ display: "flex" }}>
+        <Sidebar />
+        <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          <ProductProvider>
+            <SubcategoryProvider>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "end",
+                }}
+              >
+                <h5>Products management</h5>
+
+                <ProductsModal
+                  handleCloseFormModal={handleCloseFormModal}
+                  isFormModalOpen={isFormModalOpen}
+                />
+              </div>
+              <div>
+                {selectedProductId ? (
+                  <ProductDetails
+                    productId={selectedProductId}
+                    setSelectedProductId={handleProductClick}
+                  />
+                ) : (
+                  <AllProducts />
+                )}
+              </div>
+            </SubcategoryProvider>
+          </ProductProvider>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

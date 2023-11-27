@@ -24,6 +24,7 @@ const EditForm = ({ onClose }) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       updateSubCat(subcategory?._id, values);
+      onClose();
     },
   });
   useEffect(() => {

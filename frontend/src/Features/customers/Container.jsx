@@ -12,9 +12,18 @@ const Container = () => {
         <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <h1>Customers</h1>
           <div>
-            <CustomerPopup />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "end",
+              }}
+            >
+              <h5>Customers management</h5>
+
+              <CustomerPopup />
+            </div>
             <DataTable />
           </div>
         </Box>

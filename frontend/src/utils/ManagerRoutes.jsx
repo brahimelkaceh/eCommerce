@@ -11,14 +11,3 @@ const ManagerRoutes = () => {
   );
 };
 export default ManagerRoutes;
-
-// export const UserRoute = () => {
-//   return isAuth() ? (
-//     <>
-//       {" "}
-//       <Navigate to="/dashboard" />{" "}
-//     </>
-//   ) : (
-//     <Outlet />
-//   );
-// };

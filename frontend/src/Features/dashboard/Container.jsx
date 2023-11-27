@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
 import "./style.css";
+import DatetimeChart from "../../Components/charts/DatetimeChart";
 const Container = () => {
   return (
     <Box
@@ -26,7 +27,7 @@ const Container = () => {
                   background: "#fff",
                   borderRadius: "var(--border-radius)",
                   width: "100%",
-                  // height: "100%",
+                  height: "100%",
                   boxShadow: "var(--box-shadow)",
                 }}
               >
@@ -46,6 +47,7 @@ const Container = () => {
                 }}
               >
                 {/* <PieChart /> */}
+                {/* <DatetimeChart /> */}
               </Box>
             </Grid>
             <Grid item xs={6}>

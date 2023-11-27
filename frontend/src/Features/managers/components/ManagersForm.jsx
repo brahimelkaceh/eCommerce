@@ -3,7 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
+import Swal from "sweetalert2";
 import { createUser } from "../service";
+import { useManager } from "../Context";
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -16,7 +18,7 @@ const initialValues = {
 };
 const checkoutSchema = yup.object().shape({
   firstName: yup.string().required("required"),
- role: yup.string().required("required"),
+  role: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   userName: yup.string().required("required"),
@@ -30,16 +32,21 @@ const checkoutSchema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Password confirmation is required"),
 });
-
-const Formm = () => {
+const Formm = ({ open, onClose }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
+  const { setRefresh } = useManager();
   const handleFormSubmit = (values, { resetForm }) => {
     console.log(values);
     try {
       createUser(values)
         .then((response) => {
-          console.log(response);
+          onClose();
+          Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success",
+          });
+          setRefresh(new Date().toISOString());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
@@ -179,8 +186,6 @@ const Formm = () => {
                       name="images"
                       type="file"
                       onChange={(event) => {
-                        // console.log(values);
-                        // console.log(event.target.files[0]);
                         setFieldValue("images", event.target.files[0]); // Set the image file directly
                       }}
                     />

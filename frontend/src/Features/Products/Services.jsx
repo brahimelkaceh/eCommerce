@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 // apiService.js
 import axios from "axios";
 
@@ -7,41 +8,39 @@ const apiService = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
+    "Content-Type": "multipart/form-data",
+    // Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 
-const handleRequest = async (method, endpoint, data = null) => {
-  try {
-    const response = await apiService({
-      method,
-      url: endpoint,
-      data,
-      headers,
-    });
-
-    return response.data;
-  } catch (error) {
-    throw error;
+const setAuthHeader = () => {
+  const token = localStorage.getItem("userT");
+  if (token) {
+    apiService.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
+      token
+    )}`;
+  } else {
+    delete apiService.defaults.headers.common["Authorization"];
   }
 };
 
-export function getproducts() {
+export const getProducts = async () => {
+  setAuthHeader();
   return apiService.get("/");
-}
-
-export const fetchProductData = async (endpoint) =>
-  handleRequest("get", endpoint);
-
-export const fetchProductById = async (id) => fetchProductData(`${id}`);
-
-export const updateProduct = async (id, updatedProductData) =>
-  handleRequest("put", `${id}`, updatedProductData);
-
-export const createProduct = async (newProductData) =>
-  handleRequest("post", "/", newProductData);
-
-export const deleteProd = async (id) => apiService.delete(`/${id}`);
-
-export default apiService;
+};
+export const getP = async (id) => {
+  setAuthHeader();
+  return apiService.get(`/${id}`);
+};
+export const createP = async (newProductData) => {
+  setAuthHeader();
+  return apiService.post(`/`, newProductData);
+};
+export const deleteP = async (id) => {
+  setAuthHeader();
+  return apiService.delete(`/${id}`);
+};
+export const editP = async (id, updatedProductData) => {
+  setAuthHeader();
+  return apiService.put(`/${id}`, updatedProductData);
+};

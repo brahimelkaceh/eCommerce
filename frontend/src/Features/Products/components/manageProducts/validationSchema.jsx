@@ -4,7 +4,7 @@ import * as yup from "yup";
 const validationSchema = yup.object({
   sku: yup.string().required("SKU is required"),
   productName: yup.string().required("Product Name is required"),
-  subCategoryId: yup.string().required("Subcategory ID is required"),
+  subCategoryId: yup.string(),
   shortDescription: yup.string().required("Short Description is required"),
   longDescription: yup.string().required("Long Description is required"),
   image: yup.string(),
@@ -20,7 +20,7 @@ const validationSchema = yup.object({
       .number()
       .required("Price is required")
       .positive("Price must be positive"),
-    availability: yup.boolean().required("Availability is required"),
+    availability: yup.string().required("Availability is required"),
   }),
   active: yup.boolean(),
 });

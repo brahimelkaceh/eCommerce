@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import ManagerForm from "../components/ManagersForm";
+import ManagerForm from "../components/ProductForm";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 const style = {
   position: "absolute",
@@ -23,6 +23,7 @@ export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <div
       style={{
@@ -57,7 +58,7 @@ export default function TransitionsModal() {
         <Fade in={open}>
           <Box sx={style}>
             <Typography>
-              <ManagerForm open={handleOpen} onClose={handleClose} />
+              <ManagerForm />
             </Typography>
           </Box>
         </Fade>

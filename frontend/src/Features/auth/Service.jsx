@@ -18,25 +18,9 @@ const setAuthHeader = () => {
   }
 };
 
-export function getUsers() {
+export function getProfile() {
   setAuthHeader();
-  return apiService.get("/users");
-}
-export function createUser(body) {
-  setAuthHeader();
-
-  return apiService.post("/users", body);
-}
-export function DeleteUser(id) {
-  setAuthHeader();
-  return apiService.delete(`/users/${id}`);
-}
-
-export function editUser(id, body) {
-  console.log(id, body);
-  // return;
-  setAuthHeader();
-  return apiService.put(`/users/${id}`, body);
+  return apiService.get("/users/profile");
 }
 
 export default apiService;

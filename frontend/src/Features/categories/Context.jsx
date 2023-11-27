@@ -24,6 +24,7 @@ export const SubcategoryProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [subcategory, setSubcategory] = useState([]);
   const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [refreshSub, setRefreshSub] = useState(new Date().toISOString());
   // ! ====== CATEGORIES MANAGEMENT =====
 
   useEffect(() => {
@@ -74,6 +75,7 @@ export const SubcategoryProvider = ({ children }) => {
   // ! ======== SUBCATEGORIES MANAGEMENT =================================
   useEffect(() => {
     const fetchDataFromApi = async () => {
+      console.log(refreshSub);
       try {
         const responseData = await fetchSubcategoriesData("");
         setSubcatData(responseData.data);
@@ -84,7 +86,7 @@ export const SubcategoryProvider = ({ children }) => {
       }
     };
     fetchDataFromApi();
-  }, []);
+  }, [refreshSub]);
   const getSubcategoryById = async (id) => {
     try {
       const fetchedSubcategory = await fetchSubcategoryById(id);
@@ -97,6 +99,7 @@ export const SubcategoryProvider = ({ children }) => {
   const updateSubCat = async (id, updatedSubcategoryData) => {
     try {
       await updateSubcategory(id, updatedSubcategoryData);
+      setRefreshSub(new Date().toISOString());
     } catch (error) {
       console.error("Error updating subcategory:", error);
     }
@@ -135,6 +138,7 @@ export const SubcategoryProvider = ({ children }) => {
     error,
     getSubcategoryById,
     updateSubCat,
+    setRefreshSub,
     createSubCat,
     deleteSubCat,
     subcategory,

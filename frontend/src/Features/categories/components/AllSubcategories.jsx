@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -48,12 +49,39 @@ export default function AllSubcategories() {
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
-  const handleDeleteClick = (id) => async () => {
-    await deleteSubCat(id);
-    return setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id) => () => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteSubCat(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+      throw err;
+    }
   };
-
   const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
@@ -87,8 +115,21 @@ export default function AllSubcategories() {
       field: "subCategoryName",
       headerName: "Subcategory Name",
       align: "center",
-      editable: true,
       width: 150,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params?.value}
+            size="small"
+            style={{
+              backgroundColor: "#FBE5C9",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#BF710F",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
       field: "categoryId",
@@ -96,10 +137,19 @@ export default function AllSubcategories() {
       align: "center",
       width: 150,
       editable: false,
-      // valueOptions: categories,
-      type: "singleSelect",
       renderCell: (params) => {
-        return <Chip label={params?.value?.categoryName}></Chip>;
+        return (
+          <Chip
+            label={params?.value?.categoryName}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
       },
     },
     {
@@ -228,6 +278,9 @@ export default function AllSubcategories() {
           processRowUpdate={processRowUpdate}
           slotProps={{
             toolbar: { setRows, setRowModesModel },
+          }}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 9 } },
           }}
         />
       </Box>
