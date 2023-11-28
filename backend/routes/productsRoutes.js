@@ -1,10 +1,8 @@
 // ! Express.js routes for products
 const express = require("express");
-// const upload = require("../middlewares/multer");
 const multer = require("multer");
 const upload = require("../middlewares/multer");
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
+
 const Router = express.Router();
 const {
   createProduct,
@@ -18,25 +16,25 @@ const {
 const validatorSanitizer = require("../middlewares/validator");
 const ValidatorSanitizer = new validatorSanitizer();
 const { TokenCheck } = require("../middlewares/TokenCheck");
+const { ManagerTokenCheck } = require("../middlewares/ManagerTokenCheck");
 
 Router.post(
   "/products",
-  upload.array("image"),
-  // TokenCheck,
-  ValidatorSanitizer.validate,
+  upload.array("images"),
+  ManagerTokenCheck,
   createProduct
 );
 Router.put(
   "/products/:id",
-  upload.array("images", 5),
-  ValidatorSanitizer.validate,
+  upload.array("images"),
+  ManagerTokenCheck,
   updateProduct
 );
 
 // TokenCheck
-Router.get("/products/", getAllProducts);
-Router.get("/products/search", TokenCheck, searchProducts);
-Router.get("/products/:id", TokenCheck, getProductById);
-Router.delete("/products/:id", deleteProduct);
+Router.get("/products/", ManagerTokenCheck, getAllProducts);
+Router.get("/products/search", ManagerTokenCheck, searchProducts);
+Router.get("/products/:id", ManagerTokenCheck, getProductById);
+Router.delete("/products/:id", ManagerTokenCheck, deleteProduct);
 
 module.exports = Router;

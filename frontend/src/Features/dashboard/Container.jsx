@@ -1,16 +1,13 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
-import CardItem from "./components/cards/CardItem";
 import LinearChart from "../../Components/charts/LinearChart";
-import PieChart from "../../Components/charts/PeiChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
-import { UserC } from "../auth/Context";
 import "./style.css";
+import DatetimeChart from "../../Components/charts/DatetimeChart";
 const Container = () => {
-  const { username } = UserC();
   return (
     <Box
       sx={{
@@ -20,7 +17,6 @@ const Container = () => {
       <Sidebar />
       <Box component="main" className="main-page" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <h1 style={{ color: "red" }}>{username}</h1>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Cards />
@@ -31,7 +27,7 @@ const Container = () => {
                   background: "#fff",
                   borderRadius: "var(--border-radius)",
                   width: "100%",
-                  // height: "100%",
+                  height: "100%",
                   boxShadow: "var(--box-shadow)",
                 }}
               >
@@ -51,6 +47,7 @@ const Container = () => {
                 }}
               >
                 {/* <PieChart /> */}
+                {/* <DatetimeChart /> */}
               </Box>
             </Grid>
             <Grid item xs={6}>

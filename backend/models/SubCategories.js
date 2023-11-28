@@ -1,14 +1,15 @@
 // ! MongoDB schema/model for subcategories
-
 const mongoose = require("mongoose");
+const ProductModel = require("./Products");
 const subCategorySchema = new mongoose.Schema({
   subCategoryName: {
     type: String,
     required: true,
+    unique: true,
   },
-   categoryId: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref:'CategoryModel',
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "CategoryModel",
     required: true,
   },
   active: {

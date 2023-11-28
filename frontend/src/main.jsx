@@ -4,10 +4,13 @@ import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { UserState } from "./Features/auth/Context.jsx";
+import { SubcategoryProvider } from "./Features/categories/Context.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <UserState>
-      <App />
+      <SubcategoryProvider>
+        <App />
+      </SubcategoryProvider>
     </UserState>
   </BrowserRouter>
 );

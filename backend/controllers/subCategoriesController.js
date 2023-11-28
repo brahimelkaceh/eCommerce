@@ -2,6 +2,7 @@
 const catchAsync = require("../helpers/catchAsync");
 const Subcategory = require("../models/SubCategories");
 const Category = require("../models/Categories");
+const Product = require("../models/Products");
 const AppError = require("../helpers/AppError");
 const mongoose = require("mongoose");
 
@@ -23,7 +24,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
       active,
     });
 
-    await createdSubcategory.save();
+    createdSubcategory.save();
 
     res.status(201).json({
       status: "success",
@@ -38,7 +39,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 exports.getAllSubcategories = async (req, res) => {
   const subcategories = await Subcategory.find({}).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
   res.json({
     status: "success",
@@ -52,7 +53,7 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
 
   const subCategories = await Subcategory.find(searchParams).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subCategories.length) {
@@ -62,7 +63,7 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
   return res.json({
     status: "success",
     data: subCategories.map((subCategory) =>
-      subCategory.toObject({ getters: true }),
+      subCategory.toObject({ getters: true })
     ),
   });
 });
@@ -73,7 +74,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
   // Find the subcategory by its ID
   const subcategory = await Subcategory.findById(subcategoryId).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subcategory) {
@@ -88,7 +89,7 @@ exports.getSubCategoryById = catchAsync(async (req, res, next) => {
 
 exports.updateSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-  const { subCategoryName, active } = req.body;
+  const { subCategoryName, categoryId, active } = req.body;
 
   // Validate the request body
   if (!subCategoryName) {
@@ -98,7 +99,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   // Find the subcategory by its ID
   const subcategory = await Subcategory.findById(subcategoryId).populate(
     "categoryId",
-    "categoryName",
+    "categoryName"
   );
 
   if (!subcategory) {
@@ -108,7 +109,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   // Update the subcategory properties
   subcategory.subCategoryName = subCategoryName;
   subcategory.active = active || false; // Set to false if not provided
-
+  subcategory.categoryId = categoryId;
   // Save the updated subcategory
   await subcategory.save();
 
@@ -120,14 +121,15 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
 
 exports.deleteSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-
-  // Find the subcategory by its ID and remove it
-  const result = await Subcategory.deleteOne({ _id: subcategoryId });
-
-  if (result.deletedCount === 0) {
-    return next(new AppError("Can't find the specified subcategory", 404));
+  const subcategory = await Subcategory.findById(subcategoryId);
+  if (!subcategory) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Subcategory not found",
+    });
   }
-
+  await Product.deleteMany({ subCategoryId: subcategoryId }).exec();
+  await Subcategory.findByIdAndDelete(subcategoryId);
   res.status(204).json({
     status: "success",
     data: null,

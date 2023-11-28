@@ -14,10 +14,9 @@ const { checkingID } = require("../helpers/checkIfExist");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
   // Find the user by their email
   const user = await User.findOne({ email });
-  // console.log(user);
+  console.log(user);
   if (!user) {
     return next(new AppError("User not found!", 404));
   }
@@ -40,8 +39,7 @@ exports.login = catchAsync(async (req, res, next) => {
       },
       process.env.SECRET_KEY
     );
-    // user.lastLogin = new Date();
-    // console.log(user.lastLogin);
+
     await user.save();
     console.log(user);
 
@@ -61,7 +59,7 @@ exports.login = catchAsync(async (req, res, next) => {
   // Create and send the JWT token for managers
   const token = jwt.sign(
     {
-      userId: user._id,
+      _id: user._id,
       email: user.email,
       role: user.role,
       username: user.userName,
@@ -123,10 +121,14 @@ exports.createUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res) => {
   const response = {};
   const images = req.files;
+
   const uploadedImages = await addImages(images);
   try {
     const id = req.params.id;
     const user = await checkingID(id);
+    //doing some magic
+    // do the magic here !!!
+    // finishing the magic
     if (!user) {
       response.message = CONSTANTS.USER_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;
@@ -155,7 +157,9 @@ exports.updateUser = catchAsync(async (req, res) => {
     const updateData = {
       lastUpdate: Date.now(),
       ...newUserData,
-      images: uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.length
+        ? uploadedImages.map((image) => image.imageUrl)
+        : newUserData.images,
     };
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
@@ -168,9 +172,7 @@ exports.searchUser = async (req, res, next) => {
   try {
     const searchParams = req.query;
     console.log(searchParams);
-    const allUsers = await User.find(searchParams)
-      .sort({ _id: "descending" })
-      .limit(10);
+    const allUsers = await User.find(searchParams);
     if (!allUsers.length) {
       return next(new AppError("User not found", 404));
     } else {
@@ -209,10 +211,27 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.showAllUsers = async (req, res) => {
   try {
-    const users = await User.find().sort({ _id: "descending" }).limit(10); // This assumes you have a User model defined
+    console.log("hello");
+    const users = await User.find(); // This assumes you have a User model defined
     res.json(users);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 };
+
+exports.profile = catchAsync(async (req, res, next) => {
+  console.log(req._id);
+  const user = await User.findById({ _id: req._id });
+  if (user) {
+    console.log(user);
+    return res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } else {
+    res.status(400).json({
+      message: "user not found",
+    });
+  }
+});

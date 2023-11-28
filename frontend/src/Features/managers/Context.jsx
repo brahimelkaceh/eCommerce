@@ -1,48 +1,38 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
+import { getUsers } from "./service";
 export const ManagerContext = createContext();
 
 export const ManagerProvider = ({ children }) => {
   const [managers, setManagers] = useState([]);
-
+  const [refresh, setRefresh] = useState(new Date().toISOString());
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/users");
-        const data = await response.json();
-
+        const Response = await getUsers();
         const formatDate = (dateString) => {
           const utcDate = new Date(dateString); // Original date in UTC
           return utcDate; // Convert to string in the desired format
         };
-
-        const managersWithId = data.map((manager) => ({
+        const managersWithId = Response?.data?.map((manager) => ({
+          ...manager,
           id: manager._id,
-          userName: manager.userName,
-          lastName: manager.lastName,
-          firstName: manager.firstName,
-          email: manager.email,
           creationDate: formatDate(manager.creationDate),
           lastLogin: formatDate(manager.lastLogin),
           lastUpdate: formatDate(manager.lastUpdate),
-
-          role: manager.role,
         }));
-
         setManagers(managersWithId);
       } catch (error) {
         console.error("Error fetching managers:", error);
       }
     };
-
     fetchManagers();
-  }, []);
+  }, [refresh]);
 
   const managerContextValue = {
     managers,
     setManagers,
+    setRefresh,
   };
-
   return (
     <ManagerContext.Provider value={managerContextValue}>
       {children}

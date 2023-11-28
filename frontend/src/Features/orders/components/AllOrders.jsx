@@ -27,14 +27,33 @@ export default function AllOrders({ handleOpen }) {
 
   const [rows, setrows] = useState([]);
   const [customerId, setcustomer] = useState("");
+  const [Customer, setCustomer] = useState({})
   const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
   }, [data]);
 
+  // useEffect(() => {
+  //   getCustomerById(customerId);
+  // }, [customerId]);
+
   useEffect(() => {
-    getCustomerById(customerId);
-  }, [customerId]);
+    const fetchCustomer = async () => {
+      try {
+        const customer = await getCustomerById(customerId);
+        console.log("Fetched customer:", customer);
+        return setCustomer(customer);
+        // return;
+        // setcustomer(customer);
+      } catch (error) {
+        console.error("Error fetching customer by ID:", error);
+      }
+    };
+
+    if (customerId) {
+      fetchCustomer();
+    }
+  }, [customerId, getCustomerById]);
 
   const getColorBasedOnStatus = (status) => {
     switch (status) {
@@ -127,14 +146,14 @@ export default function AllOrders({ handleOpen }) {
       field: "customerID",
       headerName: "Customer Name",
       align: "left",
-      width: 120,
+      width: 150,
 
       headerAlign: "left",
       renderCell: (params) => {
-        // console.log();
-        setcustomer(params.value._id);
+        console.log(params.value?._id);
+        setcustomer(params.value?._id);
         return (
-          <span className="customer-name"> {singleCustomer?.userName}</span>
+          <span className="customer-name"> {Customer?.userName}</span>
         );
       },
     },
@@ -333,9 +352,9 @@ export default function AllOrders({ handleOpen }) {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slotProps={{
-          toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
-        }}
+        // slotProps={{
+        //   toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
+        // }}
         disableColumnFilter
         disableDensitySelector
         slots={{ toolbar: GridToolbar }}

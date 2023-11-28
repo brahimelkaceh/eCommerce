@@ -12,22 +12,23 @@ const {
   getSubCategoryById,
   searchSubCategory,
 } = require("../controllers/subCategoriesController");
+const { ManagerTokenCheck } = require("../middlewares/ManagerTokenCheck");
 
 Router.post(
   "/subcategories/",
-  TokenCheck,
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   createSubCategory
 );
 Router.get("/subcategories/search", searchSubCategory);
-Router.get("/subcategories/", getAllSubcategories);
-Router.get("/subcategories/:id", getSubCategoryById);
+Router.get("/subcategories/", ManagerTokenCheck, getAllSubcategories);
+Router.get("/subcategories/:id", ManagerTokenCheck, getSubCategoryById);
 Router.put(
   "/subcategories/:id",
-  TokenCheck,
+  ManagerTokenCheck,
   ValidatorSanitizer.validate,
   updateSubCategory
 );
-Router.delete("/subcategories/:id", TokenCheck, deleteSubCategory);
+Router.delete("/subcategories/:id", ManagerTokenCheck, deleteSubCategory);
 
 module.exports = Router;

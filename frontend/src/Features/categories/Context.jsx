@@ -1,22 +1,37 @@
 // DataContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchSubcategoriesData } from "./Services";
+import {
+  fetchSubcategoriesData,
+  fetchSubcategoryById,
+  updateSubcategory,
+  createSubcategory,
+  deleteSubcategory,
+} from "./SubCategorisServices";
+import {
+  createCategory,
+  deleteCategory,
+  fetchCategories,
+  updateCategory,
+} from "./CategoriesService";
 
 const DataSubcategoriesContext = createContext();
 
 export const SubcategoryProvider = ({ children }) => {
-  const [SubcatData, setData] = useState([]);
+  const [SubcatData, setSubcatData] = useState([]);
+  const [catData, setCatData] = useState([]);
+  const [categoryError, setCategoryError] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [order, setOrder] = useState(null);
+  const [subcategory, setSubcategory] = useState([]);
+  const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [refreshSub, setRefreshSub] = useState(new Date().getMilliseconds());
+  // ! ====== CATEGORIES MANAGEMENT =====
 
-  const [orderDetailsData, setOrderDetailsData] = useState([]);
   useEffect(() => {
-    const fetchDataFromApi = async () => {
+    const getCategoriesData = async () => {
       try {
-        const responseData = await fetchSubcategoriesData("");
-        console.log("data", responseData.data);
-        setData(responseData.data);
+        const response = await fetchCategories("");
+        setCatData(response.data);
       } catch (error) {
         setError(error);
       } finally {
@@ -24,34 +39,108 @@ export const SubcategoryProvider = ({ children }) => {
       }
     };
 
+    getCategoriesData();
+  }, [refresh]);
+
+  const createCat = async (newCategoryData) => {
+    try {
+      const createdCategory = await createCategory(newCategoryData);
+      if (createdCategory.status !== "success") {
+        setCategoryError("duplicate category");
+      } else {
+        setCategoryError("");
+        console.log("Created category:", createdCategory);
+      }
+    } catch (error) {
+      console.error("Error creating subcategory:", error);
+    }
+  };
+  const deleteCat = async (id) => {
+    try {
+      await deleteCategory(id);
+      setCatData((prevData) =>
+        prevData.filter((category) => category.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting Category:", error);
+    }
+  };
+  const updateCat = async (id, updatedCategoryData) => {
+    try {
+      await updateCategory(id, updatedCategoryData);
+    } catch (error) {
+      console.error("Error updating subcategory:", error);
+    }
+  };
+  // ! ======== SUBCATEGORIES MANAGEMENT =================================
+  useEffect(() => {
+    const fetchDataFromApi = async () => {
+      try {
+        const responseData = await fetchSubcategoriesData("");
+        setSubcatData(responseData.data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchDataFromApi();
-  }, []);
-  // const getOrderById = async (id) => {
-  //   try {
-  //     const fetchedOrder = await fetchOrderById(id);
-  //     setOrderDetailsData(fetchedOrder.data);
-  //   } catch (error) {
-  //     console.error("Error fetching customer:", error);
-  //   }
-  // };
-  // const updateOrder = async (id, updatedOrderData) => {
-  //   console.log(updatedOrderData);
-  //   try {
-  //     const updatedOrder = await updateOrderById(id, updatedOrderData);
-  //     setOrder(updatedOrder);
-  //   } catch (error) {
-  //     console.error("Error updating order:", error);
-  //   }
-  // };
+  }, [refresh, refreshSub]);
+  const getSubcategoryById = async (id) => {
+    try {
+      const fetchedSubcategory = await fetchSubcategoryById(id);
+      setSubcategory(fetchedSubcategory.data);
+    } catch (error) {
+      console.error("Error fetching subcategory:", error);
+    }
+  };
+
+  const updateSubCat = async (id, updatedSubcategoryData) => {
+    try {
+      await updateSubcategory(id, updatedSubcategoryData);
+      setRefreshSub(new Date().toISOString());
+    } catch (error) {
+      console.error("Error updating subcategory:", error);
+    }
+  };
+
+  const createSubCat = async (newSubcategoryData) => {
+    try {
+      const createdSubcategory = await createSubcategory(newSubcategoryData);
+      console.log("Created subcategory:", createdSubcategory);
+    } catch (error) {
+      console.error("Error creating subcategory:", error);
+    }
+  };
+
+  const deleteSubCat = async (id) => {
+    try {
+      await deleteSubcategory(id);
+      setSubcatData((prevData) =>
+        prevData.filter((subcategory) => subcategory.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting subcategory:", error);
+    }
+  };
 
   const values = {
+    catData,
+    createCat,
+    setRefresh,
+    deleteCat,
+    updateCat,
+    categoryError,
+    // ! =================================================================
     SubcatData,
     loading,
     error,
-    // getOrderById,
-    // orderDetailsData,
-    // updateOrder,
-    test: "test",
+    getSubcategoryById,
+    updateSubCat,
+    setRefreshSub,
+    createSubCat,
+    deleteSubCat,
+    subcategory,
   };
 
   return (

@@ -1,6 +1,7 @@
 const CONSTANTS = require("../config/constants.js");
 const jwt = require("jsonwebtoken");
 exports.TokenCheck = (req, res, next) => {
+  console.log(req);
   try {
     // retrieve the authorization header from the request
     const authHeader = req.headers.authorization || null;

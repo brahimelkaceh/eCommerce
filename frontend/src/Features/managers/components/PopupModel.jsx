@@ -23,7 +23,6 @@ export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
     <div
       style={{
@@ -58,7 +57,7 @@ export default function TransitionsModal() {
         <Fade in={open}>
           <Box sx={style}>
             <Typography>
-              <ManagerForm />
+              <ManagerForm open={handleOpen} onClose={handleClose} />
             </Typography>
           </Box>
         </Fade>

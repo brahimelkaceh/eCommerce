@@ -1,12 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
 import MuiAppBar from "@mui/material/AppBar";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import Typography from "@mui/material/Typography";
-import { memo } from "react";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 
+import { UserC } from "../../Features/auth/Context";
+import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { StyledBadge } from "../mui/MuiStyles";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -26,7 +30,17 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
 const Navbar = ({ handleDrawerOpen, open }) => {
+  const { userData } = UserC();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <AppBar
       position="fixed"
@@ -37,17 +51,69 @@ const Navbar = ({ handleDrawerOpen, open }) => {
     >
       <Toolbar>
         <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
+          size="large"
           edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: "none" }),
-          }}
+          color="inherit"
+          onClick={handleDrawerOpen}
+          aria-label="menu"
+          sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Photos
+        </Typography>
+
+        <div>
+          <IconButton
+            direction="row"
+            spacing={2}
+            onClick={handleMenu}
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <Stack>
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+              >
+                <Avatar
+                  alt="Remy Sharp"
+                  src={userData?.images && userData?.images[0]}
+                />
+              </StyledBadge>
+            </Stack>
+          </IconButton>
+
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>
+              <Link to="/profile">
+                Profile <AccountCircle></AccountCircle>
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              Logout <LogoutIcon></LogoutIcon>
+            </MenuItem>
+          </Menu>
+        </div>
       </Toolbar>
     </AppBar>
   );

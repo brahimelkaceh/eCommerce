@@ -1,110 +1,106 @@
+// In your ProductProvider file
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  // fetchProductData,
+  // fetchProductById, // Added this import
+  // updateProduct,
+  // createProduct,
+  deleteP,
+  createP,
+  editP,
+  getProducts,
+  getP,
+} from "./Services";
 import axios from "axios";
-import { createProduct } from "./Services";
 
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState(null);
-  // const getProductById = async (productId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:5000/products/${productId}`
-  //     );
-  //     const data = await response.json();
-  //     return data.data[0];
-  //   } catch (error) {
-  //     console.error(`Error fetching product with ID ${productId}:`, error);
-  //     return null;
-  //   }
-  // };
+  const [refresh, setRefresh] = useState(new Date().toISOString());
 
-  // const addProduct = async (newProduct) => {
-  //   console.log("new product", newProduct);
-  //   axios
-  //     .post("http://localhost:5000/products", newProduct, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     });
-  // };
+  const updateProducts = (newProduct) => {
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
 
   const addNewProduct = async (productData) => {
-    console.log(productData);
-    // return;
+    console.log("enterd context ", productData);
+
     try {
-      const addedProduct = await createProduct(productData);
-      console.log(addedProduct);
+      const addedProduct = await createP(productData)
+        .then((res) => {
+          console.log("responses", res);
+        })
+        .catch((err) => {
+          console.log("err", err.message);
+        });
       setProducts((prevData) => [...prevData, { ...addedProduct }]);
     } catch (error) {
       console.error("Error adding Product:", error);
     }
   };
+
   const editProduct = async (productId, updatedProduct) => {
-    console.log(productId);
     try {
-      const response = await axios.put(
-        `http://localhost:5000/products/${productId}`,
-        updatedProduct,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`Failed to edit product: ${response.statusText}`);
-      }
-
-      const updatedData = response.data.data;
-
+      const updatedData = await editP(productId, updatedProduct);
+      console.log(updatedData.data.data);
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.id === productId ? { ...product, ...updatedData } : product
         )
       );
-
       return updatedData;
     } catch (error) {
-      console.error(`Error editing product with ID ${productId}:`, error);
-      return null;
+      console.error("Error updating order:", error);
     }
   };
 
-  const deleteProduct = async (productId) => {
-    console.log(`Deleting ${productId}`);
+  const deleteProductById = async (productId) => {
+    console.log("enterd context ", productId);
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/products/` + productId
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`Failed to delete product: ${response.statusText}`);
-      }
-      console.log("deleteds", response.data);
-
+      deleteP(productId)
+        .then((res) => {
+          console.log("responses", res);
+        })
+        .catch((err) => {
+          console.log("err", err.message);
+        });
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== productId)
       );
-
       return true;
     } catch (error) {
       console.error(`Error deleting product with ID ${productId}:`, error);
       return false;
     }
   };
+
+  const fetchProductByIdFromService = async (productId) => {
+    try {
+      const product = await fetchProductById(productId);
+      return product;
+    } catch (error) {
+      console.error(`Error fetching product with ID ${productId}:`, error);
+      return null;
+    }
+  };
+
+  const fetchProductByIdAndUpdateState = async (productId) => {
+    const product = await fetchProductByIdFromService(productId);
+    if (product) {
+      setProducts((prevProducts) => [...prevProducts, { ...product }]);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5000/products");
-        const data = await response.json();
-        const productsWithId = data.data.map((product) => ({
+        const response = await getProducts();
+        console.log("hello I am data", response);
+        const productsWithId = response.data.data.map((product) => ({
           ...product,
+          id: product._id,
         }));
         setProducts(productsWithId);
       } catch (error) {
@@ -113,16 +109,17 @@ export const ProductProvider = ({ children }) => {
     };
 
     fetchProducts();
-  }, []);
+  }, [refresh]);
 
   const productContextValue = {
     products,
     addNewProduct,
     setNewProduct,
-    // getProductById,
-    // addProduct,
     editProduct,
-    deleteProduct,
+    deleteProductById,
+    fetchProductById: fetchProductByIdAndUpdateState,
+    updateProducts,
+    setRefresh,
   };
 
   return (

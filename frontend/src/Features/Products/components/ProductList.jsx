@@ -40,13 +40,18 @@ function EditToolbar(props) {
 }
 
 const ProductList = () => {
-  const { products, addProduct, getProductById, editProduct, deleteProduct } =
-    useProduct();
+  const {
+    products,
+    addProduct,
+    getProductById,
+    editProduct,
+    deleteProductById,
+  } = useProduct();
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editModeRows, setEditModeRows] = useState(new Set());
   const [rows, setRows] = useState(products);
   const [rowModesModel, setRowModesModel] = useState({});
-  // console.log(products);
+   
   useEffect(() => {
     setRows(
       products.map((product) => ({ ...product, isNew: false, id: product._id }))
@@ -61,9 +66,13 @@ const ProductList = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    console.log(id);
-    await deleteProduct(id);
-    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    try {
+      console.log(id);
+      await deleteProductById(id);
+      setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    } catch (error) {
+      console.error(`Error deleting product with ID ${id}:`, error);
+    }
   };
 
   const processRowUpdate = async (newRow) => {
@@ -365,7 +374,6 @@ const ProductList = () => {
           toolbar: { setRows, setRowModesModel },
         }}
       />
- 
     </Box>
   );
 };

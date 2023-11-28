@@ -63,10 +63,7 @@ export default function ProductsModal({
       >
         <Fade in={open}>
           <Box sx={style}>
-            <ProductForm
-              open={isFormModalOpen}
-              onClose={handleCloseFormModal}
-            />
+            <ProductForm open={isFormModalOpen} onClose={handleClose} />
           </Box>
         </Fade>
       </Modal>

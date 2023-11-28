@@ -13,20 +13,27 @@ import Cart from "./Pages/cart/Cart";
 import Checkout from "./Pages/checkout/Checkout";
 import Login from "./Pages/auth/Login";
 import Adminroutes from "./utils/adminRoutes";
+import ManagerRoutes from "./utils/ManagerRoutes";
 const App = () => {
   return (
     <Routes>
       <Route element={<Adminroutes />}>
         <Route path="/" exact element={<AdminDashboard />} />
+        <Route path="/profile" exact element={<Profile />} />
         <Route path="/orders" exact element={<Orders />} />
+        <Route path="/products" exact element={<Products />} />
+        <Route path="/categories" exact element={<Categories />} />
+        <Route path="/managers" exact element={<Managers />} />
+        <Route path="/customers" exact element={<Customers />} />
       </Route>
 
+      <Route element={<ManagerRoutes />}>
+        <Route path="/" exact element={<AdminDashboard />} />
+        <Route path="/profile" exact element={<Profile />} />
+        <Route path="/orders" exact element={<Orders />} />
+        <Route path="/categories" exact element={<Categories />} />
+      </Route>
       <Route path="/login" exact element={<Login />} />
-      <Route path="/products" exact element={<Products />} />
-      <Route path="/categories" exact element={<Categories />} />
-      <Route path="/managers" exact element={<Managers />} />
-      <Route path="/customers" exact element={<Customers />} />
-      <Route path="/profile" exact element={<Profile />} />
       <Route path="/home" element={<LandingPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />

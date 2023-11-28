@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -13,45 +14,20 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomTraderName,
-  randomId,
-  randomBoolean,
-} from "@mui/x-data-grid-generator";
 
-const initialRows = [
-  {
-    id: randomId(),
-    category: randomTraderName(),
-    status: randomBoolean(),
-  },
-];
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Category
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+import { useSubCatData } from "../Context";
+import { useEffect } from "react";
+import { Chip } from "@mui/material";
 
 export default function AllCategories() {
-  const [rows, setRows] = React.useState(initialRows);
+  const { catData, deleteCat, updateCat, setRefresh } = useSubCatData();
+
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
+  useEffect(() => {
+    setRows(catData);
+  }, [catData]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -67,9 +43,38 @@ export default function AllCategories() {
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteCat(id).then((response) => {
+            setRefresh(new Date().toISOString());
+          });
+          setRows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+      throw err;
+    }
   };
-
   const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
@@ -82,9 +87,37 @@ export default function AllCategories() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    delete updatedRow.isNew;
+
+    try {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          updateCat(updatedRow._id, updatedRow)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing user", error);
+              console.error("Error occurred: while editing user", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
     return updatedRow;
   };
 
@@ -101,18 +134,45 @@ export default function AllCategories() {
       width: 200,
     },
     {
-      field: "category",
+      field: "categoryName",
       headerName: "Category Name",
       align: "center",
       editable: true,
       width: 200,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params?.value}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
-      field: "status",
+      field: "active",
       headerName: "Active",
-      type: "boolean",
-      align: "center",
       editable: true,
+      valueOptions: [true, false],
+      type: "boolean",
+
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
@@ -130,12 +190,23 @@ export default function AllCategories() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -146,17 +217,25 @@ export default function AllCategories() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            sx={{
+              color: "#E33434",
+            }}
           />,
         ];
       },
@@ -185,11 +264,11 @@ export default function AllCategories() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
+        }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 9 } },
         }}
       />
     </Box>

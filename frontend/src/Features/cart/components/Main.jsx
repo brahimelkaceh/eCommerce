@@ -1,6 +1,7 @@
 import React from "react";
 import Cart from "./main/Cart";
 import BreadCrumb from "./main/BreadCrumb";
+
 const Main = () => {
   return (
     <main>

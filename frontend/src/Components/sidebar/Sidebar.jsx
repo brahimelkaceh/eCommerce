@@ -8,7 +8,6 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Navbar from "../navbar/Navbar";
 import Lists from "./Lists";
 import { DrawerHeader, Drawer } from "../mui/MuiStyles";
-import { memo } from "react";
 
 const Sidebar = () => {
   const theme = useTheme();

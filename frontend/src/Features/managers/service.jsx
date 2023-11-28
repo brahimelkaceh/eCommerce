@@ -1,26 +1,43 @@
 import axios from "axios";
 
-const api = axios.create({
+const apiService = axios.create({
   baseURL: "http://localhost:5000",
   headers: {
-    "Content-Type": "application/json",
     "Content-Type": "multipart/form-data",
+    Authorization: ` Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
-const config = {
-  headers: {
-    "Content-type": "multipart/form-data",
-  },
+
+const setAuthHeader = () => {
+  const token = localStorage.getItem("userT");
+  if (token) {
+    apiService.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
+      token
+    )}`;
+  } else {
+    delete apiService.defaults.headers.common["Authorization"];
+  }
 };
-export function createUser(body) {
-  return api.post("/users", body, config);
+
+export function getUsers() {
+  setAuthHeader();
+  return apiService.get("/users");
 }
-export function DeleteUser(body) {
-  return api.delete(`/users/${body}`);
+export function createUser(body) {
+  setAuthHeader();
+
+  return apiService.post("/users", body);
+}
+export function DeleteUser(id) {
+  setAuthHeader();
+  return apiService.delete(`/users/${id}`);
 }
 
 export function editUser(id, body) {
-  return api.put(`/users/${id}`, body);
+  console.log(id, body);
+  // return;
+  setAuthHeader();
+  return apiService.put(`/users/${id}`, body);
 }
 
-export default api;
+export default apiService;

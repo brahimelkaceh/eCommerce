@@ -6,58 +6,36 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  randomTraderName,
-  randomId,
-  randomBoolean,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
-
-const categoryName = ["Market", "Finance", "Development"];
-const randomCategory = () => {
-  return randomArrayItem(categoryName);
-};
-const initialRows = [
-  {
-    id: randomId(),
-    subcategory: randomTraderName(),
-    category: randomCategory(),
-    status: randomBoolean(),
-  },
-];
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Subcategory
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+import { randomId, randomArrayItem } from "@mui/x-data-grid-generator";
+import { useSubCatData } from "../Context";
+import { useEffect } from "react";
+import { Chip } from "@mui/material";
+import EditSubCategoryModal from "./subcategories/EditModal";
 
 export default function AllSubcategories() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const {
+    SubcatData,
+    updateSubCat,
+    getSubcategoryById,
+    deleteSubCat,
+    catData,
+  } = useSubCatData();
+  const [rows, setRows] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [subcategoryId, setSubcategoryId] = React.useState(null);
 
+  const [rowModesModel, setRowModesModel] = React.useState({});
+  const categories = catData.map((item) => item.categoryName);
+  useEffect(() => {
+    setRows(SubcatData);
+  }, [SubcatData, catData]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -71,11 +49,39 @@ export default function AllSubcategories() {
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteSubCat(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+      throw err;
+    }
   };
-
   const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
@@ -88,7 +94,7 @@ export default function AllSubcategories() {
     }
   };
 
-  const processRowUpdate = (newRow) => {
+  const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
@@ -103,30 +109,68 @@ export default function AllSubcategories() {
       field: "id",
       headerName: "Category Id",
       align: "center",
-      editable: false,
       width: 200,
     },
     {
-      field: "subcategory",
+      field: "subCategoryName",
       headerName: "Subcategory Name",
       align: "center",
-      editable: true,
       width: 150,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params?.value}
+            size="small"
+            style={{
+              backgroundColor: "#FBE5C9",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#BF710F",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
-      field: "category",
+      field: "categoryId",
       headerName: "Category Name",
       align: "center",
-      editable: true,
       width: 150,
-      valueOptions: ["Market", "Finance", "Development"],
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params?.value?.categoryName}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
-      field: "status",
+      field: "active",
       headerName: "Active",
-      type: "boolean",
-      align: "center",
       editable: true,
+      valueOptions: [true, false],
+      type: "boolean",
+
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "disabled"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",
@@ -144,12 +188,23 @@ export default function AllSubcategories() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: "#11DD62",
+                backgroundColor: "#E7FCEF",
               }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <CancelIcon
+                  sx={{
+                    color: "#E01E1E",
+                  }}
+                />
+              }
+              sx={{
+                backgroundColor: "#FCE9E9",
+                color: "#E96262",
+              }}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -160,17 +215,30 @@ export default function AllSubcategories() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+              <EditIcon
+                sx={{
+                  color: "#FCA119",
+                }}
+              />
+            }
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
+            // onClick={handleEditClick(id)}
+            onClick={() => {
+              setOpen(true);
+              setSubcategoryId(id);
+              getSubcategoryById(id);
+            }}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            sx={{
+              color: "#E33434",
+            }}
           />,
         ];
       },
@@ -178,34 +246,44 @@ export default function AllSubcategories() {
   ];
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
-      className="dashboard-card"
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
+    <>
+      {open && (
+        <EditSubCategoryModal
+          open={open}
+          setOpen={setOpen}
+          id={subcategoryId}
+        />
+      )}
+
+      <Box
+        sx={{
+          height: 500,
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      />
-    </Box>
+        className="dashboard-card"
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slotProps={{
+            toolbar: { setRows, setRowModesModel },
+          }}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 9 } },
+          }}
+        />
+      </Box>
+    </>
   );
 }
