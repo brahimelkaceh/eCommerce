@@ -16,7 +16,7 @@ exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // Find the user by their email
   const user = await User.findOne({ email });
-  console.log(user)
+  console.log(user);
   if (!user) {
     return next(new AppError("User not found!", 404));
   }
@@ -37,10 +37,9 @@ exports.login = catchAsync(async (req, res, next) => {
         role: user.role,
         username: user.userName,
       },
-      process.env.SECRET_KEY,
+      process.env.SECRET_KEY
     );
-    // user.lastLogin = new Date();
-    // console.log(user.lastLogin);
+
     await user.save();
     console.log(user);
 
@@ -60,12 +59,12 @@ exports.login = catchAsync(async (req, res, next) => {
   // Create and send the JWT token for managers
   const token = jwt.sign(
     {
-      userId: user._id,
+      _id: user._id,
       email: user.email,
       role: user.role,
       username: user.userName,
     },
-    process.env.SECRET_KEY,
+    process.env.SECRET_KEY
   );
 
   res.status(200).json({ status: "success", data: token, user });
@@ -127,8 +126,8 @@ exports.updateUser = catchAsync(async (req, res) => {
   try {
     const id = req.params.id;
     const user = await checkingID(id);
-    //doing some magic 
-   // do the magic here !!!
+    //doing some magic
+    // do the magic here !!!
     // finishing the magic
     if (!user) {
       response.message = CONSTANTS.USER_NOT_FOUND;
@@ -158,7 +157,9 @@ exports.updateUser = catchAsync(async (req, res) => {
     const updateData = {
       lastUpdate: Date.now(),
       ...newUserData,
-      images: uploadedImages.length? uploadedImages.map((image) => image.imageUrl):newUserData.images
+      images: uploadedImages.length
+        ? uploadedImages.map((image) => image.imageUrl)
+        : newUserData.images,
     };
     await User.updateOne({ _id: id }, { $set: updateData });
     response.message = CONSTANTS.USER_UPDATED;
@@ -210,7 +211,7 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.showAllUsers = async (req, res) => {
   try {
-    console.log("hello")
+    console.log("hello");
     const users = await User.find(); // This assumes you have a User model defined
     res.json(users);
   } catch (err) {

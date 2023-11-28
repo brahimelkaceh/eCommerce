@@ -65,7 +65,7 @@ export default function CreateModal(
       >
         <Fade in={open}>
           <Box sx={style}>
-            <CreateForm onClose={handleClose}/>
+            <CreateForm onClose={handleClose} />
           </Box>
         </Fade>
       </Modal>

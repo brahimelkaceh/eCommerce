@@ -139,6 +139,20 @@ export default function AllCategories() {
       align: "center",
       editable: true,
       width: 200,
+      renderCell: (params) => {
+        return (
+          <Chip
+            label={params?.value}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          ></Chip>
+        );
+      },
     },
     {
       field: "active",
@@ -252,6 +266,9 @@ export default function AllCategories() {
         processRowUpdate={processRowUpdate}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
+        }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 9 } },
         }}
       />
     </Box>

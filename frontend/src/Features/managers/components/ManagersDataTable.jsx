@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react"
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,21 +18,10 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { randomArrayItem } from "@mui/x-data-grid-generator";
-import { Chip } from "@mui/material";
-
-const roles = ["manager", "admin"];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-const active = [true, false];
-const randomActive = () => {
-  return randomArrayItem(active);
-};
+import { Avatar, Chip } from "@mui/material";
 
 export default function allManagers() {
   const ManagerContext = useManager();
-  console.log(ManagerContext.managers)
   const [rows, setrows] = React.useState([]);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
   React.useEffect(() => {
@@ -132,12 +121,9 @@ export default function allManagers() {
           Swal.fire("Changes are not saved", "", "info");
         }
       });
-  
     } catch (error) {
       throw error;
     }
-    console.log(updatedRow);
-    console.log(updatedRow.id);
     return updatedRow;
   };
 
@@ -146,6 +132,21 @@ export default function allManagers() {
   };
 
   const columns = [
+    {
+      field: "images",
+      headerName: "Avatar",
+      renderCell: (params) => {
+        return (
+          <Avatar
+            src={
+              params.value
+                ? params?.formattedValue[0]
+                : "https://themesbrand.com/velzon/html/saas/assets/images/products/img-6.png"
+            }
+          />
+        );
+      },
+    },
     { field: "userName", headerName: "UserName", editable: true },
     {
       field: "firstName",

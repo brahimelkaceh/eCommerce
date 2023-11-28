@@ -8,7 +8,7 @@
   --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   --border-radius: 5px;
   --white-background: #fff;
-  --blue-backround: #1093f1;
+  --blue-backround: #0085ff;
   --green-color: #11dd62;
 }
 html,
@@ -71,4 +71,7 @@ h3 {
   padding: 7px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+}
+.css-mj2xxh {
+  height: auto !important;
 }

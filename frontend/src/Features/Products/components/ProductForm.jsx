@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   MenuItem,
   FormControl,
@@ -28,7 +29,6 @@ import initialValues from "./manageProducts/InitialValues";
 import { useSubCatData } from "../../categories/Context";
 import { useTheme } from "@mui/material/styles";
 import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
-import Swal from "sweetalert2";
 
 // Input styling
 
@@ -477,29 +477,32 @@ const ProductForm = ({ open, onClose }) => {
                 width: "fit-content",
               }}
             >
-              {Array.from(formik.values.images).map((file, index) => (
-                <div
-                  key={index}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Uploaded Image ${index}`}
-                    style={{
-                      maxWidth: "100px",
-                      maxHeight: "100px",
-                      margin: "5px",
-                    }}
-                  />
-                  <IconButton
-                    variant="outlined"
-                    color="error"
-                    onClick={() => handleDeleteImage(index)}
+              {Array.from(formik.values.images).map((file, index) => {
+                console.log(file);
+                return (
+                  <div
+                    key={index}
+                    style={{ display: "flex", alignItems: "center" }}
                   >
-                    <CancelIcon></CancelIcon>
-                  </IconButton>
-                </div>
-              ))}
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Uploaded Image ${index}`}
+                      style={{
+                        maxWidth: "100px",
+                        maxHeight: "100px",
+                        margin: "5px",
+                      }}
+                    />
+                    <IconButton
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleDeleteImage(index)}
+                    >
+                      <CancelIcon></CancelIcon>
+                    </IconButton>
+                  </div>
+                );
+              })}
             </div>
           )}
         </Box>

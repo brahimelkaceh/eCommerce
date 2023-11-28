@@ -52,7 +52,7 @@ export default function EditSubCategoryModal({
       >
         <Fade in={open}>
           <Box sx={style}>
-            <EditForm id={id} />
+            <EditForm id={id} onClose={handleClose} />
           </Box>
         </Fade>
       </Modal>

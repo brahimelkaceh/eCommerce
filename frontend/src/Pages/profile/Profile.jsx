@@ -1,7 +1,6 @@
-import React from "react";
-
+import Container from "../../Features/profile/Container";
 const Profile = () => {
-  return <div>Profile</div>;
+  return <Container />;
 };
 
 export default Profile;

@@ -30,10 +30,20 @@ const Container = () => {
           <DrawerHeader />
           <ProductProvider>
             <SubcategoryProvider>
-              <ProductsModal
-                handleCloseFormModal={handleCloseFormModal}
-                isFormModalOpen={isFormModalOpen}
-              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "end",
+                }}
+              >
+                <h5>Products management</h5>
+
+                <ProductsModal
+                  handleCloseFormModal={handleCloseFormModal}
+                  isFormModalOpen={isFormModalOpen}
+                />
+              </div>
               <div>
                 {selectedProductId ? (
                   <ProductDetails

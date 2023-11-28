@@ -9,6 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { deleteP, editP } from "../Services";
 import { useProduct } from "../Context";
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -17,7 +18,6 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import Swal from "sweetalert2";
 import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
 
@@ -213,7 +213,7 @@ export default function AllProducts({ handleOpen }) {
         // console.log(params);
         const subCategoryName =
           typeof params.value === "object"
-            ? params.value.subCategoryName
+            ? params.value?.subCategoryName
             : params.value;
 
         return (

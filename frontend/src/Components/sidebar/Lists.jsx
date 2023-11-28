@@ -17,8 +17,10 @@ import PeopleIcon from "@mui/icons-material/People";
 
 import { Link, NavLink } from "react-router-dom";
 import "./style.css";
+import { UserC } from "../../Features/auth/Context";
 const Lists = ({ open }) => {
-  return (
+  const { userData } = UserC();
+  return userData.role === "admin" ? (
     <List>
       <NavLink to="/">
         <ListItem disablePadding>
@@ -101,6 +103,65 @@ const Lists = ({ open }) => {
               />
             </ListItemIcon>
             <ListItemText primary="Customers" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
+    </List>
+  ) : (
+    <List>
+      <NavLink to="/">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <DashboardIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
+      <NavLink to="/orders">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <ShoppingCartCheckoutIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Orders" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
+      <NavLink to="/products">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <InventoryIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="products" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
+      <NavLink to="/categories">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <CategoryIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Categories" />
           </ListItemButton>
         </ListItem>
       </NavLink>

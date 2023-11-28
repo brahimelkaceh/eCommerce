@@ -32,6 +32,8 @@ const Form = ({ onClose }) => {
             text: "You clicked the button!",
             icon: "success",
           });
+          console.log(response);
+          setRefresh(new Date().toISOString());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);

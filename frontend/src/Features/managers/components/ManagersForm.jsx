@@ -47,7 +47,6 @@ const Formm = ({ open, onClose }) => {
             text: "You clicked the button!",
             icon: "success",
           });
-          console.log(response);
           setRefresh(new Date().toISOString());
         })
         .catch((error) => {
@@ -188,8 +187,6 @@ const Formm = ({ open, onClose }) => {
                       name="images"
                       type="file"
                       onChange={(event) => {
-                        // console.log(values);
-                        // console.log(event.target.files[0]);
                         setFieldValue("images", event.target.files[0]); // Set the image file directly
                       }}
                     />

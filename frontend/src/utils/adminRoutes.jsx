@@ -11,14 +11,3 @@ const Adminroutes = () => {
   );
 };
 export default Adminroutes;
-
-// export const UserRoute = () => {
-//   return isAuth() ? (
-//     <>
-//       {" "}
-//       <Navigate to="/dashboard" />{" "}
-//     </>
-//   ) : (
-//     <Outlet />
-//   );
-// };

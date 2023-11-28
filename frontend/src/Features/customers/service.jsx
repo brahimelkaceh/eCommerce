@@ -11,7 +11,6 @@ const api = axios.create({
   },
 });
 
-
 export function getCustomers() {
   return api.get("/customers");
 }
