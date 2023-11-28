@@ -7,6 +7,7 @@ import Main from "./components/Main";
 import Breadcrumb from "./components/Breadcrumb";
 
 
+
 const Container = () => {
   return (
     <div>
@@ -16,10 +17,13 @@ const Container = () => {
       <ScrollTop />
       {/* Header */}
       <Header />
+
       {/* Main */}
-      
       <Breadcrumb/>
+      
       <Main />
+      
+
       {/* Footer */}
       <Footer />
     </div>

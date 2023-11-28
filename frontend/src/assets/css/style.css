@@ -179,7 +179,7 @@ label {
 	text-shadow: none;
 }
 ::selection {
-	background: #444;
+	background: #001b24;
 	color: #fff;
 	text-shadow: none;
 }
@@ -986,7 +986,7 @@ label {
     margin-right: 0;
 }
 .mega-menu .mega-menu-wrap .mega-menu-col li a {
-    color: #7a7a7a;
+    color: #797979;
     text-transform: capitalize;
     padding: 12px 0;
     display: inline-block;
@@ -997,7 +997,7 @@ label {
     padding-left: 5px;
 }
 .mega-menu .mega-menu-wrap .mega-menu-col .mega-title > a {
-    color: #565656;
+    color: #474E52;
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 700;
@@ -1014,7 +1014,7 @@ label {
     bottom: 0;
     width: 60px;
     height: 1px;
-    background: #001B24;
+    background: #474E52;
 }
 .mega-menu .mega-menu-wrap .sub-cat-post li a:hover {
     padding-left: 0;
@@ -1452,7 +1452,7 @@ header.side-header {
 .header-style-five .navbar-wrap > ul > li > a {
     font-size: 14px;
     font-weight: 700;
-    color: #565656;
+    color: #474E52;
     padding: 33px 22.5px;
 }
 .header-style-five .navbar-wrap {
@@ -2054,7 +2054,7 @@ header.side-header {
     font-size: 10px;
 }
 .breadcrumb-style-two {
-    padding: 40px 0;
+    padding: 100px 0;
     background-position: center;
     background-size: cover;
 }
@@ -2322,7 +2322,7 @@ header.side-header {
     font-weight: 700;
     text-transform: uppercase;
     font-family: 'Lato', sans-serif;
-    color: #001B24;
+    color: #001921;
     display: inline-block;
     position: relative;
     padding-bottom: 4px;
@@ -2340,7 +2340,7 @@ header.side-header {
 .h7-slider-content .title {
     font-size: 80px;
     text-transform: uppercase;
-    color: #001B24;
+    color: #001921;
     line-height: 1.09;
     margin-bottom: 16px;
 }
@@ -2970,7 +2970,7 @@ header.side-header {
 .checkout-form .form-grp label small {
     font-size: 13px;
     font-weight: 500;
-    color: #565656;
+    color: #474E52;
 }
 .checkout-form .form-grp .custom-select {
 	width: 100%;
@@ -2990,7 +2990,7 @@ header.side-header {
 	font-size: 13px;
     font-weight: 500;
     text-transform: uppercase;
-    color: #565656;
+    color: #474E52;
 }
 .different-address.custom-control {
     margin-bottom: 50px;
@@ -3246,6 +3246,7 @@ header.side-header {
     font-weight: 500;
     font-family: 'Lato', sans-serif;
     margin-bottom: 20px;
+    margin-top: 30px;
     padding: 0;
 }
 .shop-sidebar .widget-title::before,
@@ -3414,9 +3415,8 @@ header.side-header {
     background: #001D2A;
 }
 .shop-sidebar .widget.has-border {
-    padding: 30px 0;
+    padding: 0;
     border-top: 1px dotted #d7d7d7;
-    border-bottom: 1px dotted #d7d7d7;
 }
 .sidebar-product-list ul li {
     display: flex;
@@ -3821,7 +3821,7 @@ header.side-header {
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 700;
-    color: #565656;
+    color: #474E52;
 }
 .cart-wrapper .table td,
 .cart-wrapper .table th {
@@ -4059,6 +4059,7 @@ header.side-header {
 	border: 1px solid #ebebeb;
 	position: relative;
 	overflow: hidden;
+    min-height: 280px;
 }
 .features-product-thumb {
     position: relative;
@@ -4107,35 +4108,44 @@ header.side-header {
 
 .thumb .add-to-cart {
     display: block;
-    width: 80%;
-    height: 45px;
-    line-height: 45px;
-    background-color: #001D2A;
+    width: 80%; 
+    background-color: #f9f9f9;
+    color: #F9F9F9;
     text-align: center;
     border: 0;
     border-radius: 3px;
-    font-size: 14px;
     position: absolute;
     bottom: 50px;
     left: 0;
     right: 0;
     z-index: 11;
     margin: auto;
-    font-weight: 600;
-    -webkit-transition: all .3s ease 0s;
     transition: all .3s ease 0s;
-    /* -webkit-transform: translateY(20px); */
-    transform: translateY(20px);
-    opacity: 0; /* Initially hidden */
-    font-family: Lato,sans-serif;
+    /* transform: translateY(px); */
+    opacity: 0;  /* Initially hidden  */;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    display: block;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+    padding: 8px 30px;
 }
 
 .thumb:hover .add-to-cart {
     transform: translateY(-100%); /* Show the button by moving it up from the bottom */
+    background-color: #001B24;
     color: #F0F3F5;
     opacity: 1; /* Show the button with full opacity on hover */
 
 }
+
+.thumb .add-to-cart:hover {
+    background-color: #C2945A;
+    color: #F0F3F5;  
+} 
+
 
 .features-product-content {
     padding: 30px 30px;
@@ -5043,7 +5053,7 @@ header.side-header {
     font-size: 13px;
     text-transform: uppercase;
     color: #fff;
-    background: #001D2A;
+    background: #001B24;
     font-weight: 500;
     max-width: 355px;
     margin: 0 auto;

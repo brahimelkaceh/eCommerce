@@ -20,6 +20,7 @@
     "@mui/x-data-grid-generator": "^6.18.1",
     "@nivo/line": "^0.83.0",
     "antd": "^5.10.3",
+    "axios": "^1.6.2",
     "buffer": "^6.0.3",
     "formik": "^2.4.5",
     "jsonwebtoken": "^9.0.2",
@@ -38,6 +39,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "sass": "^1.69.5",
     "vite": "^4.4.5"
   }
 }

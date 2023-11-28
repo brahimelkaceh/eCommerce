@@ -3,33 +3,6 @@ import React from "react";
 const Main = () => {
   return (
     <main>
-      {/* <!-- breadcrumb-area --> */}
-      <section
-        className="breadcrumb-area breadcrumb-bg"
-        data-background="img/bg/breadcrumb_bg03.jpg"
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="breadcrumb-content">
-                <h2>Cart Page</h2>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      Cart
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* <!-- breadcrumb-area-end --> */}
-
       {/* <!-- cart-area --> */}
       <div className="cart-area pt-100 pb-100">
         <div className="container">
@@ -49,47 +22,7 @@ const Main = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="product-thumbnail">
-                          <a href="shop-details.html">
-                            <img src="img/product/cart_img01.jpg" alt="" />
-                          </a>
-                        </td>
-                        <td className="product-name">
-                          <h4>
-                            <a href="shop-details.html">Travelling Bags</a>
-                          </h4>
-                        </td>
-                        <td className="product-price">$ 37.00</td>
-                        <td className="product-quantity">
-                          <div className="cart-plus-minus">
-                            <form action="#" className="num-block">
-                              <input
-                                type="text"
-                                className="in-num"
-                                value="1"
-                                readonly=""
-                              />
-                              <div className="qtybutton-box">
-                                <span className="plus">
-                                  <img src="img/icon/plus.png" alt="" />
-                                </span>
-                                <span className="minus dis">
-                                  <img src="img/icon/minus.png" alt="" />
-                                </span>
-                              </div>
-                            </form>
-                          </div>
-                        </td>
-                        <td className="product-subtotal">
-                          <span>$ 74.00</span>
-                        </td>
-                        <td className="product-delete">
-                          <a href="#">
-                            <i className="flaticon-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
+                     
                       <tr>
                         <td className="product-thumbnail">
                           <a href="shop-details.html">
