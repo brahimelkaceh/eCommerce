@@ -14,6 +14,8 @@ import Checkout from "./Pages/checkout/Checkout";
 import Login from "./Pages/auth/Login";
 import Adminroutes from "./utils/adminRoutes";
 import ManagerRoutes from "./utils/ManagerRoutes";
+import ProductDetails from "./Pages/productDetails/ProductDetails";
+import Shop from "./Pages/shop/Shop";
 const App = () => {
   return (
     <Routes>
@@ -33,6 +35,8 @@ const App = () => {
         <Route path="/orders" exact element={<Orders />} />
         <Route path="/categories" exact element={<Categories />} />
       </Route>
+      <Route path="/shop" exact element={<Shop />} />
+      <Route path="/productDetails" exact element={<ProductDetails />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="/home" element={<LandingPage />} />
       <Route path="/cart" element={<Cart />} />
