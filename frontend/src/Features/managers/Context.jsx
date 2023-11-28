@@ -27,6 +27,7 @@ export const ManagerProvider = ({ children }) => {
     };
     fetchManagers();
   }, [refresh]);
+
   const managerContextValue = {
     managers,
     setManagers,

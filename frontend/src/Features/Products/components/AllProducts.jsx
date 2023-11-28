@@ -21,14 +21,14 @@ import {
 import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip } from "@mui/material";
 
-// const roles = ["manager", "admin"];
-// const randomRole = () => {
-//   return randomArrayItem(roles);
-// };
-// const active = [true, false];
-// const randomActive = () => {
-//   return randomArrayItem(active);
-// };
+const roles = ["manager", "admin"];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+const active = [true, false];
+const randomActive = () => {
+  return randomArrayItem(active);
+};
 
 export default function AllProducts({ handleOpen }) {
   const { products, getProductById, editProduct, deleteProductById } =
@@ -94,7 +94,6 @@ export default function AllProducts({ handleOpen }) {
       setrows(rows.filter((row) => row.id !== id));
     }
   };
-  //SweatAlert
   const processRowUpdate = (newRow) => {
     const updatedRow = {
       ...newRow,
@@ -179,11 +178,7 @@ export default function AllProducts({ handleOpen }) {
         <div className="product-name">
           <span className="name">{params.value}</span>
           <span className="subcategory">
-            {console.log(
-              "i am params row",
-              params.row?.subCategoryId?.subCategoryName
-            )}
-            {params.row?.subCategoryId?.subCategoryName}
+            {params.row.subCategoryId.subCategoryName}
           </span>
         </div>
       ),

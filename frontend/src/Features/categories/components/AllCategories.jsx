@@ -20,7 +20,7 @@ import { useEffect } from "react";
 import { Chip } from "@mui/material";
 
 export default function AllCategories() {
-  const { catData, deleteCat, updateCat } = useSubCatData();
+  const { catData, deleteCat, updateCat, setRefresh } = useSubCatData();
 
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -55,9 +55,9 @@ export default function AllCategories() {
       }).then((result) => {
         if (result.isConfirmed) {
           deleteCat(id).then((response) => {
-            console.log(response);
+            setRefresh(new Date().toISOString());
           });
-          setrows(rows.filter((row) => row.id !== id));
+          setRows(rows.filter((row) => row.id !== id));
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",

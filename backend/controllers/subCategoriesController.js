@@ -2,6 +2,7 @@
 const catchAsync = require("../helpers/catchAsync");
 const Subcategory = require("../models/SubCategories");
 const Category = require("../models/Categories");
+const Product = require("../models/Products");
 const AppError = require("../helpers/AppError");
 const mongoose = require("mongoose");
 

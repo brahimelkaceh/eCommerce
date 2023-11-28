@@ -86,11 +86,31 @@ const ProductForm = ({ open, onClose }) => {
             formData.append(key, value);
           }
         });
-
-        // console.log("values: ", values.options);
-        await createP(formData);
         onClose();
-        setRefresh(new Date().toISOString());
+        Swal.fire({
+          title: "Do you want to create this product?",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Create",
+          denyButtonText: "Cancel",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              await createP(formData);
+              Swal.fire("Product Created!", "", "success");
+              setRefresh(new Date().toISOString());
+            } catch (error) {
+              Swal.fire(
+                "Error occurred while creating product",
+                error.message,
+                "error"
+              );
+              console.error("Error occurred while creating product", error);
+            }
+          } else if (result.isDenied) {
+            Swal.fire("Product creation canceled", "", "info");
+          }
+        });
       } catch (error) {
         console.error("Error submitting form:", error);
       }

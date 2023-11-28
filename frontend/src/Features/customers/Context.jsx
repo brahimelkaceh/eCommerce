@@ -1,37 +1,52 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { fetchCustomerById, fetchData } from "./service";
 
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { getCustomers } from "./service";
 export const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
-  const [singleCustomer, setSingleCustomer] = useState(null);
-
+  const [refresh, setRefresh] = useState(new Date().toISOString());
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const responseData = await fetchData("/");
+        const Response = await getCustomers();
+        const formatDate = (dateString) => {
+          const utcDate = new Date(dateString); // Original date in UTC
+          return utcDate; // Convert to string in the desired format
+        };
+        console.log(Response.data.data);
+        const customersWithId = Response.data.data.customers.map((customer) => ({
+          ...customer,
+          id: customer._id,
+          creationDate: formatDate(customer.creationDate),
+          lastLogin: formatDate(customer.lastLogin),
+          lastUpdate: formatDate(customer.lastUpdate),
+        }));
+
+        setCustomers(customersWithId);
       } catch (error) {
-        setError(error);
+        console.error("Error fetching customers:", error);
       }
     };
-
     fetchCustomers();
-  }, []);
+  }, [refresh]);
 
-  const getCustomerById = async (id) => {
+  const getCustomerById = async (customerId) => {
     try {
-      const Customer = await fetchCustomerById(id);
-      setSingleCustomer(Customer.data);
+      const response = await fetch(`http://localhost:5000/customers/${customerId}`);
+      const data = await response.json();
+      // console.log('customer: ', data.data);
+      return data.data;
     } catch (error) {
-      console.error("Error fetching customer:", error);
+      console.error("Error fetching customer by ID:", error);
     }
   };
+
   const customerContextValue = {
     customers,
     setCustomers,
-    getCustomerById,
-    singleCustomer,
+    setRefresh,
+    getCustomerById
   };
 
   return (

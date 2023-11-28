@@ -13,6 +13,7 @@ exports.ManagerTokenCheck = (req, res, next) => {
       throw new Error("Error while verifying the token");
     }
 
+    console.log(userData);
     req.username = userData.username;
     req._id = userData._id;
     req.role = userData.role;

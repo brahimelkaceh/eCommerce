@@ -11,10 +11,10 @@ const {
   createUser,
   updateUser,
   searchUser,
+  profile,
   getUserById,
   deleteUser,
   showAllUsers,
-  profile,
 } = require("../controllers/userController");
 
 Router.get("/users/profile", ManagerTokenCheck, profile);

@@ -35,7 +35,7 @@ export default function AllSubcategories() {
   const categories = catData.map((item) => item.categoryName);
   useEffect(() => {
     setRows(SubcatData);
-  }, [SubcatData]);
+  }, [SubcatData, catData]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;

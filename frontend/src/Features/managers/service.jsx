@@ -4,6 +4,7 @@ const apiService = axios.create({
   baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "multipart/form-data",
+    Authorization: ` Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 

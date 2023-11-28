@@ -1,10 +1,8 @@
 // ! Express.js routes for products
 const express = require("express");
-// const upload = require("../middlewares/multer");
 const multer = require("multer");
 const upload = require("../middlewares/multer");
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
+
 const Router = express.Router();
 const {
   createProduct,

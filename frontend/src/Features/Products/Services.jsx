@@ -9,38 +9,22 @@ const apiService = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
-    // Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 
-const setAuthHeader = () => {
-  const token = localStorage.getItem("userT");
-  if (token) {
-    apiService.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
-      token
-    )}`;
-  } else {
-    delete apiService.defaults.headers.common["Authorization"];
+const getToken = () => {
+  const token = JSON.parse(localStorage.getItem("userT"));
+  if (!token) {
+    throw new Error("Token not available");
   }
+  return token;
 };
 
-export const getProducts = async () => {
-  setAuthHeader();
-  return apiService.get("/");
-};
-export const getP = async (id) => {
-  setAuthHeader();
-  return apiService.get(`/${id}`);
-};
-export const createP = async (newProductData) => {
-  setAuthHeader();
-  return apiService.post(`/`, newProductData);
-};
-export const deleteP = async (id) => {
-  setAuthHeader();
-  return apiService.delete(`/${id}`);
-};
-export const editP = async (id, updatedProductData) => {
-  setAuthHeader();
-  return apiService.put(`/${id}`, updatedProductData);
-};
+export const getProducts = async () => apiService.get("/");
+export const getP = async (id) => apiService.get(`/${id}`);
+export const createP = async (newProductData) =>
+  apiService.post(`/`, newProductData);
+export const deleteP = async (id) => apiService.delete(`/${id}`);
+export const editP = async (id, updatedProductData) =>
+  apiService.put(`/${id}`, updatedProductData);

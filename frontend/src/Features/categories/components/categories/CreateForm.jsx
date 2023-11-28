@@ -15,7 +15,7 @@ import React from "react";
 import * as yup from "yup";
 import DoneIcon from "@mui/icons-material/Done";
 import { useSubCatData } from "../../Context";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 const CreateForm = ({ onClose }) => {
   const { createCat, categoryError, setRefresh } = useSubCatData();
   const formik = useFormik({
@@ -36,13 +36,12 @@ const CreateForm = ({ onClose }) => {
             icon: "success",
           });
           console.log(response);
-              onClose();
+          onClose();
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
         });
       setRefresh(new Date().toISOString());
-  
     },
   });
   return (

@@ -18,7 +18,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useSubCatData } from "../../Context";
 import Swal from "sweetalert2";
 const Form = ({ onClose }) => {
-  const { catData, createSubCat } = useSubCatData();
+  const { catData, createSubCat, setRefresh } = useSubCatData();
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -26,6 +26,7 @@ const Form = ({ onClose }) => {
       createSubCat(values)
         .then((response) => {
           onClose();
+          setRefresh(new Date().toISOString());
           Swal.fire({
             title: "Good job!",
             text: "You clicked the button!",

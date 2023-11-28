@@ -304,8 +304,11 @@ export default function allManagers() {
         slots={{
           toolbar: GridToolbar,
         }}
+        // slotProps={{
+        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+        // }}
         initialState={{
-          pagination: { paginationModel: { pageSize: 7 } },
+          pagination: { paginationModel: { pageSize: 5 } },
         }}
         pageSizeOptions={[5, 10, 25]}
         disableColumnFilter
