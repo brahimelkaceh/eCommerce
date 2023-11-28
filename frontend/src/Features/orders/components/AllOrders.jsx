@@ -17,7 +17,7 @@ import {
 import { Chip } from "@mui/material";
 import { useData } from "../Context";
 import { useEffect } from "react";
-import Loader from "../../../Components/loader/Loader";
+//import Loader from "../../../Components/loader/Loader";
 import { useState } from "react";
 import { useCustomer } from "../../../Features/customers/Context";
 
