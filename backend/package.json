@@ -34,6 +34,7 @@
     "sharp": "^0.32.6",
     "start": "^5.1.0",
     "validator": "^13.11.0",
+    "ws": "^8.14.2",
     "xss": "^1.0.14"
   },
   "devDependencies": {

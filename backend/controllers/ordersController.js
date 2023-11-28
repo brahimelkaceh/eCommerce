@@ -6,9 +6,8 @@ const catchAsync = require("../helpers/catchAsync");
 const orders = require("../models/Order");
 const CONSTANTS = require("../config/constants");
 const Products = require("../models/Products");
-
+const { sendOrder } = require("../middlewares/websocket");
 exports.createOrder = catchAsync(async (req, res) => {
-  console.log("hello");
   const response = {};
   try {
     const { customerID, orderItems } = req.body;
@@ -28,6 +27,10 @@ exports.createOrder = catchAsync(async (req, res) => {
       }
     }
     const newOrder = await orders.create(req.body);
+    const createdOrder = await orders
+      .findById(newOrder._id)
+      .populate("customerID", "firstName lastName");
+    sendOrder(createdOrder);
     customer.orders.push(newOrder);
     await customer.save();
     if (newOrder) {
@@ -35,7 +38,8 @@ exports.createOrder = catchAsync(async (req, res) => {
       response.status = CONSTANTS.SERVER_CREATED_HTTP_CODE;
       return res.status(201).json({
         status: "success",
-        data: newOrder.toObject({ getters: true }),
+        data: createdOrder,
+        // data: newOrder.toObject({ getters: true }),
       });
     } else {
       response.message = CONSTANTS.ORDER_CREATED_FAILED;
