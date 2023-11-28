@@ -41,6 +41,7 @@ const Formm = ({ open, onClose }) => {
       createUser(values)
         .then((response) => {
           onClose();
+          setRefresh(new Date().toISOString());
           Swal.fire({
             title: "Good job!",
             text: "You clicked the button!",
@@ -54,7 +55,7 @@ const Formm = ({ open, onClose }) => {
         });
       resetForm();
     } catch (err) {
-      console.error("Error occurred during createUser:", error);
+      console.error("Error occurred during createUser:", err);
     }
   };
 

@@ -16,27 +16,26 @@ import initialValues from "./InitialValues";
 import validationSchema from "./ValidationSchema";
 import DoneIcon from "@mui/icons-material/Done";
 import { useSubCatData } from "../../Context";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 const Form = ({ onClose }) => {
-  const { catData, createSubCat } = useSubCatData();
+  const { catData, createSubCat, setRefresh } = useSubCatData();
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       createSubCat(values)
         .then((response) => {
+          onClose();
+          setRefresh(new Date().toISOString());
           Swal.fire({
             title: "Good job!",
             text: "You clicked the button!",
             icon: "success",
           });
-          console.log(response);
-          setRefresh(new Date().toISOString());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
         });
-      onClose();
     },
   });
   return (

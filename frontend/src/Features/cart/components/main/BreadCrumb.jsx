@@ -50,7 +50,7 @@ const BreadCrumb = () => {
           <React.Fragment key={product._id}>
             
               <li>{product.productName}</li>
-              <li>{product.price}</li>
+              <li>{product.options.price}</li>
               <li>
                 <img src={product.images[0]} alt="" width={85} height={85} />
               </li>

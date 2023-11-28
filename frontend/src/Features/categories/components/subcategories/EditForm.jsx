@@ -18,12 +18,19 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useSubCatData } from "../../Context";
 
 const EditForm = ({ onClose }) => {
-  const { catData, updateSubCat, subcategory } = useSubCatData();
+  const { catData, updateSubCat, subcategory, setRefresh } = useSubCatData();
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      updateSubCat(subcategory?._id, values);
+      updateSubCat(subcategory?._id, values)
+        .then((response) => {
+          setRefresh(new Date().toISOString());
+          onClose();
+        })
+        .catch((error) => {
+          console.error("Error occurred: while creating user", error);
+        });
     },
   });
   useEffect(() => {

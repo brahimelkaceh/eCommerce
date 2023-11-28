@@ -84,7 +84,7 @@ export const SubcategoryProvider = ({ children }) => {
       }
     };
     fetchDataFromApi();
-  }, []);
+  }, [refresh]);
   const getSubcategoryById = async (id) => {
     try {
       const fetchedSubcategory = await fetchSubcategoryById(id);

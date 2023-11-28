@@ -4,6 +4,7 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
 import { createCustomer } from "../service";
+import {useCustomer} from "../Context"
  import Swal from "sweetalert2"
 const initialValues = {
   firstName: "",
@@ -34,7 +35,7 @@ const checkoutSchema = yup.object().shape({
 
 const Formm = ({open,onClose}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
+const {setRefresh} = useCustomer()
   const handleFormSubmit = (values, { resetForm }) => {
     console.log(values);
     try {

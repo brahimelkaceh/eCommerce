@@ -20,7 +20,7 @@ import { useEffect } from "react";
 import { Chip } from "@mui/material";
 
 export default function AllCategories() {
-  const { catData, deleteCat, updateCat } = useSubCatData();
+  const { catData, deleteCat, updateCat, setRefresh } = useSubCatData();
 
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -42,40 +42,39 @@ export default function AllCategories() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-
-const handleDeleteClick = (id) => () => {
-  try {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteCat(id).then((response) => {
-          console.log(response);
-        });
-        setrows(rows.filter((row) => row.id !== id));
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-      }
-    });
-  } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Something went wrong!",
-      footer: '<a href="#">Why do I have this issue?</a>',
-    });
-    throw err;
-  }
-};
+  const handleDeleteClick = (id) => () => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteCat(id).then((response) => {
+            setRefresh(new Date().toISOString());
+          });
+          setRows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+      throw err;
+    }
+  };
   const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
@@ -93,32 +92,32 @@ const handleDeleteClick = (id) => () => {
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
 
-     try {
-       Swal.fire({
-         title: "Do you want to save the changes?",
-         showDenyButton: true,
-         showCancelButton: true,
-         confirmButtonText: "Save",
-         denyButtonText: `Don't save`,
-       }).then((result) => {
-         /* Read more about isConfirmed, isDenied below */
-         if (result.isConfirmed) {
-           Swal.fire("Saved!", "", "success");
-           updateCat(updatedRow._id, updatedRow)
-             .then((response) => {
-               console.log(response);
-             })
-             .catch((error) => {
-               Swal.fire("Error occurred: while editing user", error);
-               console.error("Error occurred: while editing user", error);
-             });
-         } else if (result.isDenied) {
-           Swal.fire("Changes are not saved", "", "info");
-         }
-       });
-     } catch (error) {
-       throw error;
-     }
+    try {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          updateCat(updatedRow._id, updatedRow)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing user", error);
+              console.error("Error occurred: while editing user", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
     return updatedRow;
   };
 

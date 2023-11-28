@@ -2,6 +2,7 @@
 const catchAsync = require("../helpers/catchAsync");
 const Subcategory = require("../models/SubCategories");
 const Category = require("../models/Categories");
+const Product = require("../models/Products");
 const AppError = require("../helpers/AppError");
 const mongoose = require("mongoose");
 
@@ -120,15 +121,17 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
 
 exports.deleteSubCategory = catchAsync(async (req, res, next) => {
   const subcategoryId = req.params.id;
-
-  // Find the subcategory by its ID and remove it
-  const result = await Subcategory.deleteOne({ _id: subcategoryId });
-  if (result.deletedCount === 0) {
-    return next(new AppError("Can't find the specified subcategory", 404));
+  const subcategory = await Subcategory.findById(subcategoryId);
+  if (!subcategory) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Subcategory not found",
+    });
   }
-  res.status(200).json({
-    status: 204,
-    message: "Subcategory deleted successfully",
+  await Product.deleteMany({ subCategoryId: subcategoryId }).exec();
+  await Subcategory.findByIdAndDelete(subcategoryId);
+  res.status(204).json({
+    status: "success",
     data: null,
   });
 });

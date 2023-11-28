@@ -3,8 +3,8 @@ import { CartStore } from "../State/CartContext";
 import { useEffect, useState } from "react";
 const Cart = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-  console.log("hello total price");
-  console.log("total price", totalPrice);
+  console.log("hello total options.price");
+  console.log("total options.price", totalPrice);
   useEffect(() => {
     console.log("hello Shopping Cart");
     console.log(shoppingCart);
@@ -23,7 +23,7 @@ const Cart = () => {
                     <tr>
                       <th className="product-thumbnail"></th>
                       <th className="product-name">Product</th>
-                      <th className="product-price">Price</th>
+                      <th className="product-options.price">Price</th>
                       <th className="product-quantity">QUANTITY</th>
                       <th className="product-subtotal">SUBTOTAL</th>
                       <th className="product-delete"></th>
@@ -44,7 +44,7 @@ const Cart = () => {
                             </a>
                           </h4>
                         </td>
-                        <td className="product-price">{product.price}</td>
+                        <td className="product-options.price">{product.options.price}</td>
                         <td className="product-quantity">
                           <div className="cart-plus-minus">
                             <form  className="num-block">
@@ -88,7 +88,7 @@ const Cart = () => {
                           </div>
                         </td>
                         <td className="product-subtotal">
-                          <span>{product.price * product.quantity}</span>
+                          <span>{product.options.price * product.quantity}</span>
                         </td>
                         <td className="product-delete">
                           {/* <a href="#">

@@ -32,7 +32,7 @@ export const ManagerProvider = ({ children }) => {
   const managerContextValue = {
     managers,
     setManagers,
-    setRefresh,
+    setRefresh
   };
 
   return (

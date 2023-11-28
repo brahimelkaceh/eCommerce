@@ -1,6 +1,6 @@
 // ! MongoDB schema/model for subcategories
-
 const mongoose = require("mongoose");
+const ProductModel = require("./Products");
 const subCategorySchema = new mongoose.Schema({
   subCategoryName: {
     type: String,

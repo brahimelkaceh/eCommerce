@@ -16,17 +16,17 @@ import Adminroutes from "./utils/adminRoutes";
 const App = () => {
   return (
     <Routes>
-      <Route element={<Adminroutes />}>
-        <Route path="/" exact element={<AdminDashboard />} />
-        <Route path="/orders" exact element={<Orders />} />
+      <Route path="/" element={<Adminroutes />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="orders" element={<Orders />} />
       </Route>
 
-      <Route path="/login" exact element={<Login />} />
-      <Route path="/products" exact element={<Products />} />
-      <Route path="/categories" exact element={<Categories />} />
-      <Route path="/managers" exact element={<Managers />} />
-      <Route path="/customers" exact element={<Customers />} />
-      <Route path="/profile" exact element={<Profile />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/managers" element={<Managers />} />
+      <Route path="/customers" element={<Customers />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/home" element={<LandingPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />

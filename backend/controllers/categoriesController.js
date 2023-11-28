@@ -1,5 +1,7 @@
 // ! Controller handling Categories-related logic
 const Category = require("../models/Categories");
+const Subcategory = require("../models/SubCategories");
+const Product = require("../models/Products");
 const catchAsync = require("../helpers/catchAsync");
 const SubCategory = require("../models/SubCategories");
 const AppError = require("../helpers/appError");
@@ -59,26 +61,23 @@ exports.updateCategory = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.deleteCategory = async (req, res) => {
+exports.deleteCategory = catchAsync(async (req, res) => {
   const id = req.params.id;
-  const subCategory = await SubCategory.find({ categoryID: id });
-
-  if (!subCategory.length) {
-    try {
-      const category = await Category.findByIdAndRemove(id);
-
-      if (category) {
-        res.json({ message: "Category deleted successfully" });
-      } else {
-        res.status(404).json({ message: "Category not found" });
-      }
-    } catch (err) {
-      res.status(500).json({ message: "Internal server error" });
-    }
-  } else {
-    res.json("there is a subcategory for this category");
+  const category = await Category.findById(id);
+  if (!category) {
+    res.status(400).json({ message: "Category not found" });
   }
-};
+  const subcategories = await Subcategory.find({ categoryId: id });
+  for (const subcategory of subcategories) {
+    await Product.deleteMany({ subCategoryId: subcategory._id });
+  }
+  await Subcategory.deleteMany({ categoryId: id });
+  await Category.findByIdAndDelete(id);
+  res.status(204).json({
+    message: "Category and it's subcategories deleted successfully",
+  });
+});
+
 exports.getCategoryById = async (req, res, next) => {
   const id = req.params.id;
   // console.log(id);

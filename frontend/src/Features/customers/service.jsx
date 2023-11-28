@@ -7,7 +7,7 @@ const api = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
-    Authorization: ` Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 

@@ -9,7 +9,6 @@ export const CartReducer = (state, action) => {
   let updatedQty;
   let filtered;
 
-
   switch (action.type) {
     case "ADD_TO_CART":
       console.log("actions", action);
@@ -18,7 +17,7 @@ export const CartReducer = (state, action) => {
       if (check) {
         const index = shoppingCart.findIndex((cart) => cart._id === action.id);
         check.quantity += 1;
-        updatedPrice = totalPrice + check.price;
+        updatedPrice = totalPrice + check.options.price;
         updatedQty = qty;
         shoppingCart[index] = check;
         return {
@@ -30,7 +29,7 @@ export const CartReducer = (state, action) => {
         product = action.product;
         product["quantity"] = 1;
         updatedQty = qty + 1;
-        updatedPrice = totalPrice + product.price;
+        updatedPrice = totalPrice + product.options.price;
         return {
           shoppingCart: [product, ...shoppingCart],
           totalPrice: updatedPrice,
@@ -42,7 +41,7 @@ export const CartReducer = (state, action) => {
       product = shoppingCart.find((product) => product._id === action.id);
       index = shoppingCart.findIndex((prod) => prod._id === action.id);
       product.quantity = product.quantity + 1;
-      updatedPrice = totalPrice + product.price;
+      updatedPrice = totalPrice + product.options.price;
       updatedQty = qty + 1;
       shoppingCart[index] = product;
       return {
@@ -55,10 +54,10 @@ export const CartReducer = (state, action) => {
       product = shoppingCart.find((product) => product._id === action.id);
       index = shoppingCart.findIndex((prod) => prod._id === action.id);
       if (product.quantity > 1) {
-        console.log("minus product price", product.price);
+        console.log("minus product options.price", product.options.price);
         product.quantity = product.quantity - 1;
-        updatedPrice = +(totalPrice - product.price).toFixed(2);
-        console.log("updated price", updatedPrice);
+        updatedPrice = +(totalPrice - product.options.price).toFixed(2);
+        console.log("updated options.price", updatedPrice);
         updatedQty = qty - 1;
         shoppingCart[index] = product;
         return {
@@ -78,7 +77,7 @@ export const CartReducer = (state, action) => {
       console.log("I Am Delete");
       filtered = shoppingCart.filter((cart) => cart.id !== action.id);
       product = shoppingCart.find((cart) => cart.id === action.id);
-      updatedPrice = totalPrice - product.price * product.quantity;
+      updatedPrice = totalPrice - product.options.price * product.quantity;
       updatedQty = qty - product.quantity;
       return {
         shoppingCart: [...filtered],
