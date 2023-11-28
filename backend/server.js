@@ -2,8 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const server = express();
-
 const mongoose = require("mongoose");
 
 const { connection } = require("./config/db");
@@ -16,9 +14,13 @@ const productsRouter = require("./routes/productsRoutes");
 const ordersRouter = require("./routes/ordersRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./helpers/AppError");
-// !this is a comment
-
+const server = express();
 const db = connection();
+const http = require("http");
+const { initializeWebSocket } = require("./middlewares/websocket");
+
+const websocketServer = http.createServer(server);
+const wss = initializeWebSocket(websocketServer);
 
 require("dotenv").config();
 

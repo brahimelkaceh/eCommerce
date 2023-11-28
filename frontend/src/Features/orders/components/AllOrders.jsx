@@ -27,7 +27,7 @@ export default function AllOrders({ handleOpen }) {
 
   const [rows, setrows] = useState([]);
   const [customerId, setcustomer] = useState("");
-  const [Customer, setCustomer] = useState({})
+  const [Customer, setCustomer] = useState({});
   const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
@@ -152,9 +152,7 @@ export default function AllOrders({ handleOpen }) {
       renderCell: (params) => {
         console.log(params.value?._id);
         setcustomer(params.value?._id);
-        return (
-          <span className="customer-name"> {Customer?.userName}</span>
-        );
+        return <span className="customer-name"> {Customer?.userName}</span>;
       },
     },
     {
@@ -355,6 +353,10 @@ export default function AllOrders({ handleOpen }) {
         // slotProps={{
         //   toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
         // }}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 7 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
         disableColumnFilter
         disableDensitySelector
         slots={{ toolbar: GridToolbar }}

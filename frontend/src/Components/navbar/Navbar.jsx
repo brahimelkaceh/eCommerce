@@ -6,11 +6,20 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 import { UserC } from "../../Features/auth/Context";
-import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { StyledBadge } from "../mui/MuiStyles";
+import Index from "../notification/Index";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -64,6 +73,7 @@ const Navbar = ({ handleDrawerOpen, open }) => {
           Photos
         </Typography>
 
+        <Index />
         <div>
           <IconButton
             direction="row"
