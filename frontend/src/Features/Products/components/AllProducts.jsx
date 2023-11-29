@@ -19,7 +19,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomArrayItem } from "@mui/x-data-grid-generator";
-import { Chip } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 
 const roles = ["manager", "admin"];
 const randomRole = () => {
@@ -139,10 +139,28 @@ export default function AllProducts({ handleOpen }) {
   };
 
   const columns = [
-    { field: "_id", headerName: "Product ID", width: 150 },
+    {
+      field: "_id",
+      headerName: "Product ID",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Typography
+            size="small"
+            style={{
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            #{params?.value.slice(-6)}
+          </Typography>
+        );
+      },
+    },
     {
       field: "images",
-      headerName: "",
+      headerName: "Product Image",
       renderCell: (params) => {
         return (
           <div
@@ -182,6 +200,21 @@ export default function AllProducts({ handleOpen }) {
           </span>
         </div>
       ),
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <Typography
+            style={{
+              textTransform: "capitalize",
+              color: "#222",
+            }}
+          >{`$${params.row.options[0].price}`}</Typography>
+        );
+      },
     },
     {
       field: "quantity",
@@ -285,30 +318,7 @@ export default function AllProducts({ handleOpen }) {
         );
       },
     },
-    {
-      field: "updatedAt",
-      headerName: "Updated At",
-      editable: false,
-      flex: 1,
-      renderCell: (params) => {
-        const dateObject = new Date(params.value);
-        const options = { year: "numeric", month: "short", day: "numeric" };
-        const formatted = dateObject.toLocaleDateString(undefined, options);
 
-        return (
-          <Chip
-            label={formatted}
-            size="small"
-            style={{
-              backgroundColor: "#C5DCFA80",
-              textTransform: "capitalize",
-              fontWeight: "bold",
-              color: "#0F56B3",
-            }}
-          ></Chip>
-        );
-      },
-    },
     {
       field: "actions",
       type: "actions",

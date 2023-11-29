@@ -14,7 +14,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
-import { Chip } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import { useData } from "../Context";
 import { useEffect } from "react";
 //import Loader from "../../../Components/loader/Loader";
@@ -117,7 +117,20 @@ export default function AllOrders({ handleOpen }) {
       headerName: "Order Id",
       align: "left",
       headerAlign: "left",
-      width: 200,
+      renderCell: (params) => {
+        return (
+          <Typography
+            size="small"
+            style={{
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            #{params?.value.slice(-6)}
+          </Typography>
+        );
+      },
     },
     {
       field: "orderItems",

@@ -23,7 +23,7 @@ export const SubcategoryProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [subcategory, setSubcategory] = useState([]);
-  const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [refresh, setRefresh] = useState(new Date().getMilliseconds());
   const [refreshSub, setRefreshSub] = useState(new Date().getMilliseconds());
   // ! ====== CATEGORIES MANAGEMENT =====
 

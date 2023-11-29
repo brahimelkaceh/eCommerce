@@ -37,11 +37,11 @@ const CreateForm = ({ onClose }) => {
           });
           console.log(response);
           onClose();
+          setRefresh(new Date().getMilliseconds());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
         });
-      setRefresh(new Date().toISOString());
     },
   });
   return (

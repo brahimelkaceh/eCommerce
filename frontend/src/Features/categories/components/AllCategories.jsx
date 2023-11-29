@@ -17,7 +17,7 @@ import {
 
 import { useSubCatData } from "../Context";
 import { useEffect } from "react";
-import { Chip } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 
 export default function AllCategories() {
   const { catData, deleteCat, updateCat, setRefresh } = useSubCatData();
@@ -130,15 +130,30 @@ export default function AllCategories() {
       field: "id",
       headerName: "Category Id",
       align: "center",
+      headerAlign: "center",
       editable: false,
-      width: 200,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Typography
+            size="small"
+            style={{
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            #{params?.value.slice(-6)}
+          </Typography>
+        );
+      },
     },
     {
       field: "categoryName",
       headerName: "Category Name",
-      align: "center",
+      // align: "center",
       editable: true,
-      width: 200,
+      flex: 1,
       renderCell: (params) => {
         return (
           <Chip
@@ -158,6 +173,7 @@ export default function AllCategories() {
       field: "active",
       headerName: "Active",
       editable: true,
+      flex: 1,
       valueOptions: [true, false],
       type: "boolean",
 

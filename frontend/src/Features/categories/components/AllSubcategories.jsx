@@ -1,7 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -13,10 +11,9 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { randomId, randomArrayItem } from "@mui/x-data-grid-generator";
 import { useSubCatData } from "../Context";
 import { useEffect } from "react";
-import { Chip } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import EditSubCategoryModal from "./subcategories/EditModal";
 
 export default function AllSubcategories() {
@@ -107,15 +104,34 @@ export default function AllSubcategories() {
   const columns = [
     {
       field: "id",
-      headerName: "Category Id",
+      headerName: "Subcategory Id",
       align: "center",
-      width: 200,
+      headerAlign: "center",
+
+      flex: 1,
+
+      renderCell: (params) => {
+        return (
+          <Typography
+            size="small"
+            style={{
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            #{params?.value.slice(-6)}
+          </Typography>
+        );
+      },
     },
     {
       field: "subCategoryName",
       headerName: "Subcategory Name",
       align: "center",
-      width: 150,
+      headerAlign: "center",
+
+      flex: 1,
       renderCell: (params) => {
         return (
           <Chip
@@ -135,7 +151,9 @@ export default function AllSubcategories() {
       field: "categoryId",
       headerName: "Category Name",
       align: "center",
-      width: 150,
+      flex: 1,
+      headerAlign: "center",
+
       editable: false,
       renderCell: (params) => {
         return (

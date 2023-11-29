@@ -25,15 +25,14 @@ const Form = ({ onClose }) => {
     onSubmit: (values) => {
       createSubCat(values)
         .then((response) => {
-          onClose();
-          setRefresh(new Date().toISOString());
           Swal.fire({
             title: "Good job!",
             text: "You clicked the button!",
             icon: "success",
           });
           console.log(response);
-          setRefresh(new Date().toISOString());
+          onClose();
+          setRefresh(new Date().getMilliseconds());
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
