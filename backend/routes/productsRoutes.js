@@ -32,7 +32,7 @@ Router.put(
 );
 
 // TokenCheck
-Router.get("/products/", ManagerTokenCheck, getAllProducts);
+Router.get("/products/",ManagerTokenCheck ,getAllProducts);
 Router.get("/products/search", ManagerTokenCheck, searchProducts);
 Router.get("/products/:id", ManagerTokenCheck, getProductById);
 Router.delete("/products/:id", ManagerTokenCheck, deleteProduct);

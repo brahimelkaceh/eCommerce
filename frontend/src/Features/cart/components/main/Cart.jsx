@@ -3,11 +3,9 @@ import { CartStore } from "../State/CartContext";
 import { useEffect, useState } from "react";
 const Cart = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-  console.log("hello total options.price");
   console.log("total options.price", totalPrice);
   useEffect(() => {
-    console.log("hello Shopping Cart");
-    console.log(shoppingCart);
+    console.log("shopingCart: ", shoppingCart);
   }, [shoppingCart]);
   return (
     <div className="cart-area pt-100 pb-100">
@@ -23,7 +21,7 @@ const Cart = () => {
                     <tr>
                       <th className="product-thumbnail"></th>
                       <th className="product-name">Product</th>
-                      <th className="product-options.price">Price</th>
+                      <th className="product-price">Price</th>
                       <th className="product-quantity">QUANTITY</th>
                       <th className="product-subtotal">SUBTOTAL</th>
                       <th className="product-delete"></th>
@@ -44,15 +42,18 @@ const Cart = () => {
                             </a>
                           </h4>
                         </td>
-                        <td className="product-options.price">{product.options.price}</td>
+                        <td className="product-price">
+                          {product.options[0].price}
+                        </td>
                         <td className="product-quantity">
                           <div className="cart-plus-minus">
-                            <form  className="num-block">
+                            <form className="num-block">
                               <input
                                 type="text"
                                 className="in-num"
-                                value={product.quantity}
+                                value={qty}
                                 readonly=""
+                                max={product.quantity + 1}
                               />
                               <div className="qtybutton-box">
                                 {/* <span className="plus">
@@ -88,7 +89,9 @@ const Cart = () => {
                           </div>
                         </td>
                         <td className="product-subtotal">
-                          <span>{product.options.price * product.quantity}</span>
+                          <span>
+                            {product.options[0].price * product.quantity}
+                          </span>
                         </td>
                         <td className="product-delete">
                           {/* <a href="#">

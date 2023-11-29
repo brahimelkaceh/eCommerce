@@ -7,10 +7,21 @@ const BreadCrumb = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-          const response = await fetch("http://localhost:5000/products"); // Adjust the path based on your project structure
+        // !!! 
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: ` Bearer ${JSON.parse(
+              localStorage.getItem("userT")
+            )}`,
+          },
+        };
+          const response = await fetch("http://localhost:5000/products",config); // Adjust the path based on your project structure
         const jsonData = await response.json();
-           console.log(jsonData.data);
-          setData(jsonData.data);
+        //  console.log("jsonData",jsonData.data);
+        setData(jsonData.data);
+        localStorage.setItem("products", JSON.stringify(jsonData.data));
+        console.log("localStorageProducts: ",JSON.parse(localStorage.getItem("products")));
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -42,31 +53,37 @@ const BreadCrumb = () => {
     //     </div>
     //   </div>
     // </section>
+
     <section>
-      <h4>Data from backend : </h4>
+      <h4>Cart : </h4>
+      {/* !!! Add To Cart */}
       {console.log(data)}
       <ul>
         {data.map((product) => (
           <React.Fragment key={product._id}>
-            
-              <li>{product.productName}</li>
-              <li>{product.options.price}</li>
-              <li>
-                <img src={product.images[0]} alt="" width={85} height={85} />
-              </li>
-  
+            <li>{product.productName}</li>
+            <li>{product.options[0].price}</li>
+            <li>
+              <img src={product.images[0]} alt="" width={85} height={85} />
+            </li>
+
             <button
               onClick={() =>
-                dispatch({ type: "ADD_TO_CART", product: product, id: product._id })
+                dispatch({
+                  type: "ADD_TO_CART",
+                  product: product,
+                  id: product._id,
+                })
               }
             >
               Add to Cart
             </button>
+            {console.log("hello Product",product)}
           </React.Fragment>
         ))}
       </ul>
     </section>
-   );
+  );
 };
 
 export default BreadCrumb;
