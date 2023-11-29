@@ -113,8 +113,7 @@ export default function AllProducts({ handleOpen }) {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           Swal.fire("Saved!", "", "success");
-          console.log(updatedRow.images);
-          editP(ID, { ...updatedRow, images: updatedRow.images[0] })
+          editP(ID, { ...updatedRow, images: updatedRow.images })
             .then((response) => {
               console.log(response);
             })

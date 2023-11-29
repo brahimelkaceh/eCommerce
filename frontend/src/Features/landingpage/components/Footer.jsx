@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-lg-3 col-sm-6">
               <div className="footer-widget mb-50">
-                <h4 className="fw-title">COMPANY</h4>
+                <h4 className="fw-title">BRAND</h4>
                 <div className="fw-link">
                   <ul>
                     <li>
@@ -59,13 +59,13 @@ const Footer = () => {
                 <div className="fw-link">
                   <ul>
                     <li>
-                      <a href="shop-sidebar.html">Women</a>
+                      <a href="shop-sidebar.html">Homeware</a>
                     </li>
                     <li>
-                      <a href="shop-sidebar.html">Men</a>
+                      <a href="shop-sidebar.html">Lifestyle</a>
                     </li>
                     <li>
-                      <a href="shop-sidebar.html">Baby</a>
+                      <a href="shop-sidebar.html">Accessories</a>
                     </li>
                   </ul>
                 </div>

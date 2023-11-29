@@ -84,7 +84,7 @@ export default function DetailsOrderModal({ handleClose, open }) {
               }}
             >
               {orderDetailsData?.orderItems?.map((orderItem, i) => {
-                // console.log();
+                console.log(orderItem);
                 return (
                   <React.Fragment key={i}>
                     <ListItem>
@@ -138,6 +138,8 @@ export default function DetailsOrderModal({ handleClose, open }) {
                 );
               })}
             </List>
+
+            <List></List>
           </Box>
         </Fade>
       </Modal>

@@ -2,63 +2,25 @@ import React from 'react'
 
 const DiscountArea = () => {
   return (
-    <section className="discount-area pt-35">
-      <div className="container custom-container-two">
-        <div className="h9-discount-banner-wrap">
-          <div className="row justify-content-center">
-            <div className="col-xl-4 col-lg-6 col-md-8 col-sm-10">
-              <div className="h9-discount-item mb-30">
-                <div className="thumb">
-                  <img src="img/product/h9_discount_banner01.jpg" alt="" />
-                </div>
-                <div className="content">
-                  <span>breakfast</span>
-                  <h4>
-                    <a href="shop-sidebar.html">WINTER 2021 UP TO 50% OFF</a>
-                  </h4>
-                  <a href="shop-sidebar.html" className="btn">
-                    shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-4 col-lg-6 col-md-8 col-sm-10">
-              <div className="h9-discount-item highlight-discount mb-30">
-                <div className="thumb">
-                  <img src="img/product/h9_discount_banner02.jpg" alt="" />
-                </div>
-                <div className="content">
-                  <span>combo pack</span>
-                  <h4>
-                    <a href="shop-sidebar.html">combo 2021 UP TO 75% OFF</a>
-                  </h4>
-                  <a href="shop-sidebar.html" className="btn">
-                    shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-4 col-lg-6 col-md-8 col-sm-10">
-              <div className="h9-discount-item mb-30">
-                <div className="thumb">
-                  <img src="img/product/h9_discount_banner03.jpg" alt="" />
-                </div>
-                <div className="content">
-                  <span>new in</span>
-                  <h4>
-                    <a href="shop-sidebar.html">Baby Food UP TO 75% OFF</a>
-                  </h4>
-                  <a href="shop-sidebar.html" className="btn">
-                    shop now
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+    <main>
+<section className="discount-area discount-bg jarallax parallax-img" data-background="img/bg/discount_bg.jpg" style={{backgroundImage: 'none'}} data-jarallax-original-styles="background-image: url(&quot;img/bg/discount_bg.jpg&quot;);">
+  <div className="container">
+    <div className="row justify-content-center justify-content-lg-start">
+      <div className="col-lg-6 col-md-10">
+        <div className="discount-content text-center">
+          <div className="icon mb-15"><img src="img/icon/discount_icon.png" alt /></div>
+          <span>STOCK IS LIMITED</span>
+          <h2>GRAB EXCITING DEALS AND SPECIAL PROMOS TODAY, DON’T MISS OUT !!</h2>
+          <a href="shop-sidebar.html" className="btn">shop now</a>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </div>
+  <div id="jarallax-container-0" style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', zIndex: -100}}><div style={{backgroundPosition: '50% 50%', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundImage: 'url("http://127.0.0.1:5500/adara-html-package/Adara/img/bg/discount_bg.jpg")', position: 'fixed', top: 0, left: 0, width: '1403.7px', height: '394.346px', overflow: 'hidden', pointerEvents: 'none', transformStyle: 'preserve-3d', backfaceVisibility: 'hidden', willChange: 'transform, opacity', marginTop: '-35.1729px', transform: 'translate3d(0px, 74.6174px, 0px)'}} /></div>
+</section>
+
+    </main>
+  )
 }
 
 export default DiscountArea

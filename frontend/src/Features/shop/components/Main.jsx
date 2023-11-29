@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useProduct } from "../../Products/Context";
 import { Link } from "react-router-dom";
 import { useSubCatData } from "../../categories/Context";
@@ -6,12 +6,32 @@ import Categories from "./widgets/Categories";
 import Products from "./widgets/Products";
 
 const Main = () => {
-  const { products } = useProduct();
+  const { products: allProducts } = useProduct();
   const { SubcatData, catData } = useSubCatData();
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-  console.log("catData:", catData);
-  console.log("SubcatData:", SubcatData);
-  console.log("products:", products);
+  useEffect(() => {
+    if (selectedSubcategory) {
+      const subcategoryId = selectedSubcategory;
+      const filtered = allProducts.filter((product) => {
+        console.log("product", product.subCategoryId);
+        // console.log('selected sub', subcategoryId);
+        return product.subCategoryId._id === subcategoryId;
+      });
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(allProducts);
+    }
+  }, [selectedSubcategory, allProducts]);
+
+  const handleSubcategoryClick = (subcategoryId) => {
+    setSelectedSubcategory(subcategoryId);
+  };
+
+  const handleResetSubcategory = () => {
+    setSelectedSubcategory(null);
+  };
 
   return (
     <div>
@@ -28,7 +48,12 @@ const Main = () => {
                     </button>
                   </form>
                 </div>
-                <Categories catData={catData} SubcatData={SubcatData} />
+                <Categories
+                  catData={catData}
+                  SubcatData={SubcatData}
+                  onSubcategoryClick={handleSubcategoryClick}
+                />
+                <div onClick={handleResetSubcategory}>View All Products</div>
               </aside>
             </div>
 
@@ -43,7 +68,7 @@ const Main = () => {
                             <i className="flaticon-menu" /> FILTER
                           </a>
                         </li>
-                        <li>Showing 1–{products.length} of 80 results</li>
+                        <li>Showing 1–{allProducts.length} of 80 results</li>
                       </ul>
                     </div>
                   </div>
@@ -62,7 +87,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <Products products={products} />
+              <Products products={filteredProducts} />
             </div>
           </div>
         </div>
