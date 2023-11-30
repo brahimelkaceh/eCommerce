@@ -59,7 +59,7 @@ const Cart = () => {
                         <tr key={product._id}>
                           <td className="product-thumbnail">
                             <a href="shop-details.html">
-                              <img src="img/product/cart_img01.jpg" alt="" />
+                              <img src= {product.images[0]} alt="" />
                             </a>
                           </td>
                           <td className="product-name">

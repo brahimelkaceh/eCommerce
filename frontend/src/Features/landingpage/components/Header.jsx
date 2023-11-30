@@ -290,7 +290,7 @@ const Header = () => {
                           <span>{qty}</span>
                         </a>
                         <ul className="minicart">
-                          <li className="d-flex align-items-start">
+                          {/* <li className="d-flex align-items-start">
                             <div className="cart-img">
                               <a href="#">
                                 <img src="img/product/cart_p01.jpg" alt="" />
@@ -335,11 +335,54 @@ const Header = () => {
                                 <i className="far fa-trash-alt"></i>
                               </a>
                             </div>
-                          </li>
+                          </li> */}
+                          {shoppingCart.length > 0 &&
+                            shoppingCart.map((product) => (
+                              <li
+                                className="d-flex align-items-start"
+                                key={product._id}
+                              >
+                                <div className="cart-img">
+                                  <a href="#">
+                                    <img
+                                      src={product.images[0]}
+                                      alt=""
+                                    />
+                                  </a>
+                                </div>
+                                <div className="cart-content">
+                                  <h4>
+                                    <a href="#">{product.productName}</a>
+                                  </h4>
+                                  <div className="cart-price">
+                                    <span className="new">
+                                      ${product.options[0].price}
+                                    </span>
+                                    {/* Add your logic for displaying discounted price here */}
+                                    <span>
+                                      <del>${product.options[0].oldPrice}</del>
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="del-icon">
+                                  <button
+                                    onClick={() =>
+                                      dispatch({
+                                        type: "DELETE_PRODUCT",
+                                        id: product._id,
+                                      })
+                                    }
+                                  >
+                                    <i className="far fa-trash-alt"></i>
+                                  </button>
+                                </div>
+                              </li>
+                            ))}
+
                           <li>
                             <div className="total-price">
                               <span className="f-left">Total:</span>
-                              <span className="f-right">$239.9</span>
+                              <span className="f-right">{totalPrice} $</span>
                             </div>
                           </li>
                           <li>

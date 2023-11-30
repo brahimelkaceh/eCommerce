@@ -68,7 +68,7 @@ export const CartReducer = (state, action) => {
       return {
         shoppingCart: [...shoppingCart],
         totalPrice: subTotal,
-        qty: ProductQty,
+        qty: qty,
       };
 
     case "DECREMENT":
@@ -85,7 +85,7 @@ export const CartReducer = (state, action) => {
         return {
           shoppingCart: [...shoppingCart],
           totalPrice: subTotal,
-          qty: ProductQty,
+          qty: qty,
         };
       } else {
         return {
@@ -100,7 +100,7 @@ export const CartReducer = (state, action) => {
       filtered = shoppingCart.filter((cart) => cart.id !== action.id);
       product = shoppingCart.find((cart) => cart.id === action.id);
       subTotal = totalPrice - product.options[0].price * product.orderQty;
-      ProductQty = qty - product.orderQty;
+      ProductQty = qty - 1;
       return {
         shoppingCart: [...filtered],
         totalPrice: subTotal,
