@@ -15,6 +15,7 @@ const { addImages } = require("../helpers/addImage");
 
 exports.signup = catchAsync(async (req, res, next) => {
   const images = req.files;
+  // console.log("images: ", images);
   const uploadedImages = await addImages(images);
   // Check if password and confirm password match
   if (req.body.password !== req.body.passwordConfirm) {
@@ -32,7 +33,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     images: uploadedImages.map((image) => image.imageUrl),
-    role: req.body.role,
+    role: req.body.role || "customer",
     email: req.body.email,
     password: hashedPassword,
     activationToken: activationToken,
@@ -42,8 +43,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   const activationURL = `${req.protocol}://${req.get(
     "host",
   )}/customers/activate?token=${activationToken}`;
-  // console.log("activation url : " + activationURL);
-  // Send the activation email
   await new Email(newCustomer, activationURL).sendWelcome();
 
   res.status(201).json({
@@ -54,7 +53,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
+  // console.log(email, password);
   // 1) Check if email and password exist
   if (!email || !password) {
     return next(new AppError("Please provide email and password!", 400));

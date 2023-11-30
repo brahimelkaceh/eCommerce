@@ -60,7 +60,7 @@ exports.getOrderById = catchAsync(async (req, res) => {
       .findOne({ _id: id })
       .populate({
         path: "orderItems.product",
-        select: "productName price quantity images options",
+        select: "productName price quantity images options discountPrice",
       })
       .populate("customerID", "email userName role images");
     if (order) {
@@ -134,7 +134,7 @@ exports.updateOrder = catchAsync(async (req, res) => {
 
     const updatedOrder = await orders.updateOne(
       { _id: id },
-      { $set: newOrderData }
+      { $set: newOrderData },
     );
 
     response.message = CONSTANTS.ORDER_UPDATED;

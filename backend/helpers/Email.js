@@ -48,7 +48,7 @@ module.exports = class Email {
       to: this.to,
       subject,
       // html,
-      text: `Hello akhi, ${this.firstName}, please follow this url; ${this.url}`,
+      text: `Hello akhi, ${this.firstName}, please follow this url; ${this.url} ,one click to activate your account, after it please go to: http://localhost:5173/customerlogin`,
     };
 
     // 3) Create a transport and send email
