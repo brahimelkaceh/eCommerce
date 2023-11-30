@@ -1,6 +1,18 @@
 import React from "react";
-
+import { CartStore } from "../../cart/components/State/CartContext";
+import { useEffect } from "react";
 const Header = () => {
+    const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+   useEffect(() => {
+     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
+     console.log("StoredCart from cartOrders", storedCart)
+     if (!storedCart) {
+       storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
+       console.log("StoredCart from shopOrders", storedCart);
+     }
+     // console.log("storedCart:1", storedCart);
+     dispatch({ type: "SET_TO_CART", payload: storedCart });
+   }, []);
   return (
     <header className="header-style-five header-style-eight">
       <div className="header-top-wrap">
@@ -275,7 +287,7 @@ const Header = () => {
                       <li className="header-shop-cart">
                         <a href="#">
                           <i className="flaticon-shopping-bag"></i>
-                          <span>0</span>
+                          <span>{qty}</span>
                         </a>
                         <ul className="minicart">
                           <li className="d-flex align-items-start">

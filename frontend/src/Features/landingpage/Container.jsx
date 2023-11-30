@@ -18,18 +18,20 @@ import "../../assets/css/slick.css";
 import "../../assets/css/default.css";
 import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
-
+import CartContextStore from "../cart/components/State/CartContext"
 const Container = () => {
   return (
     <div>
-      {/* Preloader */}
-      <Preloader />
-      {/* Scroll-top */}
-      <ScrollTop />
-      {/* Header-area */}
-      <Header />
-      {/* Main-area */}
-      <Main />
+      <CartContextStore>
+        {/* Preloader */}
+        <Preloader />
+        {/* Scroll-top */}
+        <ScrollTop />
+        {/* Header-area */}
+        <Header />
+        {/* Main-area */}
+        <Main />
+      </CartContextStore>
     </div>
   );
 };

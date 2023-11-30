@@ -1,7 +1,25 @@
-import React from "react";
 import { Link } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
+import { CartStore } from "../../../cart/components/State/CartContext";
 const Products = ({ products }) => {
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+    useEffect(() => {
+      console.log("ShoppingCart: ", shoppingCart);
+
+      const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
+      // console.log("storedCart:1", storedCart);
+      dispatch({ type: "SET_TO_CART", payload: storedCart });
+    }, []);
+    useEffect(() => {
+      // console.log("shopingCart: ", shoppingCart);
+      localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
+      localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
+
+      console.log(
+        "ShopOrders: ",
+        JSON.parse(localStorage.getItem("ShopOrders"))
+      );
+    }, [shoppingCart]);
   return (
     <div className="row">
       {products.map((product) => (
@@ -30,7 +48,18 @@ const Products = ({ products }) => {
                   </li>
                 </ul>
               </div>
-              <button title="Add To Cart" className="add-to-cart">
+              <button
+                title="Add To Cart"
+                className="add-to-cart"
+
+                onClick={() =>
+                  dispatch({
+                    type: "ADD_TO_CART",
+                    product: product,
+                    id: product._id,
+                  })
+                }
+              >
                 Add To Cart
               </button>
             </div>

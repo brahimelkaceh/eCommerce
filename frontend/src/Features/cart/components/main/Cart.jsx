@@ -5,8 +5,34 @@ const Cart = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   console.log("total options.price", totalPrice);
   useEffect(() => {
-    console.log("shopingCart: ", shoppingCart);
-  }, [shoppingCart]);
+    const storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
+    // console.log("storedCart:1", storedCart);
+    dispatch({ type: "SET_TO_CART", payload: storedCart });
+  }, []);
+
+ useEffect(() => {
+    // console.log("shopingCart: ", shoppingCart);
+   localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
+      localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
+
+   console.log("CartOrders: ", JSON.parse(localStorage.getItem("CartOrders")));
+ }, [shoppingCart]);
+  const handleClick = () => {
+    const orderItems = shoppingCart.map((product) =>(
+    {
+      product: product._id,
+      quantity: product.orderQty
+      })
+      
+    );
+    const order = {
+      CustomerID: "CustomerID",
+      orderItems: orderItems,
+      cartTotalPrice: totalPrice,
+      Status:"Open"
+    }
+  console.log(order)
+}
   return (
     <div className="cart-area pt-100 pb-100">
       <div className="container">
@@ -28,88 +54,90 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {shoppingCart.map((product) => (
-                      <tr key={product._id}>
-                        <td className="product-thumbnail">
-                          <a href="shop-details.html">
-                            <img src="img/product/cart_img01.jpg" alt="" />
-                          </a>
-                        </td>
-                        <td className="product-name">
-                          <h4>
+                    {shoppingCart.length >0 &&
+                      shoppingCart.map((product) => (
+                        <tr key={product._id}>
+                          <td className="product-thumbnail">
                             <a href="shop-details.html">
-                              {product.productName}
+                              <img src="img/product/cart_img01.jpg" alt="" />
                             </a>
-                          </h4>
-                        </td>
-                        <td className="product-price">
-                          {product.options[0].price}
-                        </td>
-                        <td className="product-quantity">
-                          <div className="cart-plus-minus">
-                            <form className="num-block">
-                              <input
-                                type="text"
-                                className="in-num"
-                                value={qty}
-                                readonly=""
-                                max={product.quantity + 1}
-                              />
-                              <div className="qtybutton-box">
-                                {/* <span className="plus">
+                          </td>
+                          <td className="product-name">
+                            <h4>
+                              <a href="shop-details.html">
+                                {product.productName}
+                              </a>
+                            </h4>
+                          </td>
+                          <td className="product-price">
+                            {product.options[0].price}
+                          </td>
+                          <td className="product-quantity">
+                            <div className="cart-plus-minus">
+                              <form className="num-block">
+                                <input
+                                  type="text"
+                                  className="in-num"
+                                  value={product.orderQty}
+                                  readonly=""
+                                  max={product.quantity + 1}
+                                />
+                                <div className="qtybutton-box">
+                                  {/* <span className="plus">
                                   {/* <img src="img/icon/plus.png" alt="" /> */}
 
-                                {/* </span> */}
-                                <button
-                                  onClick={() =>
-                                    dispatch({
-                                      type: "INCREMENT",
-                                      id: product._id,
-                                    })
-                                  }
-                                >
-                                  +
-                                </button>
-                                {/* <span className="minus dis">
+                                  {/* </span> */}
+                                  <button
+                                    style={{width:'100%'}}
+                                    onClick={() =>
+                                      dispatch({
+                                        type: "INCREMENT",
+                                        id: product._id,
+                                      })
+                                    }
+                                  >
+                                    +
+                                  </button>
+                                  {/* <span className="minus dis">
                                   {/* <img src="img/icon/minus.png" alt="" /> */}
-                                {/* - */}
-                                {/* </span> */}
-                                <button
-                                  onClick={() =>
-                                    dispatch({
-                                      type: "DECREMENT",
-                                      id: product._id,
-                                    })
-                                  }
-                                >
-                                  -
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </td>
-                        <td className="product-subtotal">
-                          <span>
-                            {product.options[0].price * product.quantity}
-                          </span>
-                        </td>
-                        <td className="product-delete">
-                          {/* <a href="#">
+                                  {/* - */}
+                                  {/* </span> */}
+                                  <button
+                                    style={{width:'100%'}}
+                                    onClick={() =>
+                                      dispatch({
+                                        type: "DECREMENT",
+                                        id: product._id,
+                                      })
+                                    }
+                                  >
+                                    -
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </td>
+                          <td className="product-subtotal">
+                            <span>{product.subTotal}</span>
+                          </td>
+                          <td className="product-delete">
+                            {/* <a href="#">
                             <i className="flaticon-trash"></i>
                           </a> */}
-                          <button
-                            onClick={() =>
-                              dispatch({
-                                type: "DELETE_PRODUCT",
-                                id: product._id,
-                              })
-                            }
-                          >
-                            X
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                            <button
+                              style ={{width: '100%'}}
+                              onClick={() =>
+                                dispatch({
+                                  type: "DELETE_PRODUCT",
+                                  id: product._id,
+                                })
+                              }
+                            >
+                              X
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -117,7 +145,7 @@ const Cart = () => {
                 <div className="cart-coupon">
                   <form action="#">
                     <input type="text" placeholder="Enter Coupon Code..." />
-                    <button className="btn">Apply Coupon</button>
+                    <button className="btn" onClick={handleClick}>Apply Coupon</button>
                   </form>
                 </div>
                 <div className="continue-shopping">
