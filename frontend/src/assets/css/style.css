@@ -4077,7 +4077,7 @@ header.side-header {
 .features-product-thumb {
   position: relative;
   text-align: center;
-  padding: 43px 30px 10px;
+  /* padding: 43px 30px 10px; */
 }
 .features-product-thumb img {
   max-width: 100%;
@@ -4085,8 +4085,8 @@ header.side-header {
 }
 .discount-tag {
   position: absolute;
-  left: 12px;
-  top: 20px;
+  left: 0;
+  top: 0;
   background: #c2945a;
   color: #fff;
   font-weight: 500;
@@ -4929,12 +4929,13 @@ header.side-header {
   max-width: 26.8%;
   flex: 0 0 26.8%;
   padding: 0 15px;
+  height: 100%;
 }
 .trending-products-banner > a {
   display: block;
 }
 .trending-products-banner img {
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 .tp-tab-content .trending-product-active {
   margin: 0;

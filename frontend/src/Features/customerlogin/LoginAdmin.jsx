@@ -32,7 +32,7 @@ const LoginAdmin = () => {
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json", // Set the correct Content-Type header
+          // "Content-Type": "application/json", // Set the correct Content-Type header
           "Content-Type": "multipart/form-data", // Set the correct Content-Type header
         },
       };

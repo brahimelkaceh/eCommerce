@@ -308,10 +308,10 @@ export default function AllProducts({ handleOpen }) {
             label={formatted}
             size="small"
             style={{
-              backgroundColor: "#E5E5E580",
+              backgroundColor: "#C5DCFA",
               textTransform: "capitalize",
               fontWeight: "bold",
-              color: "#616161",
+              color: "#0A3977",
             }}
           ></Chip>
         );

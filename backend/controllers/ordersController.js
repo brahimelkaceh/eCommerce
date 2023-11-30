@@ -60,7 +60,7 @@ exports.getOrderById = catchAsync(async (req, res) => {
       .findOne({ _id: id })
       .populate({
         path: "orderItems.product",
-        select: "productName price quantity images options",
+        select: "productName price quantity images options discountPrice",
       })
       .populate("customerID", "email userName role images");
     if (order) {

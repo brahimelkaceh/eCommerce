@@ -8,9 +8,9 @@ import CategorySlider from "./components/main/CategorySlider";
 import CatArea from "./components/main/CatArea";
 import Trending from "./components/main/Trending";
 import NewArrival from "./components/main/NewArrival";
-import DiscountArea from "./components/main/DiscountArea"
-import PromoServices from "./components/main/PromoServices"
-import Newsletter from './components/main/Newsletter'
+import DiscountArea from "./components/main/DiscountArea";
+import PromoServices from "./components/main/PromoServices";
+import Newsletter from "./components/main/Newsletter";
 
 import "../../assets/css/bootstrap.min.css";
 import "../../assets/css/animate.min.css";
@@ -28,7 +28,6 @@ import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
 import "../../assets/css/fontawesome-all.min.css";
 
-
 const Container = () => {
   return (
     <div>
@@ -40,14 +39,14 @@ const Container = () => {
       <Header />
 
       {/* Main-area */}
-      <Hero/>
-      <CategorySlider/>
-      <CatArea/>
-      <Trending/>
-      <NewArrival/>
+      {/* <Hero/> */}
+      {/* <CategorySlider/> */}
+      {/* <CatArea/> */}
+      <Trending />
+      {/* <NewArrival/>
       <DiscountArea/>
       <PromoServices/>
-      <Newsletter/>
+      <Newsletter/> */}
 
       {/* Footer-area */}
       <Footer />
