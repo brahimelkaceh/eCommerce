@@ -10,6 +10,8 @@ import CancelIcon from "@mui/icons-material/Close";
 import { deleteP, editP } from "../Services";
 import { useProduct } from "../Context";
 import Swal from "sweetalert2";
+import EditProductModal from "./EditProductModal";
+
 import {
   GridRowModes,
   DataGrid,
@@ -36,6 +38,10 @@ export default function AllProducts({ handleOpen }) {
 
   const [rows, setrows] = React.useState(products && products);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
+
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [editingProductId, setEditingProductId] = React.useState(null);
+
   React.useEffect(() => {
     setrows(products);
   }, [products, setrows]);
@@ -47,11 +53,15 @@ export default function AllProducts({ handleOpen }) {
   };
 
   const handleEditClick = (id) => () => {
+    setEditingProductId(id);
+    setShowEditModal(true);
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    
   };
 
   const handleSaveClick = (id) => () => {
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    setShowEditModal(false);
   };
   // sweatAlert
   const handleDeleteClick = (id) => async () => {
@@ -114,7 +124,7 @@ export default function AllProducts({ handleOpen }) {
         if (result.isConfirmed) {
           Swal.fire("Saved!", "", "success");
           console.log(updatedRow.images);
-          editP(ID, { ...updatedRow, images: updatedRow.images[0] })
+          editP(ID, { ...updatedRow, images: updatedRow.images })
             .then((response) => {
               console.log(response);
             })
@@ -129,8 +139,6 @@ export default function AllProducts({ handleOpen }) {
     } catch (error) {
       throw error;
     }
-    // console.log(updatedRow);
-    // console.log(updatedRow.id);
     return updatedRow;
   };
 
@@ -317,16 +325,10 @@ export default function AllProducts({ handleOpen }) {
       cellClassName: "actions",
       getActions: ({ id }) => {
         const rowMode = rowModesModel[id];
-        // console.log(rowMode);
-        // if (!rowMode) {
-        //   // Handle the case where rowModesModel[id] is undefined
-        //   return [];
-        // }
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
+    
         if (rowMode) {
           const isInEditMode = rowMode.mode === GridRowModes.Edit;
-
+    
           if (isInEditMode) {
             return [
               <GridActionsCellItem
@@ -337,10 +339,10 @@ export default function AllProducts({ handleOpen }) {
                   backgroundColor: "#E7FCEF",
                 }}
                 onClick={handleSaveClick(id)}
-                key={id}
+                key={`${id}-save`}
               />,
               <GridActionsCellItem
-                key={id}
+                key={`${id}-cancel`}
                 icon={
                   <CancelIcon
                     sx={{
@@ -359,13 +361,11 @@ export default function AllProducts({ handleOpen }) {
               />,
             ];
           }
-
-          // ... rest of your code
         }
-
+    
         return [
           <GridActionsCellItem
-            key={id}
+            key={`${id}-edit`}
             icon={
               <EditIcon
                 sx={{
@@ -375,13 +375,19 @@ export default function AllProducts({ handleOpen }) {
             }
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={() => {
+              console.log("Editing product with ID:", id);
+              handleEditClick(id)();
+            }}
           />,
           <GridActionsCellItem
-            key={id}
+            key={`${id}-delete`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={() => {
+              console.log("Deleting product with ID:", id);
+              handleDeleteClick(id)();
+            }}
             color="inherit"
             sx={{
               color: "#E33434",
@@ -390,6 +396,7 @@ export default function AllProducts({ handleOpen }) {
         ];
       },
     },
+    
   ];
   const [filterModel, setFilterModel] = React.useState({
     items: [],
@@ -437,6 +444,16 @@ export default function AllProducts({ handleOpen }) {
           setColumnVisibilityModel(newModel)
         }
       />
+      {editingProductId !== null && (
+        <EditProductModal
+          rowData={products.find((row) => row.id === editingProductId)}
+          onSave={(updatedRow) => {
+            processRowUpdate(updatedRow);
+            handleSaveClick(editingProductId)();
+          }}
+          onCancel={handleCancelClick(editingProductId)}
+        />
+      )}
     </Box>
   );
 }

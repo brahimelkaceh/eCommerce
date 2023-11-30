@@ -14,6 +14,8 @@ import {
   updateCategory,
 } from "./CategoriesService";
 
+
+
 const DataSubcategoriesContext = createContext();
 
 export const SubcategoryProvider = ({ children }) => {

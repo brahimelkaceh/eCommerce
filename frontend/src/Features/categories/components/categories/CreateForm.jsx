@@ -36,12 +36,13 @@ const CreateForm = ({ onClose }) => {
             icon: "success",
           });
           console.log(response);
+          setRefresh(new Date().toISOString());
           onClose();
         })
         .catch((error) => {
           console.error("Error occurred: while creating user", error);
         });
-      setRefresh(new Date().toISOString());
+      
     },
   });
   return (

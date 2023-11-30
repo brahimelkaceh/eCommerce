@@ -16,6 +16,8 @@ import Adminroutes from "./utils/adminRoutes";
 import ManagerRoutes from "./utils/ManagerRoutes";
 import ProductDetails from "./Pages/productDetails/ProductDetails";
 import Shop from "./Pages/shop/Shop";
+import CustomerLogin from "./Pages/customerLogin/CustomerLogin";
+
 const App = () => {
   return (
     <Routes>
@@ -41,6 +43,8 @@ const App = () => {
       <Route path="/home" element={<LandingPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
+
+      <Route path="/customerLogin" element={<CustomerLogin />} />
     </Routes>
   );
 };
