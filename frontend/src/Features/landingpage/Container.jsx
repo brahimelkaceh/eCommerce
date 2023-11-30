@@ -37,17 +37,15 @@ const Container = () => {
       <ScrollTop />
       {/* Header-area */}
       <Header />
-
       {/* Main-area */}
-      {/* <Hero/> */}
-      {/* <CategorySlider/> */}
-      {/* <CatArea/> */}
+      <Hero />
+      <CategorySlider />
+      <CatArea />
       <Trending />
-      {/* <NewArrival/>
-      <DiscountArea/>
+      <NewArrival />
+      {/* <DiscountArea/>
       <PromoServices/>
       <Newsletter/> */}
-
       {/* Footer-area */}
       <Footer />
     </div>
