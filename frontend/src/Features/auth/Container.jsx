@@ -23,7 +23,6 @@ const Container = () => {
         `http://localhost:5000/users/login`,
         formdata
       );
-      console.log(response.data);
       localStorage.setItem("userT", JSON.stringify(response.data.data));
       setrole(response.data.user.role);
       setusername(response.data.user.userName);

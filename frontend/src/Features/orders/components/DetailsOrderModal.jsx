@@ -3,7 +3,9 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+import PaymentsIcon from "@mui/icons-material/Payments";
 import ImageIcon from "@mui/icons-material/Image";
+import ContentCut from "@mui/icons-material/ContentCut";
 
 import {
   Avatar,
@@ -12,17 +14,22 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemText,
+  MenuItem,
+  MenuList,
+  Paper,
   Typography,
 } from "@mui/material";
 import { useData } from "../Context";
+import { useState } from "react";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "50%",
-  height: "50%",
+  minHeight: "50%",
   bgcolor: "background.paper",
   // border: "2px solid #000",
 
@@ -33,6 +40,7 @@ const style = {
 
 export default function DetailsOrderModal({ handleClose, open }) {
   const { orderDetailsData } = useData();
+  const [total, setTotal] = useState("");
   // console.log(orderDetailsData);
   const dateObject = new Date(orderDetailsData?.orderDate);
   const options = {
@@ -84,7 +92,7 @@ export default function DetailsOrderModal({ handleClose, open }) {
               }}
             >
               {orderDetailsData?.orderItems?.map((orderItem, i) => {
-                // console.log();
+                console.log(orderDetailsData);
                 return (
                   <React.Fragment key={i}>
                     <ListItem>
@@ -93,7 +101,11 @@ export default function DetailsOrderModal({ handleClose, open }) {
                           <ImageIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                        }}
+                      >
                         <ListItemText
                           primary={orderItem?.product?.productName}
                           secondary={
@@ -114,7 +126,8 @@ export default function DetailsOrderModal({ handleClose, open }) {
                           sx={{
                             display: "flex",
                             justifyContent: "space-between",
-                            gap: "20px",
+                            width: "100%",
+                            gap: "50px",
                           }}
                         >
                           <Typography variant="body2">
@@ -125,10 +138,9 @@ export default function DetailsOrderModal({ handleClose, open }) {
                           </Typography>
                           <Typography variant="body2">
                             Total Amount :{" "}
-                            {orderItem?.product?.options?.map(
-                              (option, i) =>
-                                `$${orderItem?.quantity * option?.price}`
-                            )}
+                            {orderItem?.product?.options?.map((option, i) => {
+                              return `$${orderItem?.quantity * option?.price}`;
+                            })}
                           </Typography>
                         </Box>
                       </Box>
@@ -138,6 +150,40 @@ export default function DetailsOrderModal({ handleClose, open }) {
                 );
               })}
             </List>
+            <Box sx={{ maxWidth: "100%" }}>
+              <MenuItem>
+                <ListItemText>Subtotal :</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  {`$${orderDetailsData?.cartTotalPrice}`}{" "}
+                </Typography>
+              </MenuItem>
+              <MenuItem>
+                <ListItemText>Discount :</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  {`$${orderDetailsData?.cartTotalPrice}`}{" "}
+                </Typography>
+              </MenuItem>
+              <MenuItem>
+                <ListItemText>Estimated Tax :</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                  {`$${orderDetailsData?.cartTotalPrice}`}{" "}
+                </Typography>
+              </MenuItem>
+              <MenuItem>
+                <ListItemText>
+                  <Typography variant="body1" fontWeight="bold">
+                    Total (USD) :
+                  </Typography>
+                </ListItemText>
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  fontWeight="bold"
+                >
+                  {`$${orderDetailsData?.cartTotalPrice}`}{" "}
+                </Typography>
+              </MenuItem>
+            </Box>
           </Box>
         </Fade>
       </Modal>

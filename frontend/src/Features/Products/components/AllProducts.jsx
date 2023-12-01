@@ -113,8 +113,7 @@ export default function AllProducts({ handleOpen }) {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           Swal.fire("Saved!", "", "success");
-          console.log(updatedRow.images);
-          editP(ID, { ...updatedRow, images: updatedRow.images[0] })
+          editP(ID, { ...updatedRow, images: updatedRow.images })
             .then((response) => {
               console.log(response);
             })
@@ -309,10 +308,10 @@ export default function AllProducts({ handleOpen }) {
             label={formatted}
             size="small"
             style={{
-              backgroundColor: "#E5E5E580",
+              backgroundColor: "#C5DCFA",
               textTransform: "capitalize",
               fontWeight: "bold",
-              color: "#616161",
+              color: "#0A3977",
             }}
           ></Chip>
         );

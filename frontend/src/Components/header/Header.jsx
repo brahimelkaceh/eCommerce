@@ -425,7 +425,7 @@ const Header = () => {
       <div
         className="modal fade"
         id="search-modal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-hidden="true"
       >

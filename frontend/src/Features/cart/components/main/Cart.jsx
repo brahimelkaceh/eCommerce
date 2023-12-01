@@ -54,12 +54,12 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {shoppingCart.length >0 &&
+                    {shoppingCart.length > 0 &&
                       shoppingCart.map((product) => (
                         <tr key={product._id}>
                           <td className="product-thumbnail">
                             <a href="shop-details.html">
-                              <img src= {product.images[0]} alt="" />
+                              <img src={product.images[0]} alt="" />
                             </a>
                           </td>
                           <td className="product-name">
@@ -87,23 +87,25 @@ const Cart = () => {
                                   {/* <img src="img/icon/plus.png" alt="" /> */}
 
                                   {/* </span> */}
-                                  <button
-                                    style={{width:'100%'}}
-                                    onClick={() =>
-                                      dispatch({
-                                        type: "INCREMENT",
-                                        id: product._id,
-                                      })
-                                    }
-                                  >
-                                    +
-                                  </button>
+                                  
+                                    <button
+                                      style={{ width: "100%" }}
+                                      onClick={() =>
+                                        dispatch({
+                                          type: "INCREMENT",
+                                          id: product._id,
+                                        })
+                                      }
+                                    >
+                                      +
+                                    </button>
+                                  
                                   {/* <span className="minus dis">
                                   {/* <img src="img/icon/minus.png" alt="" /> */}
                                   {/* - */}
                                   {/* </span> */}
                                   <button
-                                    style={{width:'100%'}}
+                                    style={{ width: "100%" }}
                                     onClick={() =>
                                       dispatch({
                                         type: "DECREMENT",
@@ -125,7 +127,7 @@ const Cart = () => {
                             <i className="flaticon-trash"></i>
                           </a> */}
                             <button
-                              style ={{width: '100%'}}
+                              style={{ width: "100%" }}
                               onClick={() =>
                                 dispatch({
                                   type: "DELETE_PRODUCT",
@@ -145,7 +147,9 @@ const Cart = () => {
                 <div className="cart-coupon">
                   <form action="#">
                     <input type="text" placeholder="Enter Coupon Code..." />
-                    <button className="btn" onClick={handleClick}>Apply Coupon</button>
+                    <button className="btn" onClick={handleClick}>
+                      Apply Coupon
+                    </button>
                   </form>
                 </div>
                 <div className="continue-shopping">

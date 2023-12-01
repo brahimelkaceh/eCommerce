@@ -1,20 +1,17 @@
-import React from 'react'
+import React from "react";
 
 const CatArea = () => {
   return (
-    <section className="category-area pt-100 pb-45">
+    <section className="category-area pt-80 pb-45">
       <div className="container">
         <div className="cat-title-line">
           <div className="row justify-content-center">
             <div className="col-xl-7 col-lg-9">
               <div className="cat-section-title text-center">
-                <div className="icon">
-                  <img src="img/icon/logo_icon.png" alt="" />
-                </div>
-                <span className="sub-title">CHOOSE A TYPE</span>
+                <span className="sub-title">PREMIUM QUALITY</span>
                 <h2 className="title">
-                  Online shopping defined by fashion <br /> popular aesthetic
-                  expression at a particular place
+                  Unlocking inspiration through a one-of-a-kind blend <br /> of
+                  products, creativity, and cultural insight
                 </h2>
               </div>
             </div>
@@ -25,10 +22,10 @@ const CatArea = () => {
             <div className="shop-cat-item">
               <a href="shop-sidebar.html">
                 <div className="icon">
-                  <img src="img/icon/b_cat_icon01.png" alt="" />
+                  <img src="" alt />
                 </div>
                 <p>
-                  King Bread <span>( 9 Items )</span>
+                  Furniture <span>( 9 Items )</span>
                 </p>
               </a>
             </div>
@@ -37,10 +34,10 @@ const CatArea = () => {
             <div className="shop-cat-item">
               <a href="shop-sidebar.html">
                 <div className="icon">
-                  <img src="img/icon/b_cat_icon02.png" alt="" />
+                  <img src="" alt />
                 </div>
                 <p>
-                  Spring Roll <span>( 8 Items )</span>
+                  Electronics <span>( 8 Items )</span>
                 </p>
               </a>
             </div>
@@ -49,10 +46,10 @@ const CatArea = () => {
             <div className="shop-cat-item">
               <a href="shop-sidebar.html">
                 <div className="icon">
-                  <img src="img/icon/b_cat_icon03.png" alt="" />
+                  <img src="" alt />
                 </div>
                 <p>
-                  Donet Sweet <span>( 12 Items )</span>
+                  Jewelry <span>( 12 Items )</span>
                 </p>
               </a>
             </div>
@@ -61,10 +58,10 @@ const CatArea = () => {
             <div className="shop-cat-item">
               <a href="shop-sidebar.html">
                 <div className="icon">
-                  <img src="img/icon/b_cat_icon04.png" alt="" />
+                  <img src="" alt />
                 </div>
                 <p>
-                  Hot Pizza <span>( 10 Items )</span>
+                  Desk Suplies <span>( 10 Items )</span>
                 </p>
               </a>
             </div>
@@ -73,10 +70,10 @@ const CatArea = () => {
             <div className="shop-cat-item">
               <a href="shop-sidebar.html">
                 <div className="icon">
-                  <img src="img/icon/b_cat_icon05.png" alt="" />
+                  <img src="" alt />
                 </div>
                 <p>
-                  Chocolate Cake <span>( 19 Items )</span>
+                  Artifacts <span>( 19 Items )</span>
                 </p>
               </a>
             </div>
@@ -85,6 +82,6 @@ const CatArea = () => {
       </div>
     </section>
   );
-}
+};
 
-export default CatArea
+export default CatArea;

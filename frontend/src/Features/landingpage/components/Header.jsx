@@ -3,32 +3,45 @@ import { CartStore } from "../../cart/components/State/CartContext";
 import { useEffect } from "react";
 const Header = () => {
     const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-   useEffect(() => {
-     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
-     console.log("StoredCart from cartOrders", storedCart)
-     if (!storedCart) {
-       storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
-       console.log("StoredCart from shopOrders", storedCart);
-     }
-     // console.log("storedCart:1", storedCart);
-     dispatch({ type: "SET_TO_CART", payload: storedCart });
-   }, []);
+  useEffect(() => {
+    let storedCart = null;
+    const cartOrders = localStorage.getItem("CartOrders");
+    const shopOrders = localStorage.getItem("ShopOrders");
+
+    try {
+      storedCart = JSON.parse(cartOrders);
+      console.log("StoredCart from CartOrders", storedCart);
+    } catch (error) {
+      console.error("Error parsing CartOrders:", error);
+    }
+
+    if (!storedCart) {
+      try {
+        storedCart = JSON.parse(shopOrders);
+        console.log("StoredCart from ShopOrders", storedCart);
+      } catch (error) {
+        console.error("Error parsing ShopOrders:", error);
+      }
+    }
+
+    if (storedCart !== null) {
+      dispatch({ type: "SET_TO_CART", payload: storedCart });
+    }
+  }, []);
+
   return (
-    <header className="header-style-five header-style-eight">
-      <div className="header-top-wrap">
+    <header className="header-style-six">
+      <div className="header-top-wrap d-none d-md-block">
         <div className="container custom-container-two">
           <div className="row align-items-center justify-content-center">
             <div className="col-sm-6">
               <div className="header-top-link">
                 <ul>
                   <li>
-                    <a href="about-us.html">About US</a>
+                    <span> What’s new? A LOT </span>
                   </li>
                   <li>
-                    <a href="#">FAQS</a>
-                  </li>
-                  <li>
-                    <a href="tel:123456789">PH +1 325 362 3521</a>
+                    <a href="#"> Shop the latest arrivals</a>
                   </li>
                 </ul>
               </div>
@@ -60,7 +73,10 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div id="sticky-header" className="main-header menu-area">
+      <div
+        id="sticky-header"
+        className="main-header menu-area transparent-header"
+      >
         <div className="container custom-container-two">
           <div className="row">
             <div className="col-12">
@@ -69,144 +85,29 @@ const Header = () => {
               </div>
               <div className="menu-wrap">
                 <nav className="menu-nav show">
-                  <div className="logo d-block d-lg-none">
+                  <div className="logo">
                     <a href="index.html">
-                      <img src="img/logo/logo.png" alt="Logo" />
+                      <img src="img/logo/logo.png" height="50px" alt="Logo" />
                     </a>
                   </div>
                   <div className="navbar-wrap main-menu d-none d-lg-flex">
-                    <ul className="navigation left">
+                    <ul className="navigation">
                       <li className="active menu-item-has-children has--mega--menu">
-                        <a href="#">Home</a>
-                        <ul className="mega--menu--wrap scroll">
-                          <li>
-                            <a href="index.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_01.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style One</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-2.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_02.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style Two</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-3.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_03.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style Three</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-4.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_04.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style four</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-5.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_05.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style five</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-6.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_06.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style six</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-7.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_07.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style seven</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="index-8.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_08.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style eight</span>
-                            </a>
-                          </li>
-                          <li className="active">
-                            <a href="index-9.html">
-                              <span className="img">
-                                <img src="img/home-demo/home_09.jpg" alt="" />
-                              </span>
-                              <span className="text">Home style nine</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="has--mega--menu">
-                        <a href="#">Shop</a>
+                        <a href="#">Homeware</a>
                         <ul className="mega-menu">
                           <li className="mega-menu-wrap">
                             <ul className="mega-menu-col">
                               <li className="mega-title">
-                                <a href="shop.html">SHOP PAGES</a>
+                                <a href="shop.html">All Categories</a>
                               </li>
                               <li>
-                                <a href="shop-sidebar.html">Right Sidebar</a>
+                                <a href="shop-details.html">Furniture</a>
                               </li>
                               <li>
-                                <a href="shop-sidebar.html">Left Sidebar</a>
+                                <a href="cart.html">Artifact</a>
                               </li>
                               <li>
-                                <a href="shop.html">Hidden sidebar</a>
-                              </li>
-                              <li>
-                                <a href="shop.html">Filters area</a>
-                              </li>
-                              <li>
-                                <a href="shop-details.html">Shop Details</a>
-                              </li>
-                              <li>
-                                <a href="cart.html">Cart Page</a>
-                              </li>
-                              <li>
-                                <a href="checkout.html">Checkout Page</a>
-                              </li>
-                            </ul>
-                            <ul className="mega-menu-col">
-                              <li className="mega-title">
-                                <a href="#">FEATURES</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">Variable Product</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">External Product</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">Other Shop Pages</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">Categories</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">Collection</a>
-                              </li>
-                              <li>
-                                <a href="shop-sidebar.html">LookBook</a>
-                              </li>
-                              <li>
-                                <a href="cart.html">Shopping Cart</a>
+                                <a href="checkout.html">Wall Art</a>
                               </li>
                             </ul>
                             <ul className="mega-menu-col sub-cat-post">
@@ -216,50 +117,110 @@ const Header = () => {
                                     src="img/product/sub_menu_img01.jpg"
                                     alt=""
                                   />
-                                  <span className="btn">Man Shop</span>
+                                  <span className="btn">Shop Now</span>
                                 </a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                      <li className="has--mega--menu">
+                        <a href="#">Lifestyle</a>
+                        <ul className="mega-menu">
+                          <li className="mega-menu-wrap">
+                            <ul className="mega-menu-col">
+                              <li className="mega-title">
+                                <a href="shop.html">All Categories</a>
+                              </li>
+                              <li>
+                                <a href="shop-details.html">Electronics</a>
+                              </li>
+                              <li>
+                                <a href="cart.html">Desk Supplies</a>
+                              </li>
+                              <li>
+                                <a href="checkout.html">Music</a>
                               </li>
                             </ul>
                             <ul className="mega-menu-col sub-cat-post">
                               <li>
                                 <a href="shop-sidebar.html">
                                   <img
-                                    src="img/product/sub_menu_img02.jpg"
+                                    src="img/product/sub_menu_img01.jpg"
                                     alt=""
                                   />
-                                  <span className="btn">Women’s Shop</span>
+                                  <span className="btn">Shop Now</span>
                                 </a>
                               </li>
                             </ul>
                           </li>
                         </ul>
                       </li>
-                      <li>
-                        <a href="shop.html">Sale</a>
-                      </li>
-                      <li>
-                        <a href="about-us.html">About Us</a>
-                      </li>
-                    </ul>
-                    <div className="logo">
-                      <a href="index.html">
-                        <img src="img/logo/h9_logo.png" alt="Logo" />
-                      </a>
-                    </div>
-                    <ul className="navigation right">
-                      <li className="menu-item-has-children">
-                        <a href="#">blog</a>
-                        <ul className="submenu">
-                          <li>
-                            <a href="blog.html">Our Blog</a>
-                          </li>
-                          <li>
-                            <a href="blog-details.html">Blog Details</a>
+
+                      <li className="has--mega--menu">
+                        <a href="#">Accessories</a>
+                        <ul className="mega-menu">
+                          <li className="mega-menu-wrap">
+                            <ul className="mega-menu-col">
+                              <li className="mega-title">
+                                <a href="shop.html">All Categories</a>
+                              </li>
+                              <li>
+                                <a href="shop-sidebar.html">Bags</a>
+                              </li>
+                              <li>
+                                <a href="shop.html">Caps & Scarves</a>
+                              </li>
+                              <li>
+                                <a href="shop-details.html">Sunglasses</a>
+                              </li>
+                            </ul>
+                            <ul className="mega-menu-col sub-cat-post">
+                              <li>
+                                <a href="shop-sidebar.html">
+                                  <img
+                                    src="img/product/sub_menu_img01.jpg"
+                                    alt=""
+                                  />
+                                  <span className="btn">Shop Now</span>
+                                </a>
+                              </li>
+                            </ul>
                           </li>
                         </ul>
                       </li>
-                      <li>
-                        <a href="contact.html">Contact Us</a>
+
+                      <li className="has--mega--menu">
+                        <a href="#">✦ Gifts ✦</a>
+                        <ul className="mega-menu">
+                          <li className="mega-menu-wrap">
+                            <ul className="mega-menu-col">
+                              <li className="mega-title">
+                                <a href="shop.html">All Categories</a>
+                              </li>
+                              <li>
+                                <a href="shop-sidebar.html">Gift Sets</a>
+                              </li>
+                              <li>
+                                <a href="shop-sidebar.html">Luxe Gifts</a>
+                              </li>
+                              <li>
+                                <a href="shop.html">Responsible Gifts</a>
+                              </li>
+                            </ul>
+                            <ul className="mega-menu-col sub-cat-post">
+                              <li>
+                                <a href="shop-sidebar.html">
+                                  <img
+                                    src="img/product/sub_menu_img01.jpg"
+                                    alt=""
+                                  />
+                                  <span className="btn">Shop Now</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
                       </li>
                     </ul>
                   </div>
@@ -412,7 +373,12 @@ const Header = () => {
                 <nav className="menu-box">
                   <div className="nav-logo">
                     <a href="index.html">
-                      <img src="img/logo/logo.png" alt="" title="" />
+                      <img
+                        src="img/logo/logo.png"
+                        height="50px"
+                        alt=""
+                        title=""
+                      />
                     </a>
                   </div>
                   <div className="menu-outer">
@@ -438,13 +404,13 @@ const Header = () => {
                           <li>
                             <a href="index-6.html">Home Six</a>
                           </li>
-                          <li>
+                          <li className="active">
                             <a href="index-7.html">Home Seven</a>
                           </li>
                           <li>
                             <a href="index-8.html">Home Eight</a>
                           </li>
-                          <li className="active">
+                          <li>
                             <a href="index-9.html">Home Nine</a>
                           </li>
                         </ul>
@@ -562,13 +528,13 @@ const Header = () => {
                 <div className="content-inner">
                   <div className="logo mb-30">
                     <a href="index.html">
-                      <img src="img/logo/logo.png" alt="" />
+                      <img src="img/logo/logo.png" height="80px" alt="" />
                     </a>
                   </div>
                   <div className="content-box">
                     <p>
-                      WooCommerce and WordPress are both free, open source
-                      software reasons many ...
+                      Explore our curated collection of vintage treasures and
+                      unique finds...
                     </p>
                   </div>
                   <div className="contact-info">
@@ -576,14 +542,14 @@ const Header = () => {
                     <ul>
                       <li>
                         <span className="flaticon-phone-call"></span>
-                        <a href="tel:123456789">+9 325 444 0000</a>
+                        <a href="tel:123456789">+9 911 121 0000</a>
                       </li>
                       <li>
                         <span className="flaticon-email"></span>
-                        <a href="mailto:adara@info.com">adara@info.com</a>
+                        <a href="mailto:adara@info.com">urbangoodiz@info.com</a>
                       </li>
                       <li>
-                        <span className="flaticon-place"></span>71 Park Lan
+                        <span className="flaticon-place"></span>71 South Park
                         Street 2355 NY
                       </li>
                     </ul>

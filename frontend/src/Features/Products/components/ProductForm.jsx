@@ -86,6 +86,7 @@ const ProductForm = ({ open, onClose }) => {
             formData.append(key, value);
           }
         });
+        console.log(formData);
         onClose();
         Swal.fire({
           title: "Do you want to create this product?",

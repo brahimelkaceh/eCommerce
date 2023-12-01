@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Categories = ({ catData, SubcatData }) => {
+const Categories = ({ catData, SubcatData, onSubcategoryClick }) => {
   return (
     <div className="widget">
       {catData &&
@@ -14,10 +14,15 @@ const Categories = ({ catData, SubcatData }) => {
                   (subcategory) => subcategory.categoryId._id === category._id
                 ).map((subcategory) => (
                   <li key={subcategory._id}>
-                    <Link to={`/5000/${subcategory._id}`}>
+                    <a
+                      onClick={() => onSubcategoryClick(subcategory._id)}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
                       {subcategory.subCategoryName}{" "}
                       <i className="fas fa-angle-double-right" />
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
