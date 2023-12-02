@@ -1,6 +1,10 @@
 import React from "react";
+import { useSubCatData } from "../../../categories/Context";
+import { useProduct } from "../../../Products/Context";
 
 const CatArea = () => {
+  const { catData } = useSubCatData();
+
   return (
     <section className="category-area pt-80 pb-45">
       <div className="container">
@@ -18,66 +22,22 @@ const CatArea = () => {
           </div>
         </div>
         <div className="row justify-content-center">
-          <div className="col">
-            <div className="shop-cat-item">
-              <a href="shop-sidebar.html">
-                <div className="icon">
-                  <img src="" alt />
+          {catData?.map((category) => {
+            return (
+              <div key={category.id} className="col">
+                <div className="shop-cat-item">
+                  <a href="shop-sidebar.html">
+                    <div className="icon">
+                      <img src="" alt />
+                    </div>
+                    <p>
+                      {category.categoryName} <span>( 9 Items )</span>
+                    </p>
+                  </a>
                 </div>
-                <p>
-                  Furniture <span>( 9 Items )</span>
-                </p>
-              </a>
-            </div>
-          </div>
-          <div className="col">
-            <div className="shop-cat-item">
-              <a href="shop-sidebar.html">
-                <div className="icon">
-                  <img src="" alt />
-                </div>
-                <p>
-                  Electronics <span>( 8 Items )</span>
-                </p>
-              </a>
-            </div>
-          </div>
-          <div className="col">
-            <div className="shop-cat-item">
-              <a href="shop-sidebar.html">
-                <div className="icon">
-                  <img src="" alt />
-                </div>
-                <p>
-                  Jewelry <span>( 12 Items )</span>
-                </p>
-              </a>
-            </div>
-          </div>
-          <div className="col">
-            <div className="shop-cat-item">
-              <a href="shop-sidebar.html">
-                <div className="icon">
-                  <img src="" alt />
-                </div>
-                <p>
-                  Desk Suplies <span>( 10 Items )</span>
-                </p>
-              </a>
-            </div>
-          </div>
-          <div className="col">
-            <div className="shop-cat-item">
-              <a href="shop-sidebar.html">
-                <div className="icon">
-                  <img src="" alt />
-                </div>
-                <p>
-                  Artifacts <span>( 19 Items )</span>
-                </p>
-              </a>
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

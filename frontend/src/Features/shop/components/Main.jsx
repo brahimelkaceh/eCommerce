@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useProduct } from "../../Products/Context";
 import { Link } from "react-router-dom";
 import { useSubCatData } from "../../categories/Context";
 import Categories from "./widgets/Categories";
 import Products from "./widgets/Products";
+import { useProduct } from "../../Products/Context";
 
 const Main = () => {
   const { products: allProducts } = useProduct();

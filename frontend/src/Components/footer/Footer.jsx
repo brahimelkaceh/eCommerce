@@ -1,6 +1,10 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
+import logoWhite from "../../assets/img/logo/logo-white.png";
+import { useSubCatData } from "../../Features/categories/Context";
 const Footer = () => {
+  const { catData } = useSubCatData();
+
   return (
     <footer className="gray-bg footer-style-two pt-75">
       <div className="container">
@@ -8,9 +12,9 @@ const Footer = () => {
           <div className="row">
             <div className="col-12">
               <div className="footer-logo">
-                <a href="index.html">
-                  <img src="img/logo/logo-white.png" height="80px" alt="" />
-                </a>
+                <Link to="/home">
+                  <img src={logoWhite} height="80px" alt="" />
+                </Link>
               </div>
             </div>
           </div>
@@ -58,15 +62,13 @@ const Footer = () => {
                 <h4 className="fw-title">Category</h4>
                 <div className="fw-link">
                   <ul>
-                    <li>
-                      <a href="shop-sidebar.html">Homeware</a>
-                    </li>
-                    <li>
-                      <a href="shop-sidebar.html">Lifestyle</a>
-                    </li>
-                    <li>
-                      <a href="shop-sidebar.html">Accessories</a>
-                    </li>
+                    {catData?.slice(0, 3)?.map((category) => (
+                      <li key={category.id}>
+                        <Link to="" href="shop-sidebar.html">
+                          {category.categoryName}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>

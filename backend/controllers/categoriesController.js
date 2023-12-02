@@ -113,6 +113,7 @@ exports.searchCategory = async (req, res, next) => {
 exports.showAllCategories = async (req, res) => {
   try {
     const Categories = await Category.find().sort({ _id: "descending" });
+    console.log(Categories);
     res.json({ data: Categories.map((p) => p.toObject({ getters: true })) });
   } catch (err) {
     console.error(err);

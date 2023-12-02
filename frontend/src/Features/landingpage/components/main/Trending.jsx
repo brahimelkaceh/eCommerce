@@ -34,7 +34,6 @@ const Trending = () => {
                   </div>
                   <div className="row trending-product-active">
                     {products?.slice(0, 4).map((product) => {
-                      console.log(product);
                       return (
                         <div className="col" key={product?._id}>
                           <div className="features-product-item">

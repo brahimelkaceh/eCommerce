@@ -1,8 +1,6 @@
 import React from "react";
 import Preloader from "./components/Preloader";
 import ScrollTop from "./components/ScrollTop";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import Hero from "./components/main/Hero";
 import CategorySlider from "./components/main/CategorySlider";
 import CatArea from "./components/main/CatArea";
@@ -27,6 +25,8 @@ import "../../assets/css/default.css";
 import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
 import "../../assets/css/fontawesome-all.min.css";
+import Header from "../../Components/header/Header";
+import Footer from "../../Components/footer/Footer";
 
 const Container = () => {
   return (
@@ -43,9 +43,9 @@ const Container = () => {
       <CatArea />
       <Trending />
       <NewArrival />
-      {/* <DiscountArea/>
-      <PromoServices/>
-      <Newsletter/> */}
+      <DiscountArea />
+      <PromoServices />
+      <Newsletter />
       {/* Footer-area */}
       <Footer />
     </div>

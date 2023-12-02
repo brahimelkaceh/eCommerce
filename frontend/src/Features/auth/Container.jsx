@@ -66,7 +66,7 @@ const Container = () => {
             type="password"
             onChange={handlechange}
           />
-          <button defaultValue="Login" className="btn" type="submit">
+          <button defaultValue="Login" className="login-btn" type="submit">
             Submit
           </button>
         </div>

@@ -30,6 +30,6 @@ Router.put(
   updateCategory
 );
 Router.delete("/categories/:id", ManagerTokenCheck, deleteCategory);
-Router.get("/categories/", ManagerTokenCheck, showAllCategories);
-Router.get("/categories/:id", ManagerTokenCheck, getCategoryById);
+Router.get("/categories/", showAllCategories);
+Router.get("/categories/:id", getCategoryById);
 module.exports = Router;
