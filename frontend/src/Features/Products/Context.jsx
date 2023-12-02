@@ -87,10 +87,11 @@ export const ProductProvider = ({ children }) => {
   };
 
   const fetchProductByIdAndUpdateState = async (productId) => {
-    const product = await fetchProductByIdFromService(productId);
-    if (product) {
-      setProducts((prevProducts) => [...prevProducts, { ...product }]);
-    }
+    const product = await getP(productId);
+    console.log(product);
+    // if (product) {
+    //   setProducts((prevProducts) => [...prevProducts, { ...product }]);
+    // }
   };
 
   useEffect(() => {

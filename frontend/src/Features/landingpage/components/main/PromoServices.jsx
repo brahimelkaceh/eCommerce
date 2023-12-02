@@ -1,5 +1,8 @@
 import React from "react";
-
+import promo_icon01 from "../../../../assets/img/icon/promo_icon01.png";
+import promo_icon02 from "../../../../assets/img/icon/promo_icon02.png";
+import promo_icon03 from "../../../../assets/img/icon/promo_icon03.png";
+import promo_icon04 from "../../../../assets/img/icon/promo_icon04.png";
 const PromoServices = () => {
   return (
     <main>
@@ -9,7 +12,7 @@ const PromoServices = () => {
             <div className="col-lg-3 col-md-6 col-sm-8">
               <div className="promo-services-item mb-40">
                 <div className="icon">
-                  <img src="img/icon/promo_icon01.png" alt />
+                  <img src={promo_icon01} alt />
                 </div>
                 <div className="content">
                   <h6>payment &amp; delivery</h6>
@@ -20,7 +23,7 @@ const PromoServices = () => {
             <div className="col-lg-3 col-md-6 col-sm-8">
               <div className="promo-services-item mb-40">
                 <div className="icon">
-                  <img src="img/icon/promo_icon02.png" alt />
+                  <img src={promo_icon02} alt />
                 </div>
                 <div className="content">
                   <h6>Eco-Friendly Shopping</h6>
@@ -31,7 +34,7 @@ const PromoServices = () => {
             <div className="col-lg-3 col-md-6 col-sm-8">
               <div className="promo-services-item mb-40">
                 <div className="icon">
-                  <img src="img/icon/promo_icon03.png" alt />
+                  <img src={promo_icon03} alt />
                 </div>
                 <div className="content">
                   <h6>Money back guarantee</h6>
@@ -42,7 +45,7 @@ const PromoServices = () => {
             <div className="col-lg-3 col-md-6 col-sm-8">
               <div className="promo-services-item mb-40">
                 <div className="icon">
-                  <img src="img/icon/promo_icon04.png" alt />
+                  <img src={promo_icon04} alt />
                 </div>
                 <div className="content">
                   <h6>Quality support</h6>

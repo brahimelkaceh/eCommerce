@@ -1,8 +1,12 @@
+
+import React ,{useEffect} from "react";
 import { Link } from "react-router-dom";
-import React, {  useEffect } from "react";
+import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
+
 const Products = ({ products }) => {
-  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  const { getProductById } = useProduct();
+   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     console.log("ShoppingCart: ", shoppingCart);
 
@@ -25,7 +29,12 @@ const Products = ({ products }) => {
             <div key={product.id} className="col-xl-4 col-sm-6">
               <div className="new-arrival-item text-center mb-50">
                 <div className="thumb mb-25">
-                  <Link to={`/shop-details/${product.id}`}>
+                  <Link
+                    to={`/shop/${product.id}`}
+                    onClick={() => {
+                      getProductById(product.id);
+                    }}
+                  >
                     <img src={product.images[0]} alt={product.productName} />
                   </Link>
                   <div className="product-overlay-action">
@@ -36,13 +45,16 @@ const Products = ({ products }) => {
                         </a>
                       </li>
                       <li>
-                        <a href="shop-details.html">
+                        <Link to={`/shop/${product.id}`}>
                           <i className="far fa-eye" />
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
-                  <button
+                  {/* <button title="Add To Cart" className="add-to-cart">
+                    Add To Cart
+                  </button> */}
+                       <button
                     title="Add To Cart"
                     className="add-to-cart"
                     onClick={() =>

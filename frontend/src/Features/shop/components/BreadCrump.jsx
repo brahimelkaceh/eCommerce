@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import background from "../../../assets/img/bread-crumb-wallpaper.jpg";
 const BreadCrumb = () => {
   return (
     <div>
       <section
         className="breadcrumb-area breadcrumb-bg"
-        data-background="img/bg/breadcrumb_bg01.jpg"
+        data-background={background}
       >
         <div className="container">
           <div className="row">

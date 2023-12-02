@@ -4587,7 +4587,7 @@ header.side-header {
   margin-left: -100px;
 }
 .discount-end-time-wrap {
-  background-image: url(../img/bg/end_time_bg.jpg);
+  background-image: url(../img/bg/pexels-heather-bozman-1058770.jpg);
   text-align: center;
   margin-left: 80px;
   background-position: center;
@@ -4874,7 +4874,7 @@ header.side-header {
   flex: 0 0 18.41%;
 }
 .trending-product-grid .col-10 {
-  max-width: 81.59%;
+  max-width: 100%;
   flex: 0 0 81.59%;
 }
 .trending-products-list {
@@ -4935,7 +4935,7 @@ header.side-header {
   display: block;
 }
 .trending-products-banner img {
-  /* max-width: 100%; */
+  max-width: 100%;
 }
 .tp-tab-content .trending-product-active {
   margin: 0;

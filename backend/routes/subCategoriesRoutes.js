@@ -21,8 +21,8 @@ Router.post(
   createSubCategory
 );
 Router.get("/subcategories/search", searchSubCategory);
-Router.get("/subcategories/", ManagerTokenCheck, getAllSubcategories);
-Router.get("/subcategories/:id", ManagerTokenCheck, getSubCategoryById);
+Router.get("/subcategories/", getAllSubcategories);
+Router.get("/subcategories/:id", getSubCategoryById);
 Router.put(
   "/subcategories/:id",
   ManagerTokenCheck,

@@ -348,7 +348,7 @@ const Header = () => {
                           </li>
                           <li>
                             <div className="checkout-link">
-                              <a href="#">Shopping Cart</a>
+                              <a href="cart">Shopping Cart</a>
                               <a className="black-color" href="#">
                                 Checkout
                               </a>

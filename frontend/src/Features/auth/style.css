@@ -63,13 +63,13 @@
   font-size: 1.3em;
 }
 
-.btn {
+.login-btn {
   background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
   color: #fff;
   padding: 16px !important;
 }
 
-.btn:hover {
+.login-btn:hover {
   background: linear-gradient(
     144deg,
     var(--blue-backround),

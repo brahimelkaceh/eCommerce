@@ -7,7 +7,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -22,6 +22,20 @@ const Lists = ({ open }) => {
   const { userData } = UserC();
   return userData.role === "admin" ? (
     <List>
+      <NavLink to="/home">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <HomeIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
       <NavLink to="/">
         <ListItem disablePadding>
           <ListItemButton>
@@ -109,6 +123,20 @@ const Lists = ({ open }) => {
     </List>
   ) : (
     <List>
+      <NavLink to="/home">
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <HomeIcon
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+      </NavLink>
       <NavLink to="/">
         <ListItem disablePadding>
           <ListItemButton>
@@ -123,6 +151,7 @@ const Lists = ({ open }) => {
           </ListItemButton>
         </ListItem>
       </NavLink>
+
       <NavLink to="/orders">
         <ListItem disablePadding>
           <ListItemButton>
