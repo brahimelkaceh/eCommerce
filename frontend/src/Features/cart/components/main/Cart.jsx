@@ -90,11 +90,13 @@ const Cart = () => {
                                   
                                     <button
                                       style={{ width: "100%" }}
-                                      onClick={() =>
-                                        dispatch({
-                                          type: "INCREMENT",
-                                          id: product._id,
-                                        })
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      dispatch({
+                                        type: "INCREMENT",
+                                        id: product._id,
+                                      })
+                                    }
                                       }
                                     >
                                       +
@@ -106,11 +108,13 @@ const Cart = () => {
                                   {/* </span> */}
                                   <button
                                     style={{ width: "100%" }}
-                                    onClick={() =>
+                                    onClick={(e) => {
+                                      e.preventDefault();
                                       dispatch({
                                         type: "DECREMENT",
                                         id: product._id,
                                       })
+                                    }
                                     }
                                   >
                                     -
