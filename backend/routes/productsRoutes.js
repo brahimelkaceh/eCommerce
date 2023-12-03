@@ -11,6 +11,7 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
+    getProductsByCategory
 } = require("../controllers/productsController");
 
 const validatorSanitizer = require("../middlewares/validator");
@@ -33,6 +34,7 @@ Router.put(
 
 // TokenCheck
 Router.get("/products/", ManagerTokenCheck, getAllProducts);
+Router.get("/shop", getProductsByCategory)
 Router.get("/products/search", ManagerTokenCheck, searchProducts);
 Router.get("/products/:id", ManagerTokenCheck, getProductById);
 Router.delete("/products/:id", ManagerTokenCheck, deleteProduct);
