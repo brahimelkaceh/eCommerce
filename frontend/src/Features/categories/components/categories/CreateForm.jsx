@@ -24,7 +24,7 @@ const CreateForm = ({ onClose }) => {
       active: false,
     },
     validationSchema: yup.object({
-      categoryName: yup.string().required("Subcategory Name is required"),
+      categoryName: yup.string().required("category Name is required"),
       active: yup.boolean(),
     }),
     onSubmit: (values) => {
@@ -73,7 +73,7 @@ const CreateForm = ({ onClose }) => {
           <TextField
             id="categoryName"
             name="categoryName"
-            label="Subcategory Name"
+            label="category Name"
             variant="outlined"
             sx={{ gridColumn: "span 2" }}
             size="small"
