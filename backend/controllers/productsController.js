@@ -58,7 +58,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       //   : [],
       active,
     });
-    console.log(options);
+    // console.log(options);
     await newProduct.save();
 
     res.status(201).json({

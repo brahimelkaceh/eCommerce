@@ -32,7 +32,6 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    minLength: 10,
   },
   creationDate: {
     type: Date,
@@ -51,7 +50,7 @@ const customerSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   orders: [
     {
@@ -59,6 +58,7 @@ const customerSchema = new mongoose.Schema({
       ref: "OrdersModel",
     },
   ],
+  activationToken: { type: String },
 });
 
 // customerSchema.pre("save", async function (next) {

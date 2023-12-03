@@ -36,6 +36,7 @@ const CreateForm = ({ onClose }) => {
             icon: "success",
           });
           console.log(response);
+          setRefresh(new Date().toISOString());
           onClose();
           setRefresh(new Date().getMilliseconds());
         })

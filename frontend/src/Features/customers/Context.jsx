@@ -14,7 +14,7 @@ export const CustomerProvider = ({ children }) => {
           const utcDate = new Date(dateString); // Original date in UTC
           return utcDate; // Convert to string in the desired format
         };
-        console.log(Response.data.data);
+        // console.log(Response.data.data);
         const customersWithId = Response.data.data.customers.map((customer) => ({
           ...customer,
           id: customer._id,
@@ -42,11 +42,32 @@ export const CustomerProvider = ({ children }) => {
     }
   };
 
+const loginCustomer = async (email, password) => {
+  try {
+    const response = await fetch("http://localhost:5000/customers/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+  }
+}
+
   const customerContextValue = {
     customers,
     setCustomers,
     setRefresh,
-    getCustomerById
+    getCustomerById,
+    loginCustomer
   };
 
   return (
