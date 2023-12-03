@@ -1,11 +1,15 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, IconButton, TextField } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DoneIcon from "@mui/icons-material/Done";
 import { createCustomer } from "../service";
-import {useCustomer} from "../Context"
- import Swal from "sweetalert2"
+import { useCustomer } from "../Context";
+import Swal from "sweetalert2";
+import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CancelIcon from "@mui/icons-material/Cancel";
+
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -33,9 +37,9 @@ const checkoutSchema = yup.object().shape({
     .required("Password confirmation is required"),
 });
 
-const Formm = ({open,onClose}) => {
+const Formm = ({ open, onClose }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-const {setRefresh} = useCustomer()
+  const { setRefresh } = useCustomer();
   const handleFormSubmit = (values, { resetForm }) => {
     console.log(values);
     try {
@@ -57,6 +61,12 @@ const {setRefresh} = useCustomer()
     } catch (err) {
       console.error("Error occurred during createCustomer:", error);
     }
+  };
+
+  const handleDeleteImage = (index) => {
+    const updatedImages = [...values.images];
+    updatedImages.splice(index, 1);
+    setFieldValue("images", updatedImages);
   };
 
   return (
@@ -179,7 +189,7 @@ const {setRefresh} = useCustomer()
                 helperText={touched.confirmPassword && errors.confirmPassword}
                 sx={{ gridColumn: "span 2" }}
               />
-              <Field
+              {/* <Field
                 name="images"
                 render={({ field }) => (
                   <div>
@@ -204,7 +214,65 @@ const {setRefresh} = useCustomer()
                     )}
                   </div>
                 )}
-              />
+              /> */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  width: "fit-content",
+                }}
+              >
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                >
+                  Upload Images
+                  <VisuallyHiddenInput
+                    type="file"
+                    multiple
+                    name="images"
+                    onChange={(event) => {
+                      setFieldValue("images", event.target.files[0]); // Set the image file directly
+                    }}
+                  />
+                </Button>
+                {values.images.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "fit-content",
+                    }}
+                  >
+                    {Array.from(values.images).map((file, index) => {
+                      console.log(file);
+                      return (
+                        <div
+                          key={index}
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Uploaded Image ${index}`}
+                            style={{
+                              maxWidth: "100px",
+                              maxHeight: "100px",
+                              margin: "5px",
+                            }}
+                          />
+                          <IconButton
+                            variant="outlined"
+                            color="error"
+                            onClick={() => handleDeleteImage(index)}
+                          >
+                            <CancelIcon></CancelIcon>
+                          </IconButton>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </Box>
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
               <Button

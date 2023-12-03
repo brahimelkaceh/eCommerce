@@ -23,7 +23,6 @@ const Container = () => {
             <Grid item xs={8}>
               <Box
                 sx={{
-                  height: "100%",
                   background: "#fff",
                   borderRadius: "var(--border-radius)",
                   width: "100%",

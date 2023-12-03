@@ -9,7 +9,7 @@ const apiService = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
+    "Authorization": `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
   },
 });
 
@@ -21,8 +21,26 @@ const getToken = () => {
   return token;
 };
 
+const handleRequest = async (method, endpoint, data = null) => {
+  try {
+    const response = await apiService({
+      method,
+      url: endpoint,
+      data,
+    });
+    console.log("response", response);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const getProducts = async () => apiService.get("/");
-export const getP = async (id) => apiService.get(`/${id}`);
+export const getP = async (id) => await apiService.get(`/${id}`);
+export const fetcProductById = (id) => {
+  console.log(id);
+  handleRequest("get", `${id}`);
+};
+
 export const createP = async (newProductData) =>
   apiService.post(`/`, newProductData);
 export const deleteP = async (id) => apiService.delete(`/${id}`);

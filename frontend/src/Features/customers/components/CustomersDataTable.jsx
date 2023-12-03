@@ -18,7 +18,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomArrayItem } from "@mui/x-data-grid-generator";
-import { Chip } from "@mui/material";
+import { Avatar, Chip } from "@mui/material";
 
 const active = [true, false];
 const randomActive = () => {
@@ -32,6 +32,7 @@ export default function allCustomers() {
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
   React.useEffect(() => {
     setrows(CustomerContext.customers);
+    console.log(CustomerContext.customers);
   }, [CustomerContext.customers]);
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -48,37 +49,37 @@ export default function allCustomers() {
   };
 
   const handleDeleteClick = (id) => () => {
-      try {
-        Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            DeleteCustomer(id).then((response) => {
-              console.log(response);
-            });
-            setrows(rows.filter((row) => row.id !== id));
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-          }
-        });
-      } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-          footer: '<a href="#">Why do I have this issue?</a>',
-        });
-        throw err;
-      }
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          DeleteCustomer(id).then((response) => {
+            console.log(response);
+          });
+          setrows(rows.filter((row) => row.id !== id));
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+      throw err;
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -102,33 +103,33 @@ export default function allCustomers() {
     const ID = updatedRow.id;
     delete updatedRow.isNew;
     delete updatedRow.password;
-     try {
-       Swal.fire({
-         title: "Do you want to save the changes?",
-         showDenyButton: true,
-         showCancelButton: true,
-         confirmButtonText: "Save",
-         denyButtonText: `Don't save`,
-       }).then((result) => {
-         /* Read more about isConfirmed, isDenied below */
-         if (result.isConfirmed) {
-           Swal.fire("Saved!", "", "success");
-           console.log(updatedRow);
-           editCustomer(ID, updatedRow)
-             .then((response) => {
-               console.log(response);
-             })
-             .catch((error) => {
-               Swal.fire("Error occurred: while editing Customer", error);
-               console.error("Error occurred: while editing Customer", error);
-             });
-         } else if (result.isDenied) {
-           Swal.fire("Changes are not saved", "", "info");
-         }
-       });
-     } catch (error) {
-       throw error;
-     }
+    try {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          console.log(updatedRow);
+          editCustomer(ID, updatedRow)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing Customer", error);
+              console.error("Error occurred: while editing Customer", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
     console.log(updatedRow);
     console.log(updatedRow.id);
     return updatedRow;
@@ -139,6 +140,21 @@ export default function allCustomers() {
   };
 
   const columns = [
+    {
+      field: "images",
+      headerName: "Avatar",
+      renderCell: (params) => {
+        return (
+          <Avatar
+            src={
+              params.value
+                ? params?.formattedValue[0]
+                : "https://themesbrand.com/velzon/html/saas/assets/images/products/img-6.png"
+            }
+          />
+        );
+      },
+    },
     { field: "userName", headerName: "UserName", width: 180, editable: true },
     {
       field: "firstName",
@@ -161,29 +177,64 @@ export default function allCustomers() {
       headerName: "Email",
       align: "left",
       headerAlign: "left",
-      editable: true,
       flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
-      type: "date",
-      editable: true,
       flex: 1,
+      renderCell: (params) => {
+        const dateObject = new Date(params.value);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        const formatted = dateObject.toLocaleDateString(undefined, options);
+
+        return (
+          <Chip
+            label={formatted}
+            size="small"
+            style={{
+              backgroundColor: "#C5DCFA80",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              color: "#0F56B3",
+            }}
+          />
+        );
+      },
     },
+    // {
+    //   field: "lastLogin",
+    //   headerName: "Last Login",
+    //   type: "date",
+    //   flex: 1,
+    //   editable: true,
+    // },
+    // {
+    //   field: "lastUpdate",
+    //   headerName: "Last Update",
+    //   type: "date",
+    //   flex: 1,
+    //   editable: true,
+    // },
     {
-      field: "lastLogin",
-      headerName: "Last Login",
-      type: "date",
-      flex: 1,
+      field: "active",
+      headerName: "Status",
       editable: true,
-    },
-    {
-      field: "lastUpdate",
-      headerName: "Last Update",
-      type: "date",
-      flex: 1,
-      editable: true,
+      valueOptions: [true, false],
+      type: "boolean",
+
+      renderCell: (params) => (
+        <Chip
+          label={params.value === true ? "active" : "block"}
+          size="small"
+          style={{
+            backgroundColor: params.value === true ? "#CFF8E0" : "#F9D2D2",
+            textTransform: "capitalize",
+            fontWeight: "bold",
+            color: params.value === true ? "#1F8B24" : "#E64B4B",
+          }}
+        ></Chip>
+      ),
     },
     {
       field: "actions",

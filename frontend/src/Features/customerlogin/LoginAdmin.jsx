@@ -3,22 +3,25 @@ import "./Form.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCustomer } from "../customers/Context";
+import { ErrorMessage, useFormik } from "formik";
+import { initialValues, validationSchema } from "./loginPameters/FormSettings";
+import TextField from "@mui/material/TextField";
+import SuccessAlert from "./components/SuccessAlert";
+import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
+import * as Yup from "yup";
 
 const LoginAdmin = () => {
   const navigate = useNavigate();
   const [isActive, setActive] = useState(false);
-  const [buttonclicked, setbuttonclicked] = useState(true);
+  const [loading, isLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const buttonref = useRef(null);
 
   const { loginCustomer } = useCustomer();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [image, setImage] = useState("");
 
   const [formValues, setFormValues] = useState({
     username: "",
@@ -28,6 +31,44 @@ const LoginAdmin = () => {
     password: "",
     confirmPassword: "",
     image: "",
+  });
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      // console.log(values);
+      handleSignup(values);
+    },
+  });
+
+  const loginForm = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object().shape({
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      handleSignin(values);
+    },
   });
 
   const handleInputChange = (e) => {
@@ -39,20 +80,22 @@ const LoginAdmin = () => {
     });
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    Object.entries(formValues).forEach(([key, value]) => {
-      if (key === "images") {
-        for (let i = 0; i < value.length; i++) {
-          console.log("image", value[i]);
-          formData.append("images", value[i]);
-        }
-      } else {
-        formData.append(key, value);
-      }
-    });
-
+  const handleSignup = async (formData) => {
+    // console.log(formData);
+    // return;
+    // e.preventDefault();
+    // const formData = new FormData();
+    // Object.entries(formValues).forEach(([key, value]) => {
+    //   if (key === "images") {
+    //     for (let i = 0; i < value.length; i++) {
+    //       console.log("image", value[i]);
+    //       formData.append("images", value[i]);
+    //     }
+    //   } else {
+    //     formData.append(key, value);
+    //   }
+    // });
+    isLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/customers/signup",
@@ -63,9 +106,21 @@ const LoginAdmin = () => {
           },
         }
       );
-      console.log("Signup successful:", response.data);
-      navigate("/shop");
+      console.log("Signup successful:", response.data?.status);
+
+      if (response.data?.status == "success") {
+        handleClick();
+        formik.handleReset();
+        setActive(false);
+        isLoading(false);
+        setMessage(response.data?.message);
+      }
+
+      // return;
+      // navigate("/customerLogin");
     } catch (error) {
+      isLoading(false);
+
       console.error("Error signing up:", error);
     }
   };
@@ -92,164 +147,204 @@ const LoginAdmin = () => {
     };
   }, []);
 
-  const handleSignin = async (e) => {
-    e.preventDefault();
+  const handleSignin = async (formData) => {
+    isLoading(true);
     try {
       // console.log(email, password);
-      const response = await loginCustomer(email, password);
-      console.log("Login successful:", response.data);
-      navigate("/shop");
-      setEmail("");
-      setPassword("");
+      const response = await loginCustomer(formData.email, formData.password);
+      // console.log("Login successful:", response.status);
+      if (response.status == "success") {
+        isLoading(false);
+        handleClick();
+        setAlertMessage("Congratulations on Your Successful Login!");
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
 
   return (
-    <div className={`app__form cnt ${isActive ? "right-panel-active" : ""}`}>
-      <div className="form-container sign-up-container">
-        {/* <form action="#">
-          <h1>Create Account</h1>
-          <input
-            type="text"
-            id="up_firstName"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            type="text"
-            id="up_lastName"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <input
-            type="text"
-            id="up_username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="email"
-            id="up_email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            id="up_password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            id="up_confirmPassword"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <input
-            type="file"
-            id="up_image"
-            placeholder="Enter your image"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          <button onClick={handleSignup}>Sign Up</button>
-        </form> */}
-        <form>
-          <h1>Create Account</h1>
-          <input
-            type="text"
-            name="userName"
-            placeholder="Username"
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            onChange={handleInputChange}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleInputChange}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleInputChange}
-          />
-          <input
-            type="password"
-            name="passwordConfirm"
-            placeholder="Confirm Password"
-            onChange={handleInputChange}
-          />
-          <input
+    <>
+      {open && (
+        <SuccessAlert
+          handleClose={handleClose}
+          open={open}
+          message={alertMessage}
+        />
+      )}
+      <div className={`app__form cnt ${isActive ? "right-panel-active" : ""}`}>
+        <div className="form-container sign-up-container">
+          {loading && (
+            <Stack sx={{ width: "100%", color: "grey.500" }} spacing={2}>
+              <LinearProgress color="secondary" />
+            </Stack>
+          )}
+          <form onSubmit={formik.handleSubmit}>
+            <h1>Create Account</h1>
+            <TextField
+              type="text"
+              className="input-field"
+              size="small"
+              name="userName"
+              placeholder="Username"
+              onChange={formik.handleChange}
+              value={formik.userName}
+              error={formik.touched.userName && Boolean(formik.errors.userName)}
+              helperText={formik.touched.userName && formik.errors.userName}
+            />
+
+            <TextField
+              type="text"
+              className="input-field"
+              size="small"
+              name="firstName"
+              placeholder="First Name"
+              onChange={formik.handleChange}
+              value={formik.firstName}
+              error={
+                formik.touched.firstName && Boolean(formik.errors.firstName)
+              }
+              helperText={formik.touched.firstName && formik.errors.firstName}
+            />
+            <TextField
+              className="input-field"
+              size="small"
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              onChange={formik.handleChange}
+              value={formik.lastName}
+              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+              helperText={formik.touched.lastName && formik.errors.lastName}
+            />
+            <TextField
+              className="input-field"
+              size="small"
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={formik.handleChange}
+              value={formik.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              className="input-field"
+              size="small"
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={formik.handleChange}
+              value={formik.password}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+            <TextField
+              className="input-field"
+              size="small"
+              type="password"
+              name="passwordConfirm"
+              placeholder="Confirm Password"
+              onChange={formik.handleChange}
+              value={formik.passwordConfirm}
+              error={
+                formik.touched.passwordConfirm &&
+                Boolean(formik.errors.passwordConfirm)
+              }
+              helperText={
+                formik.touched.passwordConfirm && formik.errors.passwordConfirm
+              }
+            />
+            {/* <input
             type="file"
             name="images"
             placeholder="Enter your image"
             onChange={handleInputChange}
-          />
-          <button onClick={handleSignup}>Sign Up</button>
-        </form>
-      </div>
-      <div className="form-container sign-in-container">
-        <form action="#">
-          <h1>Sign in</h1>
-          <input
-            type="email"
-            id="in_email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            id="in_password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <a href="#">Forgot your password?</a>
-          <button onClick={handleSignin}>Sign In</button>
-        </form>
-      </div>
-      <div className="overlay-container">
-        <div className="overlay">
-          <div className="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>
-              To keep connected with us please login with your personal info
-            </p>
-            <button className="ghost" id="signIn" ref={buttonref}>
-              Sign In
-            </button>
-          </div>
-          <div className="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start the journey with us</p>
-            <button className="ghost" id="signUp">
+          /> */}
+            <button
+              type="submit"
+              // onClick={handleSignup}
+            >
               Sign Up
             </button>
+          </form>
+        </div>
+        <div className="form-container sign-in-container">
+          {loading && (
+            <Stack sx={{ width: "100%", color: "grey.500" }} spacing={2}>
+              <LinearProgress color="secondary" />
+            </Stack>
+          )}
+          <form onSubmit={loginForm.handleSubmit}>
+            <h1>Sign in</h1>
+            <TextField
+              size="small"
+              className="input-field"
+              type="email"
+              name="email"
+              id="in_email"
+              placeholder="Email"
+              value={loginForm.values.email}
+              onChange={loginForm.handleChange}
+              error={loginForm.touched.email && Boolean(loginForm.errors.email)}
+              helperText={loginForm.touched.email && loginForm.errors.email}
+              // value={email}
+              // onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              size="small"
+              className="input-field"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={loginForm.values.password}
+              onChange={loginForm.handleChange}
+              error={
+                loginForm.touched.password && Boolean(loginForm.errors.password)
+              }
+              helperText={
+                loginForm.touched.password && loginForm.errors.password
+              }
+              // value={password}
+              // onChange={(e) => setPassword(e.target.value)}
+            />
+            <a
+              href="https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox"
+              target="_blank"
+            >
+              {message}
+            </a>
+            <button
+              // onClick={handleSignin}
+              type="submit"
+            >
+              Sign In
+            </button>
+          </form>
+        </div>
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1>Welcome Back!</h1>
+              <p>
+                To keep connected with us please login with your personal info
+              </p>
+              <button className="ghost" id="signIn" ref={buttonref}>
+                Sign In
+              </button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1>Hello, Friend!</h1>
+              <p>Enter your personal details and start the journey with us</p>
+              <button className="ghost" id="signUp">
+                Sign Up
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

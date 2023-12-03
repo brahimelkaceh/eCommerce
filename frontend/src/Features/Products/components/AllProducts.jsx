@@ -7,10 +7,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { deleteP, editP } from "../Services";
+import { deleteP, editP, getP } from "../Services";
 import { useProduct } from "../Context";
 import Swal from "sweetalert2";
-import EditProductModal from "./EditProductModal";
+import EditProductModal from "./edit/EditProductModal";
 
 import {
   GridRowModes,
@@ -20,26 +20,14 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { randomArrayItem } from "@mui/x-data-grid-generator";
 import { Chip, Typography } from "@mui/material";
 
-const roles = ["manager", "admin"];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-const active = [true, false];
-const randomActive = () => {
-  return randomArrayItem(active);
-};
-
-export default function AllProducts({ handleOpen }) {
-  const { products, getProductById, editProduct, deleteProductById } =
-    useProduct();
+export default function AllProducts() {
+  const { products, getProductById } = useProduct();
 
   const [rows, setrows] = React.useState(products && products);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
-
-  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [editingProductId, setEditingProductId] = React.useState(null);
 
   React.useEffect(() => {
@@ -53,7 +41,6 @@ export default function AllProducts({ handleOpen }) {
   };
 
   const handleEditClick = (id) => () => {
-    setEditingProductId(id);
     setShowEditModal(true);
     setrowsmodesmodel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
@@ -384,9 +371,10 @@ export default function AllProducts({ handleOpen }) {
             }
             label="Edit"
             className="textPrimary"
-            onClick={() => {
-              console.log("Editing product with ID:", id);
-              handleEditClick(id)();
+            onClick={async () => {
+              setOpen(true);
+              setEditingProductId(id);
+              getProductById(id);
             }}
           />,
           <GridActionsCellItem
@@ -413,55 +401,54 @@ export default function AllProducts({ handleOpen }) {
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
   return (
-    <Box
-      sx={{
-        height: "100%",
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-        backgroundColor: "#fff",
-        p: 1,
-        borderRadius: 2,
-        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: GridToolbar,
-        }}
-        // slotProps={{
-        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
-        // }}
-        disableColumnFilter
-        disableDensitySelector
-        filterModel={filterModel}
-        onFilterModelChange={(newModel) => setFilterModel(newModel)}
-        columnVisibilityModel={columnVisibilityModel}
-        onColumnVisibilityModelChange={(newModel) =>
-          setColumnVisibilityModel(newModel)
-        }
-      />
-      {editingProductId !== null && (
+    <>
+      {open && (
         <EditProductModal
-          rowData={products.find((row) => row.id === editingProductId)}
-          onSave={(updatedRow) => {
-            processRowUpdate(updatedRow);
-            handleSaveClick(editingProductId)();
-          }}
-          onCancel={handleCancelClick(editingProductId)}
-        />
+          open={open}
+          setOpen={setOpen}
+          id={editingProductId}
+        ></EditProductModal>
       )}
-    </Box>
+      <Box
+        sx={{
+          height: "100%",
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
+          backgroundColor: "#fff",
+          p: 1,
+          borderRadius: 2,
+          boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+        }}
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          // slotProps={{
+          //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
+          // }}
+          disableColumnFilter
+          disableDensitySelector
+          filterModel={filterModel}
+          onFilterModelChange={(newModel) => setFilterModel(newModel)}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColumnVisibilityModel(newModel)
+          }
+        />
+      </Box>
+    </>
   );
 }

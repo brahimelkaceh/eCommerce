@@ -23,7 +23,7 @@
   overflow: hidden;
   width: 770px;
   max-width: 100%;
-  min-height: 480px;
+  min-height: 70%;
 }
 
 .app__form h1 {
@@ -96,14 +96,20 @@
   text-align: center;
 }
 
-.app__form input {
+.app__form .input-field {
   font-family: "Lato", sans-serif;
   background-color: #f9f9f9;
   border: none;
   border-radius: 3px;
-  padding: 12px 15px;
-  margin: 8px 0;
+  padding: 2px 15px;
+  margin-bottom: 2px;
   width: 100%;
+}
+.app__form .input-field > p {
+  margin: 0;
+}
+.app__form .input-field:last-of-type {
+  margin-bottom: 15px;
 }
 
 .form-container {

@@ -2,9 +2,12 @@ import React from "react";
 import { useSubCatData } from "../../../Features/categories/Context";
 import logo from "../../../assets/img/logo/logo.png";
 import { Link } from "react-router-dom";
+import { useCustomer } from "../../../Features/customers/Context";
 
 const StickyHeader = () => {
   const { catData, SubcatData } = useSubCatData();
+  const { customer } = useCustomer();
+  console.log(customer);
 
   return (
     <div
@@ -74,6 +77,7 @@ const StickyHeader = () => {
                     <li className="header-profile">
                       <a href="#">
                         <i className="flaticon-user"></i>
+                        customer
                       </a>
                     </li>
                     <li className="header-wishlist">

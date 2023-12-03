@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCustomers } from "./service";
 export const CustomerContext = createContext();
@@ -6,6 +5,7 @@ export const CustomerContext = createContext();
 export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [customer, setCustomer] = useState("");
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -15,13 +15,12 @@ export const CustomerProvider = ({ children }) => {
           return utcDate; // Convert to string in the desired format
         };
         // console.log(Response.data.data);
-        const customersWithId = Response.data.data.customers.map((customer) => ({
-          ...customer,
-          id: customer._id,
-          creationDate: formatDate(customer.creationDate),
-          lastLogin: formatDate(customer.lastLogin),
-          lastUpdate: formatDate(customer.lastUpdate),
-        }));
+        const customersWithId = Response.data.data.customers.map(
+          (customer) => ({
+            ...customer,
+            id: customer._id,
+          })
+        );
 
         setCustomers(customersWithId);
       } catch (error) {
@@ -33,7 +32,9 @@ export const CustomerProvider = ({ children }) => {
 
   const getCustomerById = async (customerId) => {
     try {
-      const response = await fetch(`http://localhost:5000/customers/${customerId}`);
+      const response = await fetch(
+        `http://localhost:5000/customers/${customerId}`
+      );
       const data = await response.json();
       // console.log('customer: ', data.data);
       return data.data;
@@ -42,32 +43,35 @@ export const CustomerProvider = ({ children }) => {
     }
   };
 
-const loginCustomer = async (email, password) => {
-  try {
-    const response = await fetch("http://localhost:5000/customers/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error("Error logging in:", error);
-  }
-}
+  const loginCustomer = async (email, password) => {
+    try {
+      const response = await fetch("http://localhost:5000/customers/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      setCustomer(data);
+      console.log(customer);
+      return data;
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
 
   const customerContextValue = {
     customers,
+    customer,
     setCustomers,
     setRefresh,
     getCustomerById,
-    loginCustomer
+    loginCustomer,
   };
 
   return (

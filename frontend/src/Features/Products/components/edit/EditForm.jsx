@@ -22,13 +22,13 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { useProduct } from "../Context";
-import { createP } from "../Services";
-import validationSchema from "./manageProducts/validationSchema";
-import initialValues from "./manageProducts/InitialValues";
-import { useSubCatData } from "../../categories/Context";
+import { useProduct } from "../../Context";
+import { createP } from "../../Services";
+import validationSchema from "../manageProducts/validationSchema";
+import initialValues from "../manageProducts/InitialValues";
+import { useSubCatData } from "../../../categories/Context";
 import { useTheme } from "@mui/material/styles";
-import { VisuallyHiddenInput } from "../../../Components/mui/MuiStyles";
+import { VisuallyHiddenInput } from "../../../../Components/mui/MuiStyles";
 
 // Input styling
 
@@ -52,7 +52,7 @@ function getStyles(name, size, theme) {
   };
 }
 
-const ProductForm = ({ open, onClose }) => {
+const EditForm = ({ onClose }) => {
   const theme = useTheme();
   const sizes = ["S", "M", "L", "XL"];
   const colors = ["PINK", "PURPLE", "RED", "GREEN", "BLUE"];
@@ -132,7 +132,7 @@ const ProductForm = ({ open, onClose }) => {
         position: "relative",
       }}
     >
-      <h1 className="main-title">add new Product</h1>
+      <h1 className="main-title">Edit Product</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -532,4 +532,4 @@ const ProductForm = ({ open, onClose }) => {
   );
 };
 
-export default ProductForm;
+export default EditForm;

@@ -10,6 +10,7 @@ import {
   editP,
   getProducts,
   getP,
+  fetcProductById,
 } from "./Services";
 import axios from "axios";
 
@@ -87,18 +88,25 @@ export const ProductProvider = ({ children }) => {
   };
 
   const fetchProductByIdAndUpdateState = async (productId) => {
-    const product = await getP(productId);
-    console.log(product);
-    // if (product) {
-    //   setProducts((prevProducts) => [...prevProducts, { ...product }]);
-    // }
+    try {
+      const product = await getP(productId);
+      return product;
+    } catch (error) {
+      console.error(`Error fetching product with ID ${productId}:`, error);
+      return null;
+    }
   };
-
+  const getProductById = async (id) => {
+    try {
+      const fetcProduct = await fetcProductById(id);
+    } catch (error) {
+      console.error("Error fetching subcategory:", error);
+    }
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await getProducts();
-        console.log("hello I am data", response);
         const productsWithId = response.data.data.map((product) => ({
           ...product,
           id: product._id,
@@ -121,6 +129,7 @@ export const ProductProvider = ({ children }) => {
     fetchProductById: fetchProductByIdAndUpdateState,
     updateProducts,
     setRefresh,
+    getProductById,
   };
 
   return (

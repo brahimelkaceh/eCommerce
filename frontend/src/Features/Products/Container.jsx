@@ -8,6 +8,7 @@ import ProductsModal from "./components/ProductsModal";
 import AllProducts from "./components/AllProducts";
 import { ProductProvider, useProduct } from "./Context";
 import { SubcategoryProvider } from "../categories/Context";
+import EditProductModal from "./components/edit/EditProductModal";
 
 const Container = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -20,7 +21,6 @@ const Container = () => {
   const handleCloseFormModal = () => {
     setFormModalOpen(false);
   };
-  console.log("inside container");
 
   return (
     <>
