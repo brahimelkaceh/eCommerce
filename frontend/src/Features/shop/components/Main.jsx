@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useProduct } from "../../Products/Context";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSubCatData } from "../../categories/Context";
 import Categories from "./widgets/Categories";
 import Products from "./widgets/Products";
+import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
   const { products: allProducts } = useProduct();
@@ -11,14 +12,48 @@ const Main = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
+  const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const categoryId = new URLSearchParams(location.search).get("category");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/shop?category=${categoryId}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${JSON.parse(localStorage.getItem("userT"))}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Response is not in JSON format");
+        }
+
+        const data = await response.json();
+        console.log(data)
+        setProducts(data.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    if (categoryId) {
+      fetchProducts();
+    }
+  }, [categoryId]);
+
   useEffect(() => {
     if (selectedSubcategory) {
-      const subcategoryId = selectedSubcategory;
-      const filtered = allProducts.filter((product) => {
-        console.log("product", product.subCategoryId);
-        // console.log('selected sub', subcategoryId);
-        return product.subCategoryId._id === subcategoryId;
-      });
+      const filtered = allProducts.filter(
+        (product) => product.subCategoryId._id === selectedSubcategory
+      );
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts(allProducts);
@@ -31,6 +66,7 @@ const Main = () => {
 
   const handleResetSubcategory = () => {
     setSelectedSubcategory(null);
+    navigate("/shop")
   };
 
   return (
@@ -87,7 +123,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <Products products={filteredProducts} />
+              <Products products={categoryId ? products : filteredProducts} />
             </div>
           </div>
         </div>

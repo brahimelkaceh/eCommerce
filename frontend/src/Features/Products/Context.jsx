@@ -93,6 +93,7 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
