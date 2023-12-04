@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useProduct } from "../../Context";
 import { getP } from "../../Services";
 import { useParams } from "react-router-dom";
+import { CartStore } from "../../../cart/components/State/CartContext";
 const Main = () => {
+    const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   const { fetchProductById } = useProduct();
   const [product, setproduct] = useState(null);
   const { id } = useParams();
@@ -18,7 +20,19 @@ const Main = () => {
     };
     getProuctData();
   }, []);
+  useEffect(() => {
+  const storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
+  // console.log("storedCart:1", storedCart);
+  dispatch({ type: "SET_TO_CART", payload: storedCart });
+}, []);
 
+  useEffect(() => {
+  // console.log("shopingCart: ", shoppingCart);
+  localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
+  localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
+
+  console.log("CartOrders: ", JSON.parse(localStorage.getItem("CartOrders")));
+}, [shoppingCart]);
   return (
     <div>
       {product && (
@@ -109,7 +123,9 @@ const Main = () => {
                     <i className="fas fa-star" />
                   </div>
                   <p className="style-name">Product Sku:{product.sku}</p>
-                  <div className="price">Price : {product.discountPrice}</div>
+                  <div className="price">
+                    Price : {product.options[0].price}
+                  </div>
                   <div className="product-details-info">
                     <div className="sidebar-product-size mb-30">
                       <h4 className="widget-title">Product Size</h4>
@@ -147,30 +163,45 @@ const Main = () => {
                   </div>
                   <div className="perched-info">
                     <div className="cart-plus-minus">
-                      <form action="#" className="num-block">
+                      {/* <form action="#" className="num-block">
+                        {console.log(product)}
                         <input
                           type="text"
                           className="in-num"
-                          defaultValue={1}
-                          readOnly
+                          value={product.orderQty}
+                          readonly=""
+                          max={product.quantity + 1}
                         />
-                        <div className="qtybutton-box">
-                          <span className="plus">
+                        {/* <div className="qtybutton-box">
+                          {/* <span className="plus">
                             <img src="img/icon/plus.png" alt />
-                          </span>
-                          <span className="minus dis">
+                          </span> *}
+                          {/* <span className="minus dis">
                             <img src="img/icon/minus.png" alt />
-                          </span>
-                        </div>
-                      </form>
+                          </span> */}
+                        {/* </div> */} 
+                      {/* </form> */}
                     </div>
-                    <a href="#" className="btn">
+                    {/* <a href="#" className="btn">
                       add to cart
-                    </a>
+                    </a> */}
+                    <button
+                      title="Add To Cart"
+                      className="add-to-cart"
+                      onClick={() =>
+                        dispatch({
+                          type: "ADD_TO_CART",
+                          product: product,
+                          id: product._id,
+                        })
+                      }
+                    >
+                      Add To Cart
+                    </button>
                     <div className="wishlist-compare">
                       <ul>
                         <li>
-                          <a href="#">
+                          <a  href="#">
                             <i className="far fa-heart" /> Add to Wishlist
                           </a>
                         </li>

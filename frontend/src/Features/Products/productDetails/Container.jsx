@@ -5,24 +5,26 @@ import Footer from "../../../Components/footer/Footer";
 import BreadCrumb from "./components/BreadCrump";
 import Header from "../../../Components/header/Header";
 import Main from "./components/Main";
-
+import CartContextStore from "../../cart/components/State/CartContext";
 const Container = () => {
   return (
     <div>
       {/* Prealoader */}
       {/* <Preloader /> */}
       {/* Scroll-top */}
-      <ScrollTop />
-      {/* Header */}
-      <Header />
+      <CartContextStore>
+        <ScrollTop />
+        {/* Header */}
+        <Header />
 
-      {/* Main */}
-      <BreadCrumb />
+        {/* Main */}
+        <BreadCrumb />
 
-      <Main />
+        <Main />
 
-      {/* Footer */}
-      <Footer />
+        {/* Footer */}
+        <Footer />
+      </CartContextStore>
     </div>
   );
 };

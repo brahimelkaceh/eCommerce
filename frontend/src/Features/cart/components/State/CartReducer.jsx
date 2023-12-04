@@ -1,3 +1,5 @@
+import { SubcategoryProvider } from "../../../categories/Context";
+
 export const CartReducer = (state, action) => {
   const { shoppingCart, qty, totalPrice } = state;
   //  console.log("shoppingLocalStorage ", shoppingCart);
@@ -14,6 +16,7 @@ export const CartReducer = (state, action) => {
       console.log("I am in Cart Reducer : myAction ", action);
       subTotal = 0;
       ProductQty = 0;
+      console.log("reducer", action);
       if (action.payload) {
          action.payload.forEach((product) => {
            subTotal += product.orderQty * product.options[0].price;
