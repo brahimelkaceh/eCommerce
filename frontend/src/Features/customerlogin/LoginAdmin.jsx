@@ -157,7 +157,7 @@ const LoginAdmin = () => {
         isLoading(false);
         handleClick();
         setAlertMessage("Congratulations on Your Successful Login!");
-        navigate("/home");
+        navigate("/customerProfile");
       }
     } catch (error) {
       console.error("Login failed:", error);

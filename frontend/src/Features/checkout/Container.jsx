@@ -1,15 +1,14 @@
 import React from "react";
-import Header from "../landingpage/components/Header";
 import Main from "./components/Main";
-import Footer from "../landingpage/components/Footer";
 import ScrollTop from "../landingpage/components/ScrollTop";
 import Preloader from "../landingpage/components/Preloader";
-
+import Header from "../../Components/header/Header";
+import Footer from "../../Components/footer/Footer";
 const Container = () => {
   return (
     <>
       {/* Preloader */}
-      <Preloader />
+      {/* <Preloader /> */}
       {/* scroll-top */}
       <ScrollTop />
       {/* Header */}

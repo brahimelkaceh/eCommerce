@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   return (
@@ -16,7 +17,7 @@ const Main = () => {
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
+                      <Link to="/home">Home</Link>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
                       Checkout
@@ -37,9 +38,9 @@ const Main = () => {
               <div className="checkout-wrap">
                 <div className="checkout-top">
                   <h5 className="title">Billing details</h5>
-                  <a href="cart.html" className="back">
+                  <Link to="/cart" className="back">
                     <i className="fas fa-angle-left" /> -- Back to Cart
-                  </a>
+                  </Link>
                 </div>
                 <form action="#" className="checkout-form">
                   <div className="row">
@@ -61,32 +62,17 @@ const Main = () => {
                     </div>
                     <div className="col-12">
                       <div className="form-grp">
-                        <label htmlFor="cName">
-                          COMPANY NAME <small>(OPTIONAL)</small>
-                        </label>
-                        <input type="text" id="cName" />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-grp">
-                        <label>
-                          COUNTRY / REGION <span>*</span>
-                        </label>
-                        <select className="custom-select" />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-grp">
                         <label htmlFor="address">
                           STREET ADDRESS <span>*</span>
                         </label>
                         <input type="text" id="address" />
                       </div>
                     </div>
+
                     <div className="col-sm-6">
                       <div className="form-grp">
                         <label>
-                          TOWN / CITY <span>*</span>
+                          CITY <span>*</span>
                         </label>
                         <select className="custom-select">
                           <option value="Illinois">Illinois</option>
@@ -98,21 +84,7 @@ const Main = () => {
                         </select>
                       </div>
                     </div>
-                    <div className="col-sm-6">
-                      <div className="form-grp">
-                        <label>
-                          STATE <span>*</span>
-                        </label>
-                        <select className="custom-select">
-                          <option value="New York">New York</option>
-                          <option value="California">California</option>
-                          <option value="Los Angeles">Los Angeles</option>
-                          <option value="Chicago">Chicago</option>
-                          <option value="Illinois">Illinois</option>
-                          <option value="Houston">Houston</option>
-                        </select>
-                      </div>
-                    </div>
+
                     <div className="col-sm-6">
                       <div className="form-grp">
                         <label htmlFor="zip">
@@ -121,7 +93,7 @@ const Main = () => {
                         <input type="text" id="zip" />
                       </div>
                     </div>
-                    <div className="col-sm-6">
+                    <div className="col-sm-12">
                       <div className="form-grp">
                         <label htmlFor="phone">
                           Your PHONE <span>*</span>
@@ -137,18 +109,7 @@ const Main = () => {
                         <input type="email" id="email" />
                       </div>
                     </div>
-                    <div className="col-12">
-                      <div className="different-address custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="stda"
-                        />
-                        <label className="custom-control-label" htmlFor="stda">
-                          SHIP TO A DIFFERENT ADDRESS?
-                        </label>
-                      </div>
-                    </div>
+
                     <div className="col-12">
                       <div className="form-grp mb-0">
                         <label htmlFor="message">
@@ -182,20 +143,8 @@ const Main = () => {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="customCheck1"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="customCheck1"
-                            >
-                              FLAT RATE: $15
-                            </label>
-                          </div>
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
                               id="customCheck2"
+                              checked
                             />
                             <label
                               className="custom-control-label"
@@ -204,9 +153,6 @@ const Main = () => {
                               FREE SHIPPING
                             </label>
                           </div>
-                          <a href="#" className="calculate">
-                            Calculate shipping
-                          </a>
                         </div>
                       </li>
                       <li className="cart-total-amount">
@@ -221,6 +167,7 @@ const Main = () => {
                             type="checkbox"
                             className="custom-control-input"
                             id="customCheck5"
+                            checked
                           />
                           <label
                             className="custom-control-label"
@@ -229,24 +176,6 @@ const Main = () => {
                             Cash on delivery
                           </label>
                           <p>Pay with cash upon delivery.</p>
-                        </div>
-                      </div>
-                      <div className="paypal-method-flex">
-                        <div className="custom-control custom-checkbox">
-                          <input
-                            type="checkbox"
-                            className="custom-control-input"
-                            id="customCheck6"
-                          />
-                          <label
-                            className="custom-control-label"
-                            htmlFor="customCheck6"
-                          >
-                            Payments on Card
-                          </label>
-                        </div>
-                        <div className="paypal-logo">
-                          <img src="img/images/card.png" alt />
                         </div>
                       </div>
                     </div>

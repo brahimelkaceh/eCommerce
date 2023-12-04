@@ -25,17 +25,15 @@ import "../../assets/css/default.css";
 import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
 import "../../assets/css/fontawesome-all.min.css";
-// import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
 import Header from "../../Components/header/Header";
 
 const Container = () => {
-  console.log("Container home");
   return (
     <CartContextStore>
       <div>
         {/* Preloader */}
-        <Preloader />
+        {/* <Preloader /> */}
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header-area */}
