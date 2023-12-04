@@ -1,9 +1,28 @@
-import React from "react";
+
+import React,{useEffect} from "react";
 import { useProduct } from "../../../Products/Context";
 import banner from "../../../../assets/img/banner.webp";
-
+import { CartStore } from "../../../cart/components/State/CartContext";
 const Trending = () => {
   const { products } = useProduct();
+    const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+    useEffect(() => {
+      console.log("ShoppingCart: ", shoppingCart);
+
+      const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
+      // console.log("storedCart:1", storedCart);
+      dispatch({ type: "SET_TO_CART", payload: storedCart });
+    }, []);
+    useEffect(() => {
+      // console.log("shopingCart: ", shoppingCart);
+      localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
+      localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
+
+      console.log(
+        "ShopOrders: ",
+        JSON.parse(localStorage.getItem("ShopOrders"))
+      );
+    }, [shoppingCart]);
   return (
     <main>
       <section className="trending-product-area trending-product-two gray-bg pt-95 pb-100">
@@ -108,8 +127,23 @@ const Trending = () => {
                                 </ul>
                               </div>
                             </div>
-                            <div className="features-product-cart">
+                            {/* <div className="features-product-cart">
                               <a href="cart.html">add to cart</a>
+                            </div> */}
+                             <div className="features-product-cart">
+                              <button
+                                title="Add To Cart"
+                                className="add-to-cart"
+                                onClick={() =>
+                                  dispatch({
+                                    type: "ADD_TO_CART",
+                                    product: product,
+                                    id: product._id,
+                                  })
+                                }
+                              >
+                                 ADD TO CART 
+                              </button>
                             </div>
                           </div>
                         </div>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import Preloader from "./components/Preloader";
 import ScrollTop from "./components/ScrollTop";
@@ -9,7 +10,7 @@ import NewArrival from "./components/main/NewArrival";
 import DiscountArea from "./components/main/DiscountArea";
 import PromoServices from "./components/main/PromoServices";
 import Newsletter from "./components/main/Newsletter";
-
+import CartContextStore from "../cart/components/State/CartContext";
 import "../../assets/css/bootstrap.min.css";
 import "../../assets/css/animate.min.css";
 import "../../assets/css/magnific-popup.css";
@@ -25,12 +26,15 @@ import "../../assets/css/default.css";
 import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
 import "../../assets/css/fontawesome-all.min.css";
-import Header from "../../Components/header/Header";
+// import Header from "../../Components/header/Header";
+import Header from "./components/Header"
 import Footer from "../../Components/footer/Footer";
 
 const Container = () => {
   return (
+    <CartContextStore>
     <div>
+      
       {/* Preloader */}
       <Preloader />
       {/* Scroll-top */}
@@ -48,7 +52,8 @@ const Container = () => {
       <Newsletter />
       {/* Footer-area */}
       <Footer />
-    </div>
+      </div>
+      </CartContextStore>
   );
 };
 

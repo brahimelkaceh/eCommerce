@@ -167,7 +167,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       userName,
       firstName,
       lastName,
-      images: uploadedImages.map((image) => image.imageUrl),
+      images: uploadedImages.length? uploadedImages.map((image) => image.imageUrl):req.body.images,
       email,
     },
     { new: true, runValidators: true },
