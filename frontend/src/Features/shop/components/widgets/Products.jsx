@@ -1,12 +1,11 @@
-
-import React ,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
 
 const Products = ({ products }) => {
-  const { getProductById } = useProduct();
-   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  // const { getProductById } = useProduct();
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     console.log("ShoppingCart: ", shoppingCart);
 
@@ -31,9 +30,9 @@ const Products = ({ products }) => {
                 <div className="thumb mb-25">
                   <Link
                     to={`/shop/${product.id}`}
-                    onClick={() => {
-                      getProductById(product.id);
-                    }}
+                    // onClick={() => {
+                    //   getProductById(product.id);
+                    // }}
                   >
                     <img src={product.images[0]} alt={product.productName} />
                   </Link>
@@ -54,7 +53,7 @@ const Products = ({ products }) => {
                   {/* <button title="Add To Cart" className="add-to-cart">
                     Add To Cart
                   </button> */}
-                       <button
+                  <button
                     title="Add To Cart"
                     className="add-to-cart"
                     onClick={() =>

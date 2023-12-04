@@ -1,4 +1,3 @@
-
 import React from "react";
 import Preloader from "./components/Preloader";
 import ScrollTop from "./components/ScrollTop";
@@ -27,33 +26,33 @@ import "../../assets/css/style.css";
 import "../../assets/css/responsive.css";
 import "../../assets/css/fontawesome-all.min.css";
 // import Header from "../../Components/header/Header";
-import Header from "./components/Header"
 import Footer from "../../Components/footer/Footer";
+import Header from "../../Components/header/Header";
 
 const Container = () => {
+  console.log("Container home");
   return (
     <CartContextStore>
-    <div>
-      
-      {/* Preloader */}
-      <Preloader />
-      {/* Scroll-top */}
-      <ScrollTop />
-      {/* Header-area */}
-      <Header />
-      {/* Main-area */}
-      <Hero />
-      <CategorySlider />
-      <CatArea />
-      <Trending />
-      <NewArrival />
-      <DiscountArea />
-      <PromoServices />
-      <Newsletter />
-      {/* Footer-area */}
-      <Footer />
+      <div>
+        {/* Preloader */}
+        <Preloader />
+        {/* Scroll-top */}
+        <ScrollTop />
+        {/* Header-area */}
+        <Header />
+        {/* Main-area */}
+        <Hero />
+        <CategorySlider />
+        <CatArea />
+        <Trending />
+        <NewArrival />
+        <DiscountArea />
+        <PromoServices />
+        <Newsletter />
+        {/* Footer-area */}
+        <Footer />
       </div>
-      </CartContextStore>
+    </CartContextStore>
   );
 };
 

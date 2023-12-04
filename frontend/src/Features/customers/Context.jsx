@@ -56,9 +56,7 @@ export const CustomerProvider = ({ children }) => {
         }),
       });
       const data = await response.json();
-      console.log(data);
       setCustomer(data);
-      console.log(customer);
       return data;
     } catch (error) {
       console.error("Error logging in:", error);
@@ -84,7 +82,7 @@ export const CustomerProvider = ({ children }) => {
 export const useCustomer = () => {
   const context = useContext(CustomerContext);
   if (!context) {
-    throw new Error("customer must be used within a ProductProvider");
+    throw new Error("customer must be used within a CustomerProvider");
   }
   return context;
 };

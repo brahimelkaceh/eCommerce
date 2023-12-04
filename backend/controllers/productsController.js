@@ -28,7 +28,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(
-        new AppError("Can't find the corresponding subcategory", 404),
+        new AppError("Can't find the corresponding subcategory", 404)
       );
     }
 
@@ -80,7 +80,7 @@ exports.getAllProducts = async (req, res, next) => {
       .paginate();
     const products = await features.query.populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     // SEND RESPONSE
@@ -102,7 +102,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   try {
     const product = await Products.findOne(searchParams).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
@@ -129,7 +129,7 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   try {
     const product = await Products.findById(id).populate(
       "subCategoryId",
-      "subCategoryName",
+      "subCategoryName"
     );
 
     if (!product) {
@@ -138,8 +138,8 @@ exports.getProductById = catchAsync(async (req, res, next) => {
         message: CONSTANTS.PRODUCTS_NOT_FOUND,
       });
     }
-
-    return res.status(CONSTANTS.SERVER_FOUND_HTTP_CODE).json({
+    console.log("done working");
+    return res.status(200).json({
       status: "success",
       message: CONSTANTS.PRODUCTS_FOUND,
       data: product.toObject({ getters: true }),
@@ -162,8 +162,8 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       return next(
         new AppError(
           "Invalid 'options' format. It should be an array of objects.",
-          400,
-        ),
+          400
+        )
       );
     }
     const updatedProduct = await Products.findByIdAndUpdate(
@@ -177,7 +177,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
-      },
+      }
     ).populate("subCategoryId", "subCategoryName");
     console.log(updatedProduct);
     if (!updatedProduct) {

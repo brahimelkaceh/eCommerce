@@ -2,11 +2,11 @@ import React from "react";
 import Preloader from "../../Components/preloader/Preloader";
 import ScrollTop from "../../Components/scrollTop/ScrollTop";
 //import Header from "../../Components/header/Header";
-import Header from "../landingpage/components/Header";
 import BreadCrumb from "./components/BreadCrump";
 import Main from "./components/Main";
 import Footer from "../../Components/footer/Footer";
 import CartContextStore from "../cart/components/State/CartContext";
+import Header from "../../Components/header/Header";
 const Container = () => {
   return (
     <div>

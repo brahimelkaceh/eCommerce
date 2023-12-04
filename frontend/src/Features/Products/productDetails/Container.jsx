@@ -10,7 +10,7 @@ const Container = () => {
   return (
     <div>
       {/* Prealoader */}
-      <Preloader />
+      {/* <Preloader /> */}
       {/* Scroll-top */}
       <ScrollTop />
       {/* Header */}

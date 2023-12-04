@@ -10,7 +10,6 @@ import {
   editP,
   getProducts,
   getP,
-  fetcProductById,
 } from "./Services";
 import axios from "axios";
 
@@ -79,7 +78,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProductByIdFromService = async (productId) => {
     try {
-      const product = await fetchProductById(productId);
+      const product = await getP(productId);
       return product;
     } catch (error) {
       console.error(`Error fetching product with ID ${productId}:`, error);
@@ -96,13 +95,7 @@ export const ProductProvider = ({ children }) => {
       return null;
     }
   };
-  const getProductById = async (id) => {
-    try {
-      const fetcProduct = await fetcProductById(id);
-    } catch (error) {
-      console.error("Error fetching subcategory:", error);
-    }
-  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -126,10 +119,9 @@ export const ProductProvider = ({ children }) => {
     setNewProduct,
     editProduct,
     deleteProductById,
-    fetchProductById: fetchProductByIdAndUpdateState,
+    fetchProductById: fetchProductByIdFromService,
     updateProducts,
     setRefresh,
-    getProductById,
   };
 
   return (
@@ -141,6 +133,7 @@ export const ProductProvider = ({ children }) => {
 
 export const useProduct = () => {
   const context = useContext(ProductContext);
+  console.log("useProduct" + context);
   if (!context) {
     throw new Error("useProduct must be used within a ProductProvider");
   }

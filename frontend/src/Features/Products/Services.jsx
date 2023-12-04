@@ -36,10 +36,6 @@ const handleRequest = async (method, endpoint, data = null) => {
 };
 export const getProducts = async () => apiService.get("/");
 export const getP = async (id) => await apiService.get(`/${id}`);
-export const fetcProductById = (id) => {
-  console.log(id);
-  handleRequest("get", `${id}`);
-};
 
 export const createP = async (newProductData) =>
   apiService.post(`/`, newProductData);

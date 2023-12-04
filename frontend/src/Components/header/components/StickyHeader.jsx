@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSubCatData } from "../../../Features/categories/Context";
 import logo from "../../../assets/img/logo/logo.png";
 import { Link } from "react-router-dom";
 import { useCustomer } from "../../../Features/customers/Context";
+import { CartStore } from "../../../Features/cart/components/State/CartContext";
 
 const StickyHeader = () => {
   const { catData, SubcatData } = useSubCatData();
-  const { customer } = useCustomer();
-  console.log(customer);
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  useEffect(() => {
+    let storedCart = null;
+    const cartOrders = localStorage.getItem("CartOrders");
+    const shopOrders = localStorage.getItem("ShopOrders");
 
+    try {
+      storedCart = JSON.parse(cartOrders);
+      console.log("StoredCart from CartOrders", storedCart);
+    } catch (error) {
+      console.error("Error parsing CartOrders:", error);
+    }
+
+    if (!storedCart) {
+      try {
+        storedCart = JSON.parse(shopOrders);
+        console.log("StoredCart from ShopOrders", storedCart);
+      } catch (error) {
+        console.error("Error parsing ShopOrders:", error);
+      }
+    }
+
+    if (storedCart !== null) {
+      dispatch({ type: "SET_TO_CART", payload: storedCart });
+    }
+  }, []);
   return (
     <div
       id="sticky-header"
@@ -88,59 +112,52 @@ const StickyHeader = () => {
                     <li className="header-shop-cart">
                       <a href="#">
                         <i className="flaticon-shopping-bag"></i>
-                        <span>0</span>
+                        <span>{qty}</span>
                       </a>
                       <ul className="minicart">
-                        <li className="d-flex align-items-start">
-                          <div className="cart-img">
-                            <a href="#">
-                              <img src="img/product/cart_p01.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="cart-content">
-                            <h4>
-                              <a href="#">Exclusive Winter Jackets</a>
-                            </h4>
-                            <div className="cart-price">
-                              <span className="new">$229.9</span>
-                              <span>
-                                <del>$229.9</del>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="del-icon">
-                            <a href="#">
-                              <i className="far fa-trash-alt"></i>
-                            </a>
-                          </div>
-                        </li>
-                        <li className="d-flex align-items-start">
-                          <div className="cart-img">
-                            <a href="#">
-                              <img src="img/product/cart_p02.jpg" alt="" />
-                            </a>
-                          </div>
-                          <div className="cart-content">
-                            <h4>
-                              <a href="#">Winter Jackets For Women</a>
-                            </h4>
-                            <div className="cart-price">
-                              <span className="new">$229.9</span>
-                              <span>
-                                <del>$229.9</del>
-                              </span>
-                            </div>
-                          </div>
-                          <div className="del-icon">
-                            <a href="#">
-                              <i className="far fa-trash-alt"></i>
-                            </a>
-                          </div>
-                        </li>
+                        {shoppingCart.length > 0 &&
+                          shoppingCart.map((product) => (
+                            <li
+                              className="d-flex align-items-start"
+                              key={product._id}
+                            >
+                              <div className="cart-img">
+                                <a href="#">
+                                  <img src={product.images[0]} alt="" />
+                                </a>
+                              </div>
+                              <div className="cart-content">
+                                <h4>
+                                  <a href="#">{product.productName}</a>
+                                </h4>
+                                <div className="cart-price">
+                                  <span className="new">
+                                    ${product.options[0].price}
+                                  </span>
+                                  {/* Add your logic for displaying discounted price here */}
+                                  <span>
+                                    <del>${product.options[0].oldPrice}</del>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="del-icon">
+                                <button
+                                  onClick={() =>
+                                    dispatch({
+                                      type: "DELETE_PRODUCT",
+                                      id: product._id,
+                                    })
+                                  }
+                                >
+                                  <i className="far fa-trash-alt"></i>
+                                </button>
+                              </div>
+                            </li>
+                          ))}
                         <li>
                           <div className="total-price">
                             <span className="f-left">Total:</span>
-                            <span className="f-right">$239.9</span>
+                            <span className="f-right">{totalPrice} $</span>
                           </div>
                         </li>
                         <li>

@@ -19,10 +19,10 @@ import { Link, NavLink } from "react-router-dom";
 import "./style.css";
 import { UserC } from "../../Features/auth/Context";
 const Lists = ({ open }) => {
-  const { userData } = UserC();
-  return userData.role === "admin" ? (
+  const { role } = UserC();
+  return role === "admin" ? (
     <List>
-      <NavLink to="/home">
+      <a href="/home">
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
@@ -35,7 +35,7 @@ const Lists = ({ open }) => {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
-      </NavLink>
+      </a>
       <NavLink to="/">
         <ListItem disablePadding>
           <ListItemButton>

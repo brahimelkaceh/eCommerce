@@ -14,8 +14,9 @@ export const UserState = ({ children }) => {
       setloading(true);
       try {
         const response = await getProfile();
-        console.log(response);
+        console.log(response.data.data.role);
         setUserData(response.data?.data);
+        setrole(response.data?.data.role);
         setloading(false);
       } catch (error) {
         console.error("Error fetching User Profile:", error);

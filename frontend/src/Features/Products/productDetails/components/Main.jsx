@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useProduct } from "../../Context";
+import { getP } from "../../Services";
+import { useParams } from "react-router-dom";
 const Main = () => {
   const { fetchProductById } = useProduct();
   const [product, setproduct] = useState(null);
-  fetchProductById("65685bf55892aaf477a47ac5");
-  // useEffect(() => {
-  //   const getProuctData = async () => {
-  //     const response = await fetchProductById("65685bf55892aaf477a47ac5");
-  //     // console.log("respoise", response.data.data);
-  //     // setproduct(response.data.data);
-  //     // console.log(response.data);
-  //   };
-  //   getProuctData();
-  // }, [product]);
+  const { id } = useParams();
+  console.log("id", id);
+  // fetchProductById("65685bf55892aaf477a47ac5");
+  // getP("65685bf55892aaf477a47ac5");
+  useEffect(() => {
+    const getProuctData = async () => {
+      const response = await fetchProductById(id);
+      console.log("respoise", response.data.data);
+      setproduct(response.data.data);
+      console.log(response.data);
+    };
+    getProuctData();
+  }, []);
 
   return (
     <div>
