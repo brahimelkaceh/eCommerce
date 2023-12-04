@@ -17,6 +17,8 @@ import ManagerRoutes from "./utils/ManagerRoutes";
 import Shop from "./Pages/shop/Shop";
 import CustomerLogin from "./Pages/customerLogin/CustomerLogin";
 import SingleProduct from "./Pages/product/SingleProduct";
+import CustomerRoutes from "./utils/CustomerRoutes";
+import CustomerProfile from "./Pages/customerProfile/CustomerProfile";
 const App = () => {
   return (
     <Routes>
@@ -36,11 +38,13 @@ const App = () => {
         <Route path="/orders" exact element={<Orders />} />
         <Route path="/categories" exact element={<Categories />} />
       </Route>
-      <Route path="/shop" exact element={<Shop />} />
+      <Route element={<CustomerRoutes />}>
+        <Route path="/customerProfile" element={<CustomerProfile />} />
+      </Route>
+      <Route path="/products" exact element={<Products />} />
       <Route path="/login" exact element={<Login />} />
       <Route path="/home" element={<LandingPage />} />
-      <Route path="/products" exact element={<Products />} />
-
+      <Route path="/shop" exact element={<Shop />} />
       <Route path="/shop/:id" exact element={<SingleProduct />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />

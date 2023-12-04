@@ -46,22 +46,22 @@ const NewArrival = () => {
                           <div className="product-overlay-action">
                             <ul>
                               <li>
-                                <a href="#">
+                                <button className="btn-icon">
                                   <i className="far fa-heart" />
-                                </a>
+                                </button>
                               </li>
                               <li>
-                                <a href="#">
+                                <button className="btn-icon">
                                   <i className="far fa-eye" />
-                                </a>
+                                </button>
                               </li>
                               <li>
-                                <a href="#">
+                                <button className="btn-icon">
                                   <i
                                     className="fa fa-shopping-cart"
                                     aria-hidden="true"
                                   />
-                                </a>
+                                </button>
                               </li>
                             </ul>
                           </div>

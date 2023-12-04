@@ -317,6 +317,7 @@ label {
 .header-shop-cart a span,
 .header-shop-cart .minicart .checkout-link a,
 .product-overlay-action ul li a:hover,
+.product-overlay-action ul li .btn-icon:hover,
 .features-product-cart > a:hover,
 .oc-newsletter form button:hover,
 .product-tooltip .tooltip-btn,
@@ -4107,7 +4108,7 @@ header.side-header {
 .product-overlay-action ul li {
   margin-bottom: 7px;
 }
-.product-overlay-action ul li a {
+.product-overlay-action ul li .btn-icon {
   display: block;
   width: 27px;
   height: 27px;
@@ -4117,6 +4118,7 @@ header.side-header {
   line-height: 27px;
   color: #fff;
   font-size: 12px;
+  border: none;
 }
 
 .thumb .add-to-cart {

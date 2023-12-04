@@ -101,13 +101,6 @@ const Main = () => {
                 <div className="shop-details-content">
                   <h3 className="title">{product.productName}</h3>
 
-                  <div className="rating">
-                    <i className="fas fa-star" />
-                    <i className="fas fa-star" />
-                    <i className="fas fa-star" />
-                    <i className="fas fa-star" />
-                    <i className="fas fa-star" />
-                  </div>
                   <p className="style-name">Product Sku:{product.sku}</p>
                   <div className="price">Price : {product.discountPrice}</div>
                   <div className="product-details-info">
