@@ -113,7 +113,7 @@ const LoginAdmin = () => {
         formik.handleReset();
         setActive(false);
         isLoading(false);
-        setMessage(response.data?.message);
+        setAlertMessage("Congratulations on Your Successful Registration!");
       }
 
       // return;

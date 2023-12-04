@@ -42,7 +42,7 @@ const Container = () => {
         <Header />
         {/* Main-area */}
         <Hero />
-        <CategorySlider />
+        {/* <CategorySlider /> */}
         <CatArea />
         <Trending />
         <NewArrival />
