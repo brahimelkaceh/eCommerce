@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import banner from "../../../../assets/img/banner.webp";
 import { useProduct } from "../../../Products/Context";
+import { CartStore } from "../../../cart/components/State/CartContext";
 const NewArrival = () => {
   const { products } = useProduct();
-
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   return (
     <main>
       <section className="new-arrival-area home7-new-arrival pt-95 pb-50">
@@ -56,7 +57,17 @@ const NewArrival = () => {
                                 </button>
                               </li>
                               <li>
-                                <button className="btn-icon">
+                                <button
+                                  className="btn-icon"
+                                  title="Add To Cart"
+                                  onClick={() =>
+                                    dispatch({
+                                      type: "ADD_TO_CART",
+                                      product: product,
+                                      id: product._id,
+                                    })
+                                  }
+                                >
                                   <i
                                     className="fa fa-shopping-cart"
                                     aria-hidden="true"
