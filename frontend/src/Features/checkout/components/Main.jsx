@@ -9,9 +9,13 @@ const Main = () => {
   const handleClick = (event) => {
     event.preventDefault();
     const jwt = localStorage.customerId;
-      const orderItems = shoppingCart.map((product) => ({
+
+    const orderItems = shoppingCart.map((product) => ({
         product: product._id,
-        quantity: product.orderQty,
+      quantity: product.orderQty,
+      productName: product.productName,
+      productPrice: product.options[0].price,
+      quantity:product.quantity
       }));
       const order = {
         customerID: JSON.parse(jwt),
@@ -49,8 +53,11 @@ const Main = () => {
         console.log(values);
         const jwt = localStorage.customerId;
         const orderItems = shoppingCart.map((product) => ({
-          product: product._id,
+          productId: product._id,
           quantity: product.orderQty,
+          productName: product.productName,
+          productPrice: product.options[0].price,
+          quantity: product.quantity,
         }));
         const order = {
           ...values,
@@ -59,6 +66,7 @@ const Main = () => {
           cartTotalPrice: totalPrice,
           Status: "Open",
         };
+        console.log(order);
         createOrder(order);
         
       },
