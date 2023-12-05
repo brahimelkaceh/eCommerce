@@ -49,7 +49,7 @@ const Main = () => {
                         <label htmlFor="fName">
                           FIRST NAME <span>*</span>
                         </label>
-                        <input type="text" id="fName" />
+                        <input type="text" id="fName" className="input" />
                       </div>
                     </div>
                     <div className="col-sm-6">
