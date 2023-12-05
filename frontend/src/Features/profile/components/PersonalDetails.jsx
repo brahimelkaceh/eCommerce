@@ -29,7 +29,6 @@ const PersonalDetails = ({ value }) => {
 
     onSubmit: async (values) => {
       console.log(userData?._id, values);
-      // return;
       editUser(userData?._id, values);
     },
   });
@@ -171,6 +170,7 @@ const PersonalDetails = ({ value }) => {
                   style={{
                     width: "100%",
                     height: "100%",
+                    objectFit: "cover", // Ensure the image covers the entire container
                     borderRadius: "50%",
                   }}
                   src={

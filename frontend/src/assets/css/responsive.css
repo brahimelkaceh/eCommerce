@@ -739,7 +739,7 @@
     margin-top: 95px;
   }
   .checkout-sidebar {
-    margin-top: 90px;
+    margin-top: 0px;
   }
   .contact-sidebar {
     margin-left: 0;
@@ -783,6 +783,7 @@
   .h7s-bottom-item .content .btn {
     padding: 15px 20px;
   }
+
   .h7-discount-img {
     text-align: center;
     margin-bottom: 50px;

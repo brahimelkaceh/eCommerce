@@ -15,7 +15,6 @@ const StickyHeader = () => {
 
     try {
       storedCart = JSON.parse(cartOrders);
-      console.log("StoredCart from CartOrders", storedCart);
     } catch (error) {
       console.error("Error parsing CartOrders:", error);
     }
@@ -23,7 +22,6 @@ const StickyHeader = () => {
     if (!storedCart) {
       try {
         storedCart = JSON.parse(shopOrders);
-        console.log("StoredCart from ShopOrders", storedCart);
       } catch (error) {
         console.error("Error parsing ShopOrders:", error);
       }

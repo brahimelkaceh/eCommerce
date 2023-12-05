@@ -1,7 +1,16 @@
 import React from "react";
+import Container from "../../Features/customerProfile/Container";
+import CartContextStore from "../../Features/cart/components/State/CartContext";
+import { CustomerProvider } from "../../Features/customers/Context";
 
 const CustomerProfile = () => {
-  return <div>CustomerProfile</div>;
+  return (
+    <CustomerProvider>
+      <CartContextStore>
+        <Container />
+      </CartContextStore>
+    </CustomerProvider>
+  );
 };
 
 export default CustomerProfile;

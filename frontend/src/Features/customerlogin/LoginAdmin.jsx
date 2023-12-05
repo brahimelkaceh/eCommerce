@@ -66,19 +66,9 @@ const LoginAdmin = () => {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       handleSignin(values);
     },
   });
-
-  const handleInputChange = (e) => {
-    const { name, value, type, files } = e.target;
-    const updatedValue = type === "file" ? files : value;
-    setFormValues({
-      ...formValues,
-      [name]: updatedValue,
-    });
-  };
 
   const handleSignup = async (formData) => {
     // console.log(formData);
@@ -115,9 +105,6 @@ const LoginAdmin = () => {
         isLoading(false);
         setAlertMessage("Congratulations on Your Successful Registration!");
       }
-
-      // return;
-      // navigate("/customerLogin");
     } catch (error) {
       isLoading(false);
 
@@ -150,14 +137,14 @@ const LoginAdmin = () => {
   const handleSignin = async (formData) => {
     isLoading(true);
     try {
-      // console.log(email, password);
       const response = await loginCustomer(formData.email, formData.password);
-      // console.log("Login successful:", response.status);
+      // console.log("Login successful:", response);
+
       if (response.status == "success") {
         isLoading(false);
         handleClick();
         setAlertMessage("Congratulations on Your Successful Login!");
-        navigate("/customerProfile");
+        // navigate("/customerProfile");
       }
     } catch (error) {
       console.error("Login failed:", error);

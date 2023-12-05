@@ -10,7 +10,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function SuccessAlert({ handleClose, open, message }) {
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
-      <Snackbar open={open} autoHideDuration={8000} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           {message}
         </Alert>

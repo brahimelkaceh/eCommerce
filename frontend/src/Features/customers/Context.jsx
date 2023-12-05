@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCustomers } from "./service";
+import { useNavigate } from "react-router-dom";
 export const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [refresh, setRefresh] = useState(new Date().toISOString());
-  const [customer, setCustomer] = useState("");
+  const [customer, setCustomer] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -33,16 +36,22 @@ export const CustomerProvider = ({ children }) => {
   const getCustomerById = async (customerId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/customers/${customerId}`
+        `http://localhost:5000/customers/${customerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("customerToken")
+            )}`,
+          },
+        }
       );
       const data = await response.json();
-      // console.log('customer: ', data.data);
-      return data.data;
+      setCustomer(data.data);
     } catch (error) {
       console.error("Error fetching customer by ID:", error);
     }
   };
-
   const loginCustomer = async (email, password) => {
     try {
       const response = await fetch("http://localhost:5000/customers/login", {
@@ -56,7 +65,11 @@ export const CustomerProvider = ({ children }) => {
         }),
       });
       const data = await response.json();
-      setCustomer(data);
+      localStorage.setItem("customerToken", JSON.stringify(data.token));
+      localStorage.setItem("customerId", JSON.stringify(data?.data?._id));
+      navigate("/customerProfile");
+
+      // setCustomer(data);
       return data;
     } catch (error) {
       console.error("Error logging in:", error);

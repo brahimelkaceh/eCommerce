@@ -1,8 +1,8 @@
-import { isAuthenticad } from "./isAuthenticed";
+import { customerAuthenticated } from "./isAuthenticed";
 import { Route, Navigate, Outlet } from "react-router-dom";
 
 const CustomerRoutes = () => {
-  return isAuthenticad() ? (
+  return customerAuthenticated() ? (
     <Outlet />
   ) : (
     <>
