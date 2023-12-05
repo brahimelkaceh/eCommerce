@@ -9,6 +9,7 @@ const Products = require("../models/Products");
 const { sendOrder } = require("../middlewares/websocket");
 exports.createOrder = catchAsync(async (req, res) => {
   const response = {};
+  console.log(req.body);
   try {
     const { customerID, orderItems } = req.body;
     const customer = await Customer.findOne({ _id: customerID });
@@ -86,7 +87,6 @@ exports.listOrders = catchAsync(async (req, res) => {
   try {
     const Orders = await orders
       .find()
-      .limit(10)
       .populate({
         path: "orderItems.product",
         select: "productName price quantity images options",
