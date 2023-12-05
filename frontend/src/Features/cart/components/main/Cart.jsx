@@ -87,21 +87,20 @@ const Cart = () => {
                                   {/* <img src="img/icon/plus.png" alt="" /> */}
 
                                   {/* </span> */}
-                                  
-                                    <button
-                                      style={{ width: "100%" }}
+
+                                  <button
+                                    style={{ width: "100%" }}
                                     onClick={(e) => {
                                       e.preventDefault();
                                       dispatch({
                                         type: "INCREMENT",
                                         id: product._id,
-                                      })
-                                    }
-                                      }
-                                    >
-                                      +
-                                    </button>
-                                  
+                                      });
+                                    }}
+                                  >
+                                    +
+                                  </button>
+
                                   {/* <span className="minus dis">
                                   {/* <img src="img/icon/minus.png" alt="" /> */}
                                   {/* - */}
@@ -113,9 +112,8 @@ const Cart = () => {
                                       dispatch({
                                         type: "DECREMENT",
                                         id: product._id,
-                                      })
-                                    }
-                                    }
+                                      });
+                                    }}
                                   >
                                     -
                                   </button>
@@ -149,18 +147,18 @@ const Cart = () => {
               </div>
               <div className="shop-cart-bottom mt-20">
                 <div className="cart-coupon">
-                  <form action="#">
+                  {/* <form action="#">
                     <input type="text" placeholder="Enter Coupon Code..." />
                     <button className="btn" onClick={handleClick}>
                       Apply Coupon
                     </button>
-                  </form>
+                  </form> */}
                 </div>
-                <div className="continue-shopping">
+                {/* <div className="continue-shopping">
                   <a href="shop.html" className="btn">
                     update shopping
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="cart-total pt-95">
@@ -210,9 +208,12 @@ const Cart = () => {
                       <span className="amount">${totalPrice}</span>
                     </li>
                   </ul>
-                  <a href="checkout.html" className="btn">
+                  {/* <a href="checkout.html" className="btn">
                     PROCEED TO CHECKOUT
-                  </a>
+                  </a> */}
+                  <button className="btn" onClick={handleClick}>
+                    Apply Coupon
+                  </button>
                 </form>
               </div>
             </div>

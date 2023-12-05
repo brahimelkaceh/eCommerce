@@ -4,20 +4,23 @@ import Main from "./components/Main";
 import Footer from "../landingpage/components/Footer";
 import ScrollTop from "../landingpage/components/ScrollTop";
 import Preloader from "../landingpage/components/Preloader";
+import CartContextStore from "../cart/components/State/CartContext";
 
 const Container = () => {
   return (
     <>
-      {/* Preloader */}
-      <Preloader />
-      {/* scroll-top */}
-      <ScrollTop />
-      {/* Header */}
-      <Header />
-      {/* Main */}
-      <Main />
-      {/* Footer */}
-      <Footer />
+      <CartContextStore>
+        {/* Preloader */}
+        <Preloader />
+        {/* scroll-top */}
+        <ScrollTop />
+        {/* Header */}
+        <Header />
+        {/* Main */}
+        <Main />
+        {/* Footer */}
+        <Footer />
+      </CartContextStore>
     </>
   );
 };
