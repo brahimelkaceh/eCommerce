@@ -1,16 +1,16 @@
 import React from "react";
 import Preloader from "../landingpage/components/Preloader";
-import Header from "../landingpage/components/Header";
 import ScrollTop from "../landingpage/components/ScrollTop";
-import Footer from "../landingpage/components/Footer";
 import Main from "./components/Main";
 import CartContextStore from "./components/State/CartContext";
+import Header from "../../Components/header/Header";
+import Footer from "../../Components/footer/Footer";
 const Container = () => {
   return (
     <div>
       {/* Prealoader */}
       <CartContextStore>
-        <Preloader />
+        {/* <Preloader /> */}
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header */}

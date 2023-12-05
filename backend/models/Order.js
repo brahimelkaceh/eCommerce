@@ -19,8 +19,14 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        firstName: { type: String },
+        lastName: { type: String },
         address: { type: String },
+        city: { type: String },
+        postalZip: { type: String },
         phoneNumber: { type: String },
+        email: { type: String },
+        note: { type: String },
       },
     ],
     orderDate: {
@@ -37,7 +43,7 @@ const orderSchema = new mongoose.Schema(
       default: "Open",
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("OrdersModel", orderSchema);

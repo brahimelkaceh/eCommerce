@@ -29,12 +29,11 @@ import Footer from "../../Components/footer/Footer";
 import Header from "../../Components/header/Header";
 
 const Container = () => {
-  console.log("Container home");
   return (
     <CartContextStore>
       <div>
         {/* Preloader */}
-        <Preloader />
+        {/* <Preloader /> */}
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header-area */}

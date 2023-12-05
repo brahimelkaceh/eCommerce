@@ -30,7 +30,7 @@ Router.put(
   "/customers/:id",
   upload.array("images", 5),
   ValidatorSanitizer.validate,
-  updateCustomer,
+  updateCustomer
 );
 Router.delete("/customers/:id", TokenCheck, deleteCustomer);
 

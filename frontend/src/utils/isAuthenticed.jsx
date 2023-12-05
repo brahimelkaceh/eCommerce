@@ -7,3 +7,12 @@ export const isAuthenticad = () => {
 
   return false;
 };
+
+export const customerAuthenticated = () => {
+  const jwt = localStorage.customerToken;
+  if (jwt) {
+    return JSON.parse(jwt);
+  }
+
+  return false;
+};

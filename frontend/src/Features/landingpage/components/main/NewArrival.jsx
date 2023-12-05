@@ -59,7 +59,6 @@ const NewArrival = () => {
                               <li>
                                 <button
                                   className="btn-icon"
-                                  title="Add To Cart"
                                   onClick={() =>
                                     dispatch({
                                       type: "ADD_TO_CART",
