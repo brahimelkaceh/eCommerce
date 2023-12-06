@@ -97,7 +97,6 @@ export default function AllOrders({ handleOpen }) {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    // console.log(updatedRow);
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
     updateOrder(updatedRow._id, updatedRow);

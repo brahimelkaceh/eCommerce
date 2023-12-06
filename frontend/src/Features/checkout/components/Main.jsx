@@ -6,22 +6,26 @@ import { createOrder } from "../service";
 import * as Yup from "yup";
 const Main = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-  const handleClick = (event) => {
-    event.preventDefault();
-    const jwt = localStorage.customerId;
-    const orderItems = shoppingCart.map((product) => ({
-      product: product._id,
-      quantity: product.orderQty,
-    }));
-    const order = {
-      customerID: JSON.parse(jwt),
-      orderItems: orderItems,
-      cartTotalPrice: totalPrice,
-      Status: "Open",
-    };
-    console.log(order);
-    // createOrder(order)
-  };
+  // const handleClick = (event) => {
+  //   event.preventDefault();
+  //   const jwt = localStorage.customerId;
+
+  //   const orderItems = shoppingCart.map((product) => ({
+  //     product: product._id,
+  //     quantity: product.orderQty,
+  //     productName: product.productName,
+  //     productPrice: product.options[0].price,
+  //     quantity: product.quantity,
+  //   }));
+  //   const order = {
+  //     customerID: JSON.parse(jwt),
+  //     orderItems: orderItems,
+  //     cartTotalPrice: totalPrice,
+  //     Status: "Open",
+  //   };
+  //   console.log(order);
+  //   // createOrder(order)
+  // };
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -51,6 +55,9 @@ const Main = () => {
       const orderItems = shoppingCart.map((product) => ({
         product: product._id,
         quantity: product.orderQty,
+        productName: product.productName,
+        productPrice: product.options[0].price,
+        quantity: product.orderQty,
       }));
       const order = {
         ...values,
@@ -60,6 +67,10 @@ const Main = () => {
         Status: "Open",
       };
       createOrder(order);
+      console.log("order send successfully", order);
+      localStorage.removeItem("ShopOrders");
+      localStorage.removeItem("CartOrders");
+      dispatch({ type: "SET_TO_CART", payload: [] });
     },
   });
   return (
@@ -112,6 +123,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="firstName"
+                          className="input"
                           name="firstName" // Connect the input to the corresponding Formik field
                           value={formik.values.firstName} // Set value from Formik state
                           onChange={formik.handleChange} // Handle change using Formik's handleChange
@@ -132,6 +144,7 @@ const Main = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
+                          className="input"
                           value={formik.values.lastName}
                           onChange={formik.handleChange}
                         />
@@ -151,6 +164,7 @@ const Main = () => {
                           type="text"
                           id="address"
                           name="address"
+                          className="input"
                           value={formik.values.address}
                           onChange={formik.handleChange}
                         />
@@ -191,6 +205,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="postalZip"
+                          className="input"
                           name="postalZip"
                           value={formik.values.postalZip}
                           onChange={formik.handleChange}
@@ -210,6 +225,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="phoneNumber"
+                          className="input"
                           name="phoneNumber"
                           value={formik.values.phoneNumber}
                           onChange={formik.handleChange}
@@ -229,6 +245,7 @@ const Main = () => {
                         <input
                           type="email"
                           id="email"
+                          className="input"
                           name="email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
@@ -334,9 +351,7 @@ const Main = () => {
                         </label>
                       </div>
                     </div>
-                    <button className="btn" onClick={handleClick}>
-                      Place order
-                    </button>
+                    <button className="btn">Place order</button>
                   </form>
                 </div>
               </aside>
