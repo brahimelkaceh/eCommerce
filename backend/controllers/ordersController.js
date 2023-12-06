@@ -9,9 +9,12 @@ const Products = require("../models/Products");
 const { sendOrder } = require("../middlewares/websocket");
 exports.createOrder = catchAsync(async (req, res) => {
   const response = {};
-  console.log(req.body);
+  let cartTotalPrice = 0;
+  let discountPrice = 0;
+  let ProductPrice = 0;
   try {
-    const { customerID, orderItems } = req.body;
+    const { customerID, orderItems} = req.body;
+    
     const customer = await Customer.findOne({ _id: customerID });
     if (!customer) {
       response.message = CONSTANTS.CUSTOMER_NOT_FOUND;
@@ -21,12 +24,19 @@ exports.createOrder = catchAsync(async (req, res) => {
     for (let i = 0; i < orderItems.length; i++) {
       const element = orderItems[i];
       const product = await Products.findOne({ _id: element.product });
+      console.log("product", product);
+     
       if (!product) {
         response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
         response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
         return res.json({ response });
       }
+      discountPrice = (product.discountPrice * product.options[0].price) / 100;
+      discountPrice = discountPrice.toFixed(2);
+      ProductPrice = product.options[0].price - discountPrice;
+       cartTotalPrice += orderItems[i].quantity * ProductPrice;
     }
+    req.body.cartTotalPrice = cartTotalPrice;
     const newOrder = await orders.create(req.body);
     const createdOrder = await orders
       .findById(newOrder._id)
@@ -112,6 +122,7 @@ exports.listOrders = catchAsync(async (req, res) => {
 });
 exports.updateOrder = catchAsync(async (req, res) => {
   const response = {};
+  console.log("req body",req.body)
   try {
     const { customerID, orderItems } = req.body;
     const customer = await Customer.findOne({ _id: customerID });
@@ -122,13 +133,27 @@ exports.updateOrder = catchAsync(async (req, res) => {
     }
     for (let i = 0; i < orderItems.length; i++) {
       const element = orderItems[i];
-       console.log("element : ", orderItems[i]);
+      //  console.log("element : ", orderItems[i]);
       const product = await Products.findOne({ _id: element.product });
       if (!product) {
         response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
         response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
         return res.json({ response });
       }
+       if (req.body.Status === "Shipped") {
+         product.quantity -= element.quantity;
+      }
+       await Products.findByIdAndUpdate(
+      product._id,
+      {
+        ...product,  
+      },
+      {
+        new: true, // Return the updated document
+        runValidators: true, // Run validators on update
+      }
+      ).populate("subCategoryId", "subCategoryName");
+  
     }
     const id = req.params.id;
     const newOrderData = req.body;
