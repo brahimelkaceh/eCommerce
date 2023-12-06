@@ -2,23 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useProduct } from "../../Context";
 import { getP } from "../../Services";
 import { useParams } from "react-router-dom";
+import { CartStore } from "../../../cart/components/State/CartContext";
 const Main = () => {
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   const { fetchProductById } = useProduct();
   const [product, setproduct] = useState(null);
+  const [bigimage, setbigimage] = useState(null);
   const { id } = useParams();
-  console.log("id", id);
-  // fetchProductById("65685bf55892aaf477a47ac5");
-  // getP("65685bf55892aaf477a47ac5");
+
   useEffect(() => {
     const getProuctData = async () => {
       const response = await fetchProductById(id);
-      console.log("respoise", response.data.data);
       setproduct(response.data.data);
-      console.log(response.data);
     };
     getProuctData();
   }, []);
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
+    dispatch({ type: "SET_TO_CART", payload: storedCart });
+  }, []);
 
+  useEffect(() => {
+    // console.log("shopingCart: ", shoppingCart);
+    localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
+    localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
+  }, [shoppingCart]);
   return (
     <div>
       {product && (
@@ -30,8 +38,9 @@ const Main = () => {
                   <div className="shop-details-nav-wrap">
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                       <li className="nav-item" role="presentation">
-                        {product.images.map((im) => (
+                        {product.images.map((img, i) => (
                           <a
+                            key={i}
                             className="nav-link active"
                             id="item-one-tab"
                             data-toggle="tab"
@@ -39,8 +48,9 @@ const Main = () => {
                             role="tab"
                             aria-controls="item-one"
                             aria-selected="true"
+                            onMouseEnter={(e) => setbigimage(e.target.src)}
                           >
-                            <img src={im} width="99" height="117" alt />
+                            <img src={img} width="99" height="117" alt />
                           </a>
                         ))}
                       </li>
@@ -56,7 +66,7 @@ const Main = () => {
                       >
                         <div className="shop-details-img">
                           <img
-                            src={product.images[0]}
+                            src={bigimage || product.images[0]}
                             width="621"
                             height="689"
                             alt
@@ -102,73 +112,63 @@ const Main = () => {
                   <h3 className="title">{product.productName}</h3>
 
                   <p className="style-name">Product Sku:{product.sku}</p>
-                  <div className="price">Price : {product.discountPrice}</div>
-                  <div className="product-details-info">
-                    <div className="sidebar-product-size mb-30">
-                      <h4 className="widget-title">Product Size</h4>
-                      <div className="shop-size-list">
-                        <ul>
-                          <li>
-                            {product.options[0].size.map((s) => (
-                              <a href="#">{s}</a>
-                            ))}
-                          </li>
-                          <li></li>
-                          <li>
-                            <a href="#">L</a>
-                          </li>
-                          <li>
-                            <a href="#">XL</a>
-                          </li>
-                          <li>
-                            <a href="#">XXL</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="sidebar-product-color">
-                      <h4 className="widget-title">Color</h4>
-                      <div className="shop-color-list">
-                        <ul>
-                          <li />
-                          <li />
-                          <li />
-                          <li />
-                        </ul>
-                      </div>
-                    </div>
+                  <div className="price">
+                    Price : {product.options[0].price}
                   </div>
-                  <div className="perched-info">
-                    <div className="cart-plus-minus">
-                      <form action="#" className="num-block">
-                        <input
-                          type="text"
-                          className="in-num"
-                          defaultValue={1}
-                          readOnly
-                        />
-                        <div className="qtybutton-box">
-                          <span className="plus">
-                            <img src="img/icon/plus.png" alt />
-                          </span>
-                          <span className="minus dis">
-                            <img src="img/icon/minus.png" alt />
-                          </span>
+
+                  <div className="product-details-info">
+                    {product.options[0].size[0] && (
+                      <div className="sidebar-product-size mb-30">
+                        <h4 className="widget-title">Product Size</h4>
+                        <div className="shop-size-list">
+                          <ul>
+                            <li>
+                              {product.options[0].size.map((s) => {
+                                return <a href="#">{s}</a>;
+                              })}
+                            </li>
+                          </ul>
                         </div>
-                      </form>
-                    </div>
-                    <a href="#" className="btn">
-                      add to cart
-                    </a>
-                    <div className="wishlist-compare">
-                      <ul>
-                        <li>
-                          <a href="#">
-                            <i className="far fa-heart" /> Add to Wishlist
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
+                      </div>
+                    )}
+                    {product?.options[0].color[0] && (
+                      <div className="sidebar-product-color">
+                        <h4 className="widget-title">Color</h4>
+                        <div className="shop-color-list">
+                          <ul>
+                            {product?.options[0].color?.map((clr, i) => {
+                              return clr.split(",").map((c, i) => {
+                                console.log(c);
+                                return (
+                                  <li
+                                    className="gray"
+                                    style={{
+                                      backgroundColor: c,
+                                    }}
+                                  ></li>
+                                );
+                              });
+                            })}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="perched-info">
+                    <button
+                      title="Add To Cart"
+                      className="btn"
+                      onClick={() =>
+                        dispatch({
+                          type: "ADD_TO_CART",
+                          product: product,
+                          id: product._id,
+                        })
+                      }
+                    >
+                      Add To Cart
+                    </button>
                   </div>
                   <div className="product-details-share">
                     <ul>

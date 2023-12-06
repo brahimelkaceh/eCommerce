@@ -542,7 +542,6 @@ pre code {
 .no-gutters > [class*="col-"] {
   padding-right: 0;
   padding-left: 0;
-  
 }
 .col,
 .col-1,
@@ -6658,6 +6657,7 @@ button.bg-dark:hover {
 .justify-content-center {
   -ms-flex-pack: center !important;
   justify-content: center !important;
+  align-items: center !important;
 }
 .justify-content-between {
   -ms-flex-pack: justify !important;

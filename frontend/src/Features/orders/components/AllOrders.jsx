@@ -31,11 +31,8 @@ export default function AllOrders({ handleOpen }) {
   const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
+    console.log(data);
   }, [data]);
-
-  // useEffect(() => {
-  //   getCustomerById(customerId);
-  // }, [customerId]);
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -53,7 +50,7 @@ export default function AllOrders({ handleOpen }) {
     if (customerId) {
       fetchCustomer();
     }
-  }, [customerId, getCustomerById]);
+  }, [customerId]);
 
   const getColorBasedOnStatus = (status) => {
     switch (status) {
@@ -163,7 +160,6 @@ export default function AllOrders({ handleOpen }) {
 
       headerAlign: "left",
       renderCell: (params) => {
-        console.log(params.value?._id);
         setcustomer(params.value?._id);
         return <span className="customer-name"> {Customer?.userName}</span>;
       },

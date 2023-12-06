@@ -38,9 +38,9 @@ export const DataProvider = ({ children }) => {
     }
   };
   const updateOrder = async (id, updatedOrderData) => {
-    console.log(id, updatedOrderData);
     try {
       const updatedOrder = await updateOrderById(id, updatedOrderData);
+      console.log(updatedOrder);
       setOrder(updatedOrder);
     } catch (error) {
       console.error("Error updating order:", error);

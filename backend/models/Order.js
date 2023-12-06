@@ -19,7 +19,11 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
-        firstName: { type: String },
+      },
+    ],
+    firstName: {
+      type: String
+    },
         lastName: { type: String },
         address: { type: String },
         city: { type: String },
@@ -27,8 +31,6 @@ const orderSchema = new mongoose.Schema(
         phoneNumber: { type: String },
         email: { type: String },
         note: { type: String },
-      },
-    ],
     orderDate: {
       type: Date,
       default: Date.now,

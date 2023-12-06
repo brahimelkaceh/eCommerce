@@ -1,7 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { CartStore } from "../../cart/components/State/CartContext";
+import { useFormik } from "formik";
+import { createOrder } from "../service";
+import * as Yup from "yup";
 const Main = () => {
+  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  const handleClick = (event) => {
+    event.preventDefault();
+    const jwt = localStorage.customerId;
+    const orderItems = shoppingCart.map((product) => ({
+      product: product._id,
+      quantity: product.orderQty,
+    }));
+    const order = {
+      customerID: JSON.parse(jwt),
+      orderItems: orderItems,
+      cartTotalPrice: totalPrice,
+      Status: "Open",
+    };
+    console.log(order);
+    // createOrder(order)
+  };
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      address: "",
+      city: "",
+      postalZip: "",
+      email: "",
+      phoneNumber: "",
+      note: "",
+    },
+    validationSchema: Yup.object().shape({
+      firstName: Yup.string().required("First name is required"),
+      lastName: Yup.string().required("Last name is required"),
+      address: Yup.string().required("address is required"),
+      city: Yup.string().required("city is required"),
+      postalZip: Yup.string().required("postalZip is required"),
+      phoneNumber: Yup.string().required("phoneNumber  is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+    }),
+
+    onSubmit: async (values) => {
+      console.log(values);
+      const jwt = localStorage.customerId;
+      const orderItems = shoppingCart.map((product) => ({
+        product: product._id,
+        quantity: product.orderQty,
+      }));
+      const order = {
+        ...values,
+        customerID: JSON.parse(jwt),
+        orderItems: orderItems,
+        cartTotalPrice: totalPrice,
+        Status: "Open",
+      };
+      createOrder(order);
+    },
+  });
   return (
     <main>
       {/* breadcrumb-area */}
@@ -42,22 +102,44 @@ const Main = () => {
                     <i className="fas fa-angle-left" /> -- Back to Cart
                   </Link>
                 </div>
-                <form action="#" className="checkout-form">
+                <form onSubmit={formik.handleSubmit} className="checkout-form">
                   <div className="row">
                     <div className="col-sm-6">
                       <div className="form-grp">
-                        <label htmlFor="fName">
+                        <label htmlFor="firstName">
                           FIRST NAME <span>*</span>
                         </label>
-                        <input type="text" id="fName" className="input" />
+                        <input
+                          type="text"
+                          id="firstName"
+                          name="firstName" // Connect the input to the corresponding Formik field
+                          value={formik.values.firstName} // Set value from Formik state
+                          onChange={formik.handleChange} // Handle change using Formik's handleChange
+                        />
+                        {formik.errors.firstName && (
+                          <div className="required-msg">
+                            {formik.errors.firstName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-sm-6">
                       <div className="form-grp">
-                        <label htmlFor="lName">
+                        <label htmlFor="lastName">
                           Last NAME <span>*</span>
                         </label>
-                        <input type="text" id="lName" />
+                        <input
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          value={formik.values.lastName}
+                          onChange={formik.handleChange}
+                        />
+                        {formik.errors.lastName && (
+                          <div className="required-msg">
+                            {formik.errors.lastName}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-12">
@@ -65,7 +147,18 @@ const Main = () => {
                         <label htmlFor="address">
                           STREET ADDRESS <span>*</span>
                         </label>
-                        <input type="text" id="address" />
+                        <input
+                          type="text"
+                          id="address"
+                          name="address"
+                          value={formik.values.address}
+                          onChange={formik.handleChange}
+                        />
+                        {formik.errors.address && (
+                          <div className="required-msg">
+                            {formik.errors.address}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -74,7 +167,12 @@ const Main = () => {
                         <label>
                           CITY <span>*</span>
                         </label>
-                        <select className="custom-select">
+                        <select
+                          className="custom-select"
+                          name="city"
+                          value={formik.values.city}
+                          onChange={formik.handleChange}
+                        >
                           <option value="Illinois">Illinois</option>
                           <option value="New York">New York</option>
                           <option value="California">California</option>
@@ -87,18 +185,40 @@ const Main = () => {
 
                     <div className="col-sm-6">
                       <div className="form-grp">
-                        <label htmlFor="zip">
+                        <label htmlFor="postalZip">
                           postal ZIP <span>*</span>
                         </label>
-                        <input type="text" id="zip" />
+                        <input
+                          type="text"
+                          id="postalZip"
+                          name="postalZip"
+                          value={formik.values.postalZip}
+                          onChange={formik.handleChange}
+                        />
+                        {formik.errors.postalZip && (
+                          <div className="required-msg">
+                            {formik.errors.postalZip}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-sm-12">
                       <div className="form-grp">
-                        <label htmlFor="phone">
+                        <label htmlFor="phoneNumber">
                           Your PHONE <span>*</span>
                         </label>
-                        <input type="text" id="phone" />
+                        <input
+                          type="text"
+                          id="phoneNumber"
+                          name="phoneNumber"
+                          value={formik.values.phoneNumber}
+                          onChange={formik.handleChange}
+                        />
+                        {formik.errors.phoneNumber && (
+                          <div className="required-msg">
+                            {formik.errors.phoneNumber}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-12">
@@ -106,23 +226,37 @@ const Main = () => {
                         <label htmlFor="email">
                           EMAIL ADDRESS <span>*</span>
                         </label>
-                        <input type="email" id="email" />
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formik.values.email}
+                          onChange={formik.handleChange}
+                        />
+                        {formik.errors.email && (
+                          <div className="required-msg">
+                            {formik.errors.email}
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     <div className="col-12">
                       <div className="form-grp mb-0">
-                        <label htmlFor="message">
+                        <label htmlFor="note">
                           ORDER you have NOTES <small>(OPTIONAL)</small>
                         </label>
                         <textarea
-                          name="message"
-                          id="message"
+                          name="note"
+                          id="note"
                           placeholder="About Your Special Delivery Notes"
                           defaultValue={""}
+                          value={formik.values.note}
+                          onChange={formik.handleChange}
                         />
                       </div>
                     </div>
+                    <button type="submit">save</button>
                   </div>
                 </form>
               </div>
@@ -134,7 +268,7 @@ const Main = () => {
                   <form action="#">
                     <ul>
                       <li className="sub-total">
-                        <span>SUBTOTAL</span> $ 136.00
+                        <span>Products Quantity</span> {qty}
                       </li>
                       <li>
                         <span>SHIPPING</span>
@@ -157,7 +291,7 @@ const Main = () => {
                       </li>
                       <li className="cart-total-amount">
                         <span>TOTAL</span>
-                        <span className="amount">$ 151.00</span>
+                        <span className="amount">{totalPrice} $</span>
                       </li>
                     </ul>
                     <div className="payment-method-info">
@@ -200,7 +334,9 @@ const Main = () => {
                         </label>
                       </div>
                     </div>
-                    <button className="btn">Place order</button>
+                    <button className="btn" onClick={handleClick}>
+                      Place order
+                    </button>
                   </form>
                 </div>
               </aside>

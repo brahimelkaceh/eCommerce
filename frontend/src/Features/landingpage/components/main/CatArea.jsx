@@ -1,6 +1,7 @@
 import React from "react";
 import { useSubCatData } from "../../../categories/Context";
 import { useProduct } from "../../../Products/Context";
+import { Link } from "react-router-dom";
 
 const CatArea = () => {
   const { catData } = useSubCatData();
@@ -31,7 +32,9 @@ const CatArea = () => {
                       <img src="" alt />
                     </div>
                     <p>
-                      {category.categoryName} <span>( 9 Items )</span>
+                      <a href={`/shop?category=${category._id}`}>
+                        {category.categoryName} <span>( 9 Items )</span>
+                      </a>
                     </p>
                   </a>
                 </div>

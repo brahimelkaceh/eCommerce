@@ -69,7 +69,9 @@ const Products = ({ products }) => {
                 </div>
                 <div className="content">
                   <h5>
-                    <a href="shop-details.html">{product.productName}</a>
+                    <Link to={`/shop/${product.id}`}>
+                      {product.productName}
+                    </Link>
                   </h5>
                   <span className="price">${product.options[0].price}</span>
                 </div>

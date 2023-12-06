@@ -6628,3 +6628,28 @@ header.side-header {
   width: 1.25rem;
   height: 1.25rem;
 }
+
+.add-to-cart {
+  display: block;
+  width: 100%;
+  background-color: #001b24;
+  color: #f9f9f9;
+  text-align: center;
+  border: 0;
+  border-radius: 3px;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  z-index: 11;
+  margin: auto;
+  transition: all 0.3s ease 0s;
+
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: block;
+  font-family: "Lato", sans-serif;
+  letter-spacing: 1px;
+  padding: 10px;
+}

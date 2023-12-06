@@ -39,7 +39,7 @@ const Hero = () => {
                         timeless allure of our carefully selected items.
                       </p>
                       <a
-                        href="shop-sidebar.html"
+                        href="/shop"
                         className="btn"
                         data-animation-in="fadeInUpBig"
                         data-delay-in=".8"

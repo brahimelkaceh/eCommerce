@@ -9,6 +9,7 @@ const Products = require("../models/Products");
 const { sendOrder } = require("../middlewares/websocket");
 exports.createOrder = catchAsync(async (req, res) => {
   const response = {};
+  console.log(req.body);
   try {
     const { customerID, orderItems } = req.body;
     const customer = await Customer.findOne({ _id: customerID });
@@ -86,9 +87,8 @@ exports.listOrders = catchAsync(async (req, res) => {
   try {
     const Orders = await orders
       .find()
-      .limit(10)
       .populate({
-        path: "orderItems.product",
+        path: "orderItems.productId",
         select: "productName price quantity images options",
       })
       .populate("customerID", "email userName role images");
@@ -120,9 +120,12 @@ exports.updateOrder = catchAsync(async (req, res) => {
       response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
       return res.json({ response });
     }
+    // console.log("product: ", req.body);
     for (let i = 0; i < orderItems.length; i++) {
       const element = orderItems[i];
-      const product = await Products.findOne({ _id: element.product._id });
+      console.log(element?._id);
+      const product = await Products.findOne({ _id: element._id });
+      console.log(" product", product);
       if (!product) {
         response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
         response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;
@@ -134,7 +137,7 @@ exports.updateOrder = catchAsync(async (req, res) => {
 
     const updatedOrder = await orders.updateOne(
       { _id: id },
-      { $set: newOrderData },
+      { $set: newOrderData }
     );
 
     response.message = CONSTANTS.ORDER_UPDATED;

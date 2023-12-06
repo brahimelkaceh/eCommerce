@@ -33,7 +33,7 @@ const Container = () => {
     <CartContextStore>
       <div>
         {/* Preloader */}
-        {/* <Preloader /> */}
+        <Preloader />
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header-area */}

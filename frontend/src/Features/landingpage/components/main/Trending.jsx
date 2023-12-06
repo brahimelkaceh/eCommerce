@@ -6,8 +6,6 @@ const Trending = () => {
   const { products } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
-    console.log("ShoppingCart: ", shoppingCart);
-
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
     // console.log("storedCart:1", storedCart);
     dispatch({ type: "SET_TO_CART", payload: storedCart });
@@ -31,7 +29,7 @@ const Trending = () => {
             </div>
           </div>
           <div className="row no-gutters trending-product-grid">
-            <div className="col-10">
+            <div className="col-12">
               <div
                 className="tab-content tp-tab-content"
                 id="trendingTabContent"
@@ -126,7 +124,7 @@ const Trending = () => {
                             {/* <div className="features-product-cart">
                               <a href="cart.html">add to cart</a>
                             </div> */}
-                            <div className="features-product-cart">
+                            <div className="features-product-cart ">
                               <button
                                 title="Add To Cart"
                                 className="add-to-cart"

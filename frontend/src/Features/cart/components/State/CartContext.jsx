@@ -19,7 +19,7 @@ export default CartContextStore;
 
 export const CartStore = () => {
   const Context = useContext(CartContext);
-  console.log(Context);
+  // console.log(Context);
   if (!Context) {
     throw new Error("no context found");
   }
