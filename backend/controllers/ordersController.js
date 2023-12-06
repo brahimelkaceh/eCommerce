@@ -122,7 +122,8 @@ exports.updateOrder = catchAsync(async (req, res) => {
     }
     for (let i = 0; i < orderItems.length; i++) {
       const element = orderItems[i];
-      const product = await Products.findOne({ _id: element.product._id });
+       console.log("element : ", orderItems[i]);
+      const product = await Products.findOne({ _id: element.product });
       if (!product) {
         response.message = CONSTANTS.PRODUCTS_NOT_FOUND;
         response.status = CONSTANTS.SERVER_ERROR_HTTP_CODE;

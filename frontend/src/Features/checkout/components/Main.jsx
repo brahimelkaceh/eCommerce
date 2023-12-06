@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartStore } from "../../cart/components/State/CartContext";
 import { useFormik } from "formik";
@@ -6,71 +6,73 @@ import { createOrder } from "../service";
 import * as Yup from "yup";
 const Main = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-  const handleClick = (event) => {
-    event.preventDefault();
-    const jwt = localStorage.customerId;
+  // const handleClick = (event) => {
+  //   event.preventDefault();
+  //   const jwt = localStorage.customerId;
 
-    const orderItems = shoppingCart.map((product) => ({
+  //   const orderItems = shoppingCart.map((product) => ({
+  //     product: product._id,
+  //     quantity: product.orderQty,
+  //     productName: product.productName,
+  //     productPrice: product.options[0].price,
+  //     quantity: product.quantity,
+  //   }));
+  //   const order = {
+  //     customerID: JSON.parse(jwt),
+  //     orderItems: orderItems,
+  //     cartTotalPrice: totalPrice,
+  //     Status: "Open",
+  //   };
+  //   console.log(order);
+  //   // createOrder(order)
+  // };
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      address: "",
+      city: "",
+      postalZip: "",
+      email: "",
+      phoneNumber: "",
+      note: "",
+    },
+    validationSchema: Yup.object().shape({
+      firstName: Yup.string().required("First name is required"),
+      lastName: Yup.string().required("Last name is required"),
+      address: Yup.string().required("address is required"),
+      city: Yup.string().required("city is required"),
+      postalZip: Yup.string().required("postalZip is required"),
+      phoneNumber: Yup.string().required("phoneNumber  is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+    }),
+
+    onSubmit: async (values) => {
+      console.log(values);
+      const jwt = localStorage.customerId;
+      const orderItems = shoppingCart.map((product) => ({
         product: product._id,
-      quantity: product.orderQty,
-      productName: product.productName,
-      productPrice: product.options[0].price,
-      quantity:product.quantity
+        quantity: product.orderQty,
+        productName: product.productName,
+        productPrice: product.options[0].price,
+        quantity: product.orderQty,
       }));
       const order = {
+        ...values,
         customerID: JSON.parse(jwt),
         orderItems: orderItems,
         cartTotalPrice: totalPrice,
         Status: "Open",
-    };
-    console.log(order);
-      // createOrder(order)
-  };
-    const formik = useFormik({
-      initialValues: {
-        firstName: "",
-        lastName: "",
-        address: "",
-        city: "",
-        postalZip: "",
-        email: "",
-        phoneNumber: "",
-        note: "",
-      },
-      validationSchema: Yup.object().shape({
-        firstName: Yup.string().required("First name is required"),
-        lastName: Yup.string().required("Last name is required"),
-        address: Yup.string().required("address is required"),
-         city: Yup.string().required("city is required"),
-        postalZip: Yup.string().required("postalZip is required"),
-        phoneNumber: Yup.string().required("phoneNumber  is required"),
-        email: Yup.string()
-          .email("Invalid email address")
-          .required("Email is required"),
-      }),
-
-      onSubmit: async (values) => {
-        console.log(values);
-        const jwt = localStorage.customerId;
-        const orderItems = shoppingCart.map((product) => ({
-          productId: product._id,
-          quantity: product.orderQty,
-          productName: product.productName,
-          productPrice: product.options[0].price,
-          quantity: product.quantity,
-        }));
-        const order = {
-          ...values,
-          customerID: JSON.parse(jwt),
-          orderItems: orderItems,
-          cartTotalPrice: totalPrice,
-          Status: "Open",
-        };
-        console.log(order);
-        createOrder(order);
-        
-      },
-    });
+      };
+      createOrder(order);
+      console.log("order send successfully", order);
+      localStorage.removeItem("ShopOrders");
+      localStorage.removeItem("CartOrders");
+      dispatch({ type: "SET_TO_CART",payload:[] });
+    },
+  });
   return (
     <main>
       {/* breadcrumb-area */}
@@ -121,6 +123,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="firstName"
+                          className="input"
                           name="firstName" // Connect the input to the corresponding Formik field
                           value={formik.values.firstName} // Set value from Formik state
                           onChange={formik.handleChange} // Handle change using Formik's handleChange
@@ -141,6 +144,7 @@ const Main = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
+                          className="input"
                           value={formik.values.lastName}
                           onChange={formik.handleChange}
                         />
@@ -160,6 +164,7 @@ const Main = () => {
                           type="text"
                           id="address"
                           name="address"
+                          className="input"
                           value={formik.values.address}
                           onChange={formik.handleChange}
                         />
@@ -178,7 +183,7 @@ const Main = () => {
                         </label>
                         <select
                           className="custom-select"
-                          name= "city"
+                          name="city"
                           value={formik.values.city}
                           onChange={formik.handleChange}
                         >
@@ -200,6 +205,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="postalZip"
+                          className="input"
                           name="postalZip"
                           value={formik.values.postalZip}
                           onChange={formik.handleChange}
@@ -219,6 +225,7 @@ const Main = () => {
                         <input
                           type="text"
                           id="phoneNumber"
+                          className="input"
                           name="phoneNumber"
                           value={formik.values.phoneNumber}
                           onChange={formik.handleChange}
@@ -238,6 +245,7 @@ const Main = () => {
                         <input
                           type="email"
                           id="email"
+                          className="input"
                           name="email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
@@ -343,9 +351,7 @@ const Main = () => {
                         </label>
                       </div>
                     </div>
-                    <button className="btn" onClick={handleClick}>
-                      Place order
-                    </button>
+                    <button className="btn">Place order</button>
                   </form>
                 </div>
               </aside>

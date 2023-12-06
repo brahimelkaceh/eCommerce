@@ -31,6 +31,7 @@ export default function AllOrders({ handleOpen }) {
   const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
+    console.log(data);
   }, [data]);
 
   // useEffect(() => {
@@ -53,7 +54,7 @@ export default function AllOrders({ handleOpen }) {
     if (customerId) {
       fetchCustomer();
     }
-  }, [customerId, getCustomerById]);
+  }, [customerId]);
 
   const getColorBasedOnStatus = (status) => {
     switch (status) {
@@ -100,7 +101,6 @@ export default function AllOrders({ handleOpen }) {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    // console.log(updatedRow);
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
     updateOrder(updatedRow._id, updatedRow);
