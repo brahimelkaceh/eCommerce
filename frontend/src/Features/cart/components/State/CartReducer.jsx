@@ -36,16 +36,25 @@ export const CartReducer = (state, action) => {
       console.log("check", check);
       if (check) {
         const index = shoppingCart.findIndex((cart) => cart._id === action.id);
-        check.orderQty += 1;
-        subTotal = totalPrice + check.options[0].price;
-        check.subTotal = check.options[0].price * check.orderQty;
-        ProductQty = qty;
-        shoppingCart[index] = check;
-        return {
-          shoppingCart: [...shoppingCart],
-          totalPrice: subTotal,
-          qty: ProductQty,
-        };
+        if (check.quantity > check.orderQty) {
+           check.orderQty += 1;
+           subTotal = totalPrice + check.options[0].price;
+           check.subTotal = check.options[0].price * check.orderQty;
+           ProductQty = qty;
+          shoppingCart[index] = check;
+           return {
+             shoppingCart: [...shoppingCart],
+             totalPrice: subTotal,
+             qty: ProductQty,
+           };
+        } else if (check.orderQty > check.quantity) {
+          return {
+            shoppingCart: [...shoppingCart],
+            totalPrice: totalPrice,
+            qty : qty
+          }
+        }
+          
       } else {
         product = action.product;
         //  product["quantity"] = 1;
@@ -63,16 +72,25 @@ export const CartReducer = (state, action) => {
     case "INCREMENT":
       product = shoppingCart.find((product) => product._id === action.id);
       index = shoppingCart.findIndex((prod) => prod._id === action.id);
-      product.orderQty += 1;
-      subTotal = totalPrice + product.options[0].price;
-      product.subTotal = product.orderQty * product.options[0].price;
-      ProductQty = qty + 1;
-      shoppingCart[index] = product;
-      return {
-        shoppingCart: [...shoppingCart],
-        totalPrice: subTotal,
-        qty: qty,
-      };
+      if (product.quantity > product.orderQty) {
+        product.orderQty += 1;
+        subTotal = totalPrice + product.options[0].price;
+        product.subTotal = product.orderQty * product.options[0].price;
+        ProductQty = qty + 1;
+        shoppingCart[index] = product;
+         return {
+           shoppingCart: [...shoppingCart],
+           totalPrice: subTotal,
+           qty: qty,
+         };
+      } else {
+        return {
+          shoppingCart: [...shoppingCart],
+          totalPrice: totalPrice,
+          qty: qty
+        }
+      }
+     
 
     case "DECREMENT":
       product = shoppingCart.find((product) => product._id === action.id);
