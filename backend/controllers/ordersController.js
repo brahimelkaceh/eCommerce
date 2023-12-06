@@ -98,7 +98,7 @@ exports.listOrders = catchAsync(async (req, res) => {
     const Orders = await orders
       .find()
       .populate({
-        path: "orderItems.productId",
+        path: "orderItems.product",
         select: "productName price quantity images options",
       })
       .populate("customerID", "email userName role images");

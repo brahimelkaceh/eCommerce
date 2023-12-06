@@ -130,12 +130,12 @@ const StickyHeader = () => {
                                 </h4>
                                 <div className="cart-price">
                                   <span className="new">
-                                    ${product.options[0].price}
+                                    ${product.RealPrice}
                                   </span>
                                   {/* Add your logic for displaying discounted price here */}
-                                  <span>
+                                  {/* <span>
                                     <del>${product.options[0].oldPrice}</del>
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                               <div className="del-icon">

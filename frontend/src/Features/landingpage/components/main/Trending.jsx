@@ -3,7 +3,7 @@ import { useProduct } from "../../../Products/Context";
 import banner from "../../../../assets/img/banner.webp";
 import { CartStore } from "../../../cart/components/State/CartContext";
 const Trending = () => {
-  const { products } = useProduct();
+  const { products ,discountPrice} = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
@@ -87,6 +87,10 @@ const Trending = () => {
                               </h5>
                               <p className="price">
                                 ${product?.options[0]?.price}
+                              </p>
+                              <p className="price">
+                                Discount Price : $
+                                {discountPrice(product?.options[0]?.price , product?.discountPrice)}
                               </p>
                               <div className="features-product-bottom">
                                 <ul>

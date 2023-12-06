@@ -16,7 +16,8 @@ export const CartReducer = (state, action) => {
       ProductQty = 0;
       if (action.payload) {
         action.payload.forEach((product) => {
-          subTotal += product.orderQty * product.options[0].price;
+          product.RealPrice =   product?.options[0]?.price - (    (product?.discountPrice * product?.options[0]?.price) /    100   ).toFixed(2);
+          subTotal += product.orderQty * product.RealPrice;
           ProductQty += 1;
         });
       }
@@ -31,9 +32,16 @@ export const CartReducer = (state, action) => {
       if (check) {
         const index = shoppingCart.findIndex((cart) => cart._id === action.id);
         if (check.quantity > check.orderQty) {
-           check.orderQty += 1;
-           subTotal = totalPrice + check.options[0].price;
-           check.subTotal = check.options[0].price * check.orderQty;
+          check.orderQty += 1;
+          check.RealPrice =
+            product?.options[0]?.price -
+            (
+              (product?.discountPrice * product?.options[0]?.price) /
+              100
+            ).toFixed(2);
+           subTotal = totalPrice + check.RealPrice;
+          check.subTotal = check.RealPrice * check.orderQty;
+          
            ProductQty = qty;
           shoppingCart[index] = check;
            return {
@@ -53,9 +61,16 @@ export const CartReducer = (state, action) => {
         product = action.product;
         //  product["quantity"] = 1;
         product.orderQty = 1;
+        product.RealPrice =
+          product?.options[0]?.price -
+          ((product?.discountPrice * product?.options[0]?.price) / 100).toFixed(
+            2
+          );
         ProductQty = qty + 1;
-        subTotal = totalPrice + product.options[0].price;
-        product.subTotal = product.options[0].price * product.orderQty;
+        subTotal = totalPrice + product.RealPrice;
+        
+        product.subTotal = product.RealPrice * product.orderQty;
+        
         return {
           shoppingCart: [product, ...shoppingCart],
           totalPrice: subTotal,
@@ -68,8 +83,14 @@ export const CartReducer = (state, action) => {
       index = shoppingCart.findIndex((prod) => prod._id === action.id);
       if (product.quantity > product.orderQty) {
         product.orderQty += 1;
-        subTotal = totalPrice + product.options[0].price;
-        product.subTotal = product.orderQty * product.options[0].price;
+         product.RealPrice =
+           product?.options[0]?.price -
+           (
+             (product?.discountPrice * product?.options[0]?.price) /
+             100
+           ).toFixed(2);
+        subTotal = totalPrice + product.RealPrice;
+        product.subTotal = product.orderQty * product.RealPrice;
         ProductQty = qty + 1;
         shoppingCart[index] = product;
          return {
@@ -91,8 +112,14 @@ export const CartReducer = (state, action) => {
       index = shoppingCart.findIndex((prod) => prod._id === action.id);
       if (product.orderQty > 1) {
         product.orderQty -= 1;
-        subTotal = +(totalPrice - product.options[0].price).toFixed(2);
-        product.subTotal = product.orderQty * product.options[0].price;
+         product.RealPrice =
+           product?.options[0]?.price -
+           (
+             (product?.discountPrice * product?.options[0]?.price) /
+             100
+           ).toFixed(2);
+        subTotal = +(totalPrice - product.RealPrice).toFixed(2);
+        product.subTotal = product.orderQty * product.RealPrice;
         ProductQty = qty - 1;
         shoppingCart[index] = product;
         return {
@@ -111,7 +138,7 @@ export const CartReducer = (state, action) => {
     case "DELETE_PRODUCT":
       filtered = shoppingCart.filter((cart) => cart.id !== action.id);
       product = shoppingCart.find((cart) => cart.id === action.id);
-      subTotal = totalPrice - product.options[0].price * product.orderQty;
+      subTotal = totalPrice - product.RealPrice * product.orderQty;
       ProductQty = qty - 1;
       return {
         shoppingCart: [...filtered],
