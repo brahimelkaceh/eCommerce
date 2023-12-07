@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-
+import Swal from "sweetalert2";
 import {
   GridRowModes,
   DataGrid,
@@ -99,7 +99,34 @@ export default function AllOrders({ handleOpen }) {
     const updatedRow = { ...newRow, isNew: false };
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
-    updateOrder(updatedRow._id, updatedRow);
+
+      try {
+        Swal.fire({
+          title: "Do you want to save the changes?",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Save",
+          denyButtonText: `Don't save`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+                updateOrder(updatedRow._id, updatedRow)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                Swal.fire("Error occurred: while editing user", error);
+                console.error("Error occurred: while editing user", error);
+              });
+          } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+          }
+        });
+      } catch (error) {
+        throw error;
+      }
+    // updateOrder(updatedRow._id, updatedRow);
     return updatedRow;
   };
 
