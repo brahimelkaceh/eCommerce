@@ -50,7 +50,7 @@ const Main = () => {
     }),
 
     onSubmit: async (values) => {
-      console.log(values);
+      // console.log(values);
       const jwt = localStorage.customerId;
       const orderItems = shoppingCart.map((product) => ({
         product: product._id,
@@ -65,11 +65,17 @@ const Main = () => {
         cartTotalPrice: totalPrice,
         Status: "Open",
       };
-      createOrder(order);
-      console.log("order send successfully", order);
-      localStorage.removeItem("ShopOrders");
-      localStorage.removeItem("CartOrders");
-      dispatch({ type: "SET_TO_CART", payload: [] });
+      if (orderItems.length) {
+        createOrder(order);
+        console.log("order send successfully", order);
+        localStorage.removeItem("ShopOrders");
+        localStorage.removeItem("CartOrders");
+        dispatch({ type: "SET_TO_CART", payload: [] });
+      } else {
+        console.log("there is no order to send");
+      }
+     
+      
     },
   });
   return (

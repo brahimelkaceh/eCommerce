@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const Cart = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   console.log("total options.price", totalPrice);
+  console.log("shoppingCart" , shoppingCart)
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
     // console.log("storedCart:1", storedCart);
@@ -32,7 +33,8 @@ const Cart = () => {
       Status:"Open"
     }
   console.log(order)
-}
+  }
+
   return (
     <div className="cart-area pt-100 pb-100">
       <div className="container">
@@ -56,6 +58,7 @@ const Cart = () => {
                   <tbody>
                     {shoppingCart.length > 0 &&
                       shoppingCart.map((product) => (
+                     
                         <tr key={product._id}>
                           <td className="product-thumbnail">
                             <a href="shop-details.html">
@@ -70,7 +73,7 @@ const Cart = () => {
                             </h4>
                           </td>
                           <td className="product-price">
-                            {product.options[0].price}
+                            {product.RealPrice}
                           </td>
                           <td className="product-quantity">
                             <div className="cart-plus-minus">

@@ -103,6 +103,10 @@ export const ProductProvider = ({ children }) => {
     fetchProducts();
   }, [refresh]);
 
+  const discountPrice =  (price, discountPrice) => {
+    return  price - ((discountPrice * price) / 100).toFixed(2);
+  };
+
   const productContextValue = {
     products,
     addNewProduct,
@@ -112,6 +116,7 @@ export const ProductProvider = ({ children }) => {
     fetchProductById,
     updateProducts,
     setRefresh,
+    discountPrice
   };
 
   return (

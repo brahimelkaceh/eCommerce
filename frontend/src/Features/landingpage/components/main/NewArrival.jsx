@@ -3,7 +3,7 @@ import banner from "../../../../assets/img/banner.webp";
 import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
 const NewArrival = () => {
-  const { products } = useProduct();
+  const { products,discountPrice } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   return (
     <main>
@@ -85,6 +85,10 @@ const NewArrival = () => {
                           </h5>
                           <span className="price">
                             ${product?.options[0]?.price}
+                          </span>
+                          <span className="price">
+                            $
+                            {discountPrice(product.options[0].price,product.discountPrice) }
                           </span>
                         </div>
                       </div>

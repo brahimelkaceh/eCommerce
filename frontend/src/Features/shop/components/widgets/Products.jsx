@@ -5,6 +5,7 @@ import { CartStore } from "../../../cart/components/State/CartContext";
 
 const Products = ({ products }) => {
   // const { getProductById } = useProduct();
+  const {  discountPrice } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     console.log("ShoppingCart: ", shoppingCart);
@@ -74,6 +75,13 @@ const Products = ({ products }) => {
                     </Link>
                   </h5>
                   <span className="price">${product.options[0].price}</span>
+                  <span className="price">
+                    Discount price $ 
+                    {discountPrice(
+                      product.options[0].price,
+                      product.discountPrice
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
