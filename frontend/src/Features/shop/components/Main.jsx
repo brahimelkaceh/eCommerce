@@ -10,7 +10,9 @@ const Main = () => {
   const { SubcatData, catData } = useSubCatData();
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-
+  // const [text, setText] = useState('');
+  const [RealProducts, setRealProducts] = useState([]);
+   // it should be constant with no change
   useEffect(() => {
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
@@ -20,8 +22,10 @@ const Main = () => {
         return product.subCategoryId._id === subcategoryId;
       });
       setFilteredProducts(filtered);
+  
     } else {
       setFilteredProducts(allProducts);
+          setRealProducts(allProducts);
     }
   }, [selectedSubcategory, allProducts]);
 
@@ -32,6 +36,7 @@ const Main = () => {
   const handleResetSubcategory = () => {
     setSelectedSubcategory(null);
   };
+  // console.log(filteredProducts);
 
   return (
     <div>
@@ -42,7 +47,25 @@ const Main = () => {
               <aside className="shop-sidebar">
                 <div className="widget side-search-bar">
                   <form action="#">
-                    <input type="text" />
+                    <input
+                      type="text"
+                      onChange={(e) => {
+                        
+                        // setText(e.target.value);
+                        const regex = new RegExp(e.target.value, "i");
+                        let newProducts = [];
+                        RealProducts.forEach((product) => {
+                          if (regex.test(product.productName)) {
+                            newProducts.push(product);
+                          }
+                        });
+                        // console.log("showed Products",newProducts);
+                        // console.log("real Products", RealProducts);
+                        // console.log("filtered Products", filteredProducts);
+                        setFilteredProducts(  newProducts );
+                      }}
+                    />
+                    
                     <button>
                       <i className="flaticon-search" />
                     </button>
