@@ -52,9 +52,12 @@ const NewArrival = () => {
                                 </button>
                               </li>
                               <li>
-                                <button className="btn-icon">
+                                <a
+                                  href={`/shop/${product.id}`}
+                                  className="btn-icon"
+                                >
                                   <i className="far fa-eye" />
-                                </button>
+                                </a>
                               </li>
                               <li>
                                 <button

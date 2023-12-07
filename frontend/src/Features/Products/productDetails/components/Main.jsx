@@ -50,7 +50,15 @@ const Main = () => {
                             aria-selected="true"
                             onMouseEnter={(e) => setbigimage(e.target.src)}
                           >
-                            <img src={img} width="99" height="117" alt />
+                            <img
+                              style={{
+                                objectFit: "cover",
+                              }}
+                              src={img}
+                              width="99"
+                              height="117"
+                              alt
+                            />
                           </a>
                         ))}
                       </li>
@@ -70,6 +78,9 @@ const Main = () => {
                             width="621"
                             height="689"
                             alt
+                            style={{
+                              objectFit: "cover",
+                            }}
                           />
                         </div>
                       </div>
@@ -122,11 +133,13 @@ const Main = () => {
                         <h4 className="widget-title">Product Size</h4>
                         <div className="shop-size-list">
                           <ul>
-                            <li>
-                              {product.options[0].size.map((s) => {
-                                return <a href="#">{s}</a>;
-                              })}
-                            </li>
+                            {product.options[0].size.map((s) => {
+                              return s.split(",").map((size) => (
+                                <li>
+                                  <a>{size}</a>
+                                </li>
+                              ));
+                            })}
                           </ul>
                         </div>
                       </div>

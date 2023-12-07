@@ -24,7 +24,6 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       options, // Array of product options
       active,
     } = req.body;
-    console.log(options);
     const subcategory = await SubCategory.findById(subCategoryId);
     if (!subcategory) {
       return next(

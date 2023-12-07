@@ -13,27 +13,6 @@ const apiService = axios.create({
   },
 });
 
-const getToken = () => {
-  const token = JSON.parse(localStorage.getItem("userT"));
-  if (!token) {
-    throw new Error("Token not available");
-  }
-  return token;
-};
-
-const handleRequest = async (method, endpoint, data = null) => {
-  try {
-    const response = await apiService({
-      method,
-      url: endpoint,
-      data,
-    });
-    console.log("response", response);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 export const getProducts = async () => apiService.get("/");
 export const getP = async (id) => await apiService.get(`/${id}`);
 

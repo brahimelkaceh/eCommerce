@@ -3,12 +3,8 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-
-import ProductForm from "../ProductForm";
 import EditForm from "./EditForm";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,7 +21,6 @@ const style = {
 
 export default function EditProductModal({ open, setOpen, id }) {
   const handleClose = () => setOpen(false);
-
   return (
     <div
       style={{
@@ -48,8 +43,7 @@ export default function EditProductModal({ open, setOpen, id }) {
       >
         <Fade in={open}>
           <Box sx={style}>
-            {id}
-            <EditForm onClose={handleClose} />
+            <EditForm id={id} onClose={handleClose} />
           </Box>
         </Fade>
       </Modal>

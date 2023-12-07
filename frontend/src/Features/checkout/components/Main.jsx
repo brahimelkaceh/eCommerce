@@ -54,7 +54,6 @@ const Main = () => {
       const jwt = localStorage.customerId;
       const orderItems = shoppingCart.map((product) => ({
         product: product._id,
-        quantity: product.orderQty,
         productName: product.productName,
         productPrice: product.options[0].price,
         quantity: product.orderQty,

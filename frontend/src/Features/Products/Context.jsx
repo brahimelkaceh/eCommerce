@@ -76,17 +76,7 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  const fetchProductByIdFromService = async (productId) => {
-    try {
-      const product = await getP(productId);
-      return product;
-    } catch (error) {
-      console.error(`Error fetching product with ID ${productId}:`, error);
-      return null;
-    }
-  };
-
-  const fetchProductByIdAndUpdateState = async (productId) => {
+  const fetchProductById = async (productId) => {
     try {
       const product = await getP(productId);
       return product;
@@ -119,7 +109,7 @@ export const ProductProvider = ({ children }) => {
     setNewProduct,
     editProduct,
     deleteProductById,
-    fetchProductById: fetchProductByIdFromService,
+    fetchProductById,
     updateProducts,
     setRefresh,
   };

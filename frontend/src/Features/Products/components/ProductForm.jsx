@@ -77,16 +77,23 @@ const ProductForm = ({ open, onClose }) => {
             }
           } else if (key === "options") {
             optionsArray.forEach((option, index) => {
-              Object.entries(option).forEach(([optionKey, optionValue]) => {
-                formData.append(`options[${index}][${optionKey}]`, optionValue);
-              });
+              console.log(option);
+              Object.entries(option)
+                .map(([optionKey, optionValue]) => {
+                  return [`options[${index}][${optionKey}]`, optionValue];
+                })
+                .forEach(([key, value]) => {
+                  // console.log(key, value);
+                  formData.append(key, value);
+                });
             });
           } else {
-            console.log("key", key, value);
             formData.append(key, value);
+            // console.log(formData);
           }
         });
-        console.log(formData);
+        // return;
+
         onClose();
         Swal.fire({
           title: "Do you want to create this product?",
@@ -479,7 +486,7 @@ const ProductForm = ({ open, onClose }) => {
               }}
             >
               {Array.from(formik.values.images).map((file, index) => {
-                console.log(file);
+                console.log(URL.createObjectURL(file));
                 return (
                   <div
                     key={index}

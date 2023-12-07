@@ -23,7 +23,7 @@ import {
 import { Chip, Typography } from "@mui/material";
 
 export default function AllProducts() {
-  const { products, getProductById } = useProduct();
+  const { products } = useProduct();
 
   const [rows, setrows] = React.useState(products && products);
   const [rowModesModel, setrowsmodesmodel] = React.useState({});
@@ -51,7 +51,6 @@ export default function AllProducts() {
   };
   // sweatAlert
   const handleDeleteClick = (id) => async () => {
-    console.log("first entred", id);
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -374,7 +373,6 @@ export default function AllProducts() {
             onClick={async () => {
               setOpen(true);
               setEditingProductId(id);
-              getProductById(id);
             }}
           />,
           <GridActionsCellItem

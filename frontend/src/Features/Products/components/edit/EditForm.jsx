@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import DoneIcon from "@mui/icons-material/Done";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useProduct } from "../../Context";
-import { createP } from "../../Services";
+import { createP, editP } from "../../Services";
 import validationSchema from "../manageProducts/validationSchema";
 import initialValues from "../manageProducts/InitialValues";
 import { useSubCatData } from "../../../categories/Context";
@@ -52,14 +52,28 @@ function getStyles(name, size, theme) {
   };
 }
 
-const EditForm = ({ onClose }) => {
+const EditForm = ({ onClose, id }) => {
   const theme = useTheme();
   const sizes = ["S", "M", "L", "XL"];
   const colors = ["PINK", "PURPLE", "RED", "GREEN", "BLUE"];
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const { addNewProduct, setRefresh } = useProduct();
+  const { setRefresh, fetchProductById } = useProduct();
   const { SubcatData } = useSubCatData();
+  const [product, setproduct] = useState(null);
+  const [loading, setloading] = useState(false);
+  const [select, setselect] = useState(false);
+
+  useEffect(() => {
+    const getProuctData = async () => {
+      setloading(true);
+      const response = await fetchProductById(id);
+      setloading(false);
+      console.log("single product", response.data.data);
+      setproduct(response.data.data);
+    };
+    getProuctData();
+  }, []);
   // SweatAlert
   const formik = useFormik({
     initialValues: initialValues,
@@ -82,14 +96,13 @@ const EditForm = ({ onClose }) => {
               });
             });
           } else {
-            console.log("key", key, value);
             formData.append(key, value);
           }
         });
-        console.log(formData);
         onClose();
+
         Swal.fire({
-          title: "Do you want to create this product?",
+          title: "Do you want to Update this product?",
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: "Create",
@@ -97,8 +110,9 @@ const EditForm = ({ onClose }) => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              await createP(formData);
-              Swal.fire("Product Created!", "", "success");
+              const res = await editP(id, formData);
+              console.log(res);
+              Swal.fire("Product Updated!", "", "success");
               setRefresh(new Date().toISOString());
             } catch (error) {
               Swal.fire(
@@ -125,6 +139,36 @@ const EditForm = ({ onClose }) => {
     updatedImages.splice(index, 1);
     formik.setFieldValue("images", updatedImages);
   };
+
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      productName: product?.productName,
+      subCategoryId: product?.subCategoryId?._id,
+      sku: product?.sku,
+      shortDescription: product?.shortDescription,
+      longDescription: product?.longDescription,
+      options: {
+        price: product?.options[0]?.price,
+        size: product?.options[0]?.size,
+        color: product?.options[0]?.color,
+        availability: product?.options[0]?.availability,
+      },
+      active: product?.active,
+      images: product?.images,
+      discountPrice: product?.discountPrice,
+      quantity: product?.quantity,
+    });
+    setImages(product?.images);
+  }, [product]);
+  setTimeout(() => {
+    formik.values?.options?.size?.map((s) => {
+      return setSize(s.split(","));
+    });
+    formik.values?.options?.color?.map((clr) => {
+      return setColor(clr.split(","));
+    });
+  }, 0);
   return (
     <Box
       m="20px"
@@ -137,7 +181,6 @@ const EditForm = ({ onClose }) => {
         onSubmit={(e) => {
           e.preventDefault();
           formik.handleSubmit();
-          console.log("submit");
         }}
       >
         <Box
@@ -467,43 +510,58 @@ const EditForm = ({ onClose }) => {
               multiple
               name="images"
               onChange={(event) => {
-                formik.setFieldValue("images", event.target.files);
+                setImages((prevImages) => [prevImages, ...event.target.files]);
+                formik.setFieldValue(
+                  "images",
+
+                  event.target.files
+                );
               }}
             />
           </Button>
-          {formik.values.images.length > 0 && (
+          {product?.images.length > 0 && (
             <div
               style={{
                 display: "flex",
                 width: "fit-content",
               }}
             >
-              {Array.from(formik.values.images).map((file, index) => {
-                console.log(file);
-                return (
-                  <div
-                    key={index}
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`Uploaded Image ${index}`}
+              {formik?.values?.images &&
+                Array.from(formik.values.images).map((image, index) => {
+                  return (
+                    <div
+                      key={index}
                       style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                        margin: "5px",
+                        display: "flex",
+                        alignItems: "center",
+                        overflow: "hidden",
+                        // background: "blue",
+                        width: "100%",
                       }}
-                    />
-                    <IconButton
-                      variant="outlined"
-                      color="error"
-                      onClick={() => handleDeleteImage(index)}
                     >
-                      <CancelIcon></CancelIcon>
-                    </IconButton>
-                  </div>
-                );
-              })}
+                      <img
+                        src={
+                          image instanceof File
+                            ? URL.createObjectURL(image)
+                            : image
+                        }
+                        alt={`Uploaded Image ${index}`}
+                        style={{
+                          maxWidth: "100px",
+                          maxHeight: "100px",
+                          margin: "5px",
+                        }}
+                      />
+                      <IconButton
+                        variant="outlined"
+                        color="error"
+                        onClick={() => handleDeleteImage(index)}
+                      >
+                        <CancelIcon></CancelIcon>
+                      </IconButton>
+                    </div>
+                  );
+                })}
             </div>
           )}
         </Box>
