@@ -3132,7 +3132,7 @@ header.side-header {
 .shop-cart-widget form ul .cart-total-amount .amount {
   font-size: 18px;
 }
-.shop-cart-widget form button {
+.shop-cart-widget button {
   margin-top: 35px;
   width: 100%;
   box-shadow: none;

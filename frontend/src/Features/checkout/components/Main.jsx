@@ -71,11 +71,10 @@ const Main = () => {
         localStorage.removeItem("ShopOrders");
         localStorage.removeItem("CartOrders");
         dispatch({ type: "SET_TO_CART", payload: [] });
+        formik.handleReset();
       } else {
         console.log("there is no order to send");
       }
-     
-      
     },
   });
   return (
@@ -109,7 +108,10 @@ const Main = () => {
       {/* checkout-area */}
       <section className="checkout-area pt-95 pb-95">
         <div className="container">
-          <div className="row justify-content-center">
+          <form
+            onSubmit={formik.handleSubmit}
+            className="row justify-content-center"
+          >
             <div className="col-lg-7">
               <div className="checkout-wrap">
                 <div className="checkout-top">
@@ -118,7 +120,7 @@ const Main = () => {
                     <i className="fas fa-angle-left" /> -- Back to Cart
                   </Link>
                 </div>
-                <form onSubmit={formik.handleSubmit} className="checkout-form">
+                <div className="checkout-form">
                   <div className="row">
                     <div className="col-sm-6">
                       <div className="form-grp">
@@ -278,16 +280,15 @@ const Main = () => {
                         />
                       </div>
                     </div>
-                    <button type="submit">save</button>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
             <div className="col-lg-5 col-md-8">
               <aside className="checkout-sidebar">
                 <h6 className="title">Cart Totals</h6>
                 <div className="shop-cart-widget">
-                  <form action="#">
+                  <div>
                     <ul>
                       <li className="sub-total">
                         <span>Products Quantity</span> {qty}
@@ -357,11 +358,11 @@ const Main = () => {
                       </div>
                     </div>
                     <button className="btn">Place order</button>
-                  </form>
+                  </div>
                 </div>
               </aside>
             </div>
-          </div>
+          </form>
         </div>
       </section>
       {/* checkout-area-end */}
