@@ -9,7 +9,6 @@ const Main = () => {
   const [product, setproduct] = useState(null);
   const [bigimage, setbigimage] = useState(null);
   const { id } = useParams();
-
   useEffect(() => {
     const getProuctData = async () => {
       const response = await fetchProductById(id);
@@ -123,10 +122,18 @@ const Main = () => {
                   <h3 className="title">{product.productName}</h3>
 
                   <p className="style-name">Product Sku:{product.sku}</p>
+                  <del className="price">
+                    Price : {product.options[0].price} $
+                  </del>
                   <div className="price">
-                    Price : {product.options[0].price}
+                    Price :{" "}
+                    {product?.options[0]?.price -
+                      (
+                        (product?.discountPrice * product?.options[0]?.price) /
+                        100
+                      ).toFixed(2)}
+                    $
                   </div>
-
                   <div className="product-details-info">
                     {product.options[0].size[0] && (
                       <div className="sidebar-product-size mb-30">
