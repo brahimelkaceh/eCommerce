@@ -160,7 +160,7 @@ const StickyHeader = () => {
                         </li>
                         <li>
                           <div className="checkout-link">
-                            <a href="/shop">Shopping Cart</a>
+                            <a href="/cart">Shopping Cart</a>
                             <Link className="black-color" to="/checkout">
                               Checkout
                             </Link>

@@ -160,7 +160,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   const customerId = req.params.id;
   const images = req.files;
   const uploadedImages = await addImages(images);
-  const { firstName, lastName, email, userName } = req.body;
+  const { firstName, lastName, email, userName,active } = req.body;
   const updatedCustomer = await Customer.findByIdAndUpdate(
     customerId,
     {
@@ -169,6 +169,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
       lastName,
       images: uploadedImages.length? uploadedImages.map((image) => image.imageUrl):req.body.images,
       email,
+      active
     },
     { new: true, runValidators: true },
   );
