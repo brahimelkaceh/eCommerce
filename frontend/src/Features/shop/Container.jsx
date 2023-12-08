@@ -11,7 +11,7 @@ const Container = () => {
     <div>
       <CartContextStore>
         {/* Prealoader */}
-        <Preloader />
+        {/* <Preloader /> */}
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header */}

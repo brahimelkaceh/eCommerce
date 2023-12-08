@@ -42,9 +42,9 @@ const Trending = () => {
                   aria-labelledby="accessories-tab"
                 >
                   <div className="trending-products-banner banner-animation">
-                    <a href="shop-sidebar.html">
+                    <Link to="/shop">
                       <img src={banner} alt />
-                    </a>
+                    </Link>
                   </div>
                   <div className="row trending-product-active">
                     {products?.slice(0, 4).map((product) => {
