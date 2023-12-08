@@ -6,7 +6,8 @@ const Hero = () => {
       {/* <!-- slider-area --> */}
       <section className="home-seven-slider">
         <div className="h7-slider-active">
-          <div className="h7-slider-item" data-background="">
+          <div className="h7-slider-item" 
+          style={{width:"100%" , backgroundSize: 'cover', backgroundImage: `url('/src/assets/img/slider/h7_slider_bg01.jpg')`}}>
             <div className="container custom-container-two">
               <div className="h7-slider-wrap">
                 <div className="row align-items-center">

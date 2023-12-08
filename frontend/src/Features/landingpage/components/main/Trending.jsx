@@ -1,7 +1,7 @@
 
 import React,{useEffect} from "react";
 import { useProduct } from "../../../Products/Context";
-import banner from "../../../../assets/img/banner.webp";
+import banner from "../../../../assets/img/images/banner.png";
 import { CartStore } from "../../../cart/components/State/CartContext";
 const Trending = () => {
   const { products } = useProduct();

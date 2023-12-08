@@ -7,8 +7,8 @@ const CategorySlider = () => {
         <div className="container-fluid">
           <div className="row justify-content-center">
             <div className="col-xl-3 col-md-6">
-              <div className="h7s-bottom-item mb-20">
-                <img src="" alt="" />
+              <div className="h7s-bottom-item mb-20" >
+                <img src="/src/assets/img/images/1.png"  alt="" />
                 <div className="content">
                   <h5>
                     <a href="shop-sidebar.html">Homeware</a>
@@ -21,7 +21,7 @@ const CategorySlider = () => {
             </div>
             <div className="col-xl-3 col-md-6">
               <div className="h7s-bottom-item mb-20">
-                <img src="" alt="" />
+                <img src="/src/assets/img/images/2.png" alt="" />
                 <div className="content">
                   <h5>
                     <a href="shop-sidebar.html">Lifestyle</a>
@@ -34,7 +34,7 @@ const CategorySlider = () => {
             </div>
             <div className="col-xl-3 col-md-6">
               <div className="h7s-bottom-item mb-20">
-                <img src="" alt="" />
+                <img src="/src/assets/img/images/3.png" alt="" />
                 <div className="content">
                   <h5>
                     <a href="shop-sidebar.html">Accessories</a>
@@ -47,7 +47,7 @@ const CategorySlider = () => {
             </div>
             <div className="col-xl-3 col-md-6">
               <div className="h7s-bottom-item mb-20">
-                <img src="" alt="" />
+                <img src="/src/assets/img/images/4.png" alt="" />
                 <div className="content">
                   <h5>
                     <a href="shop-sidebar.html">Gifts</a>
