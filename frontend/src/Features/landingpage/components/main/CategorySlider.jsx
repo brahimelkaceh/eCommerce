@@ -10,10 +10,10 @@ const CategorySlider = () => {
       <section className=" pt-20">
         <div className="container-fluid">
           <div className="row justify-content-center">
-            {catData.map((category) => (
+            {catData?.slice(-4).map((category, i) => (
               <div key={category._id} className="col-xl-3 col-md-6">
                 <div className="h7s-bottom-item mb-20">
-                  {/* <img src={category.imageSrc} alt={category.categoryName} /> */}
+                  <img src={`/src/assets/img/images/${i + 1}.png`} alt="" />
                   <div className="content">
                     <h5>
                       <Link to={`/shop?category=${category._id}`}>

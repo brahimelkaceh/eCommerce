@@ -451,6 +451,7 @@ label {
   width: 100%;
   z-index: 9;
   height: auto;
+  padding: 5px;
 }
 .header-top-wrap {
   padding: 27px 0px;
@@ -2376,7 +2377,7 @@ header.side-header {
   background: #c2945a;
 }
 .h7-slider-content .title {
-  font-size: 80px;
+  font-size: 70px;
   text-transform: uppercase;
   color: #001921;
   line-height: 1.09;
@@ -3050,9 +3051,9 @@ header.side-header {
 .different-address
   .custom-control-input:checked
   ~ .custom-control-label::before {
-  color: #fff;
-  border-color: #ff6000;
-  background-color: #ff6000;
+  color: #ffffff;
+  border-color: #c2945a;
+  background-color: #c2945a;
 }
 .different-address
   .custom-control-input:focus:not(:checked)
