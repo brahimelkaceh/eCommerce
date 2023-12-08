@@ -25,7 +25,7 @@ const randomActive = () => {
   return randomArrayItem(active);
 };
 
-export default function allCustomers() {
+export default function allCustomers({ margin }) {
   const CustomerContext = useCustomer();
 
   const [rows, setrows] = React.useState([]);
@@ -155,14 +155,13 @@ export default function allCustomers() {
         );
       },
     },
-    { field: "userName", headerName: "UserName", width: 180, editable: true },
+    { field: "userName", headerName: "UserName", width: 100, editable: true },
     {
       field: "firstName",
       headerName: "First Name",
       align: "left",
       headerAlign: "left",
       editable: true,
-      flex: 1,
     },
     {
       field: "lastName",
@@ -170,19 +169,19 @@ export default function allCustomers() {
       align: "left",
       headerAlign: "left",
       editable: true,
-      flex: 1,
+      // flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
       align: "left",
       headerAlign: "left",
-      flex: 1,
+      // flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
-      flex: 1,
+      // flex: 1,
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -310,45 +309,34 @@ export default function allCustomers() {
   });
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
   return (
-    <Box
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      editMode="row"
+      className="dataGrid"
       sx={{
-        height: "100%",
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-        backgroundColor: "#fff",
-        p: 1,
-        borderRadius: 2,
-        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+        marginTop: margin && 0,
       }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: GridToolbar,
-        }}
-        // slotProps={{
-        //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
-        // }}
-        disableColumnFilter
-        disableDensitySelector
-        filterModel={filterModel}
-        onFilterModelChange={(newModel) => setFilterModel(newModel)}
-        columnVisibilityModel={columnVisibilityModel}
-        onColumnVisibilityModelChange={(newModel) =>
-          setColumnVisibilityModel(newModel)
-        }
-      />
-    </Box>
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      disableColumnSelector={margin}
+      slots={{
+        toolbar: GridToolbar,
+      }}
+      initialState={{
+        pagination: { paginationModel: { pageSize: 7 } },
+      }}
+      pageSizeOptions={[5, 10, 25]}
+      disableColumnFilter
+      disableDensitySelector
+      filterModel={filterModel}
+      onFilterModelChange={(newModel) => setFilterModel(newModel)}
+      columnVisibilityModel={columnVisibilityModel}
+      onColumnVisibilityModelChange={(newModel) =>
+        setColumnVisibilityModel(newModel)
+      }
+    />
   );
 }

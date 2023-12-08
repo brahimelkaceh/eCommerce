@@ -21,24 +21,22 @@ import Loader from "../../../Components/loader/Loader";
 import { useState } from "react";
 import { useCustomer } from "../../../Features/customers/Context";
 
-export default function AllOrders({ handleOpen }) {
-  const { data, loading, error, getOrderById, updateOrder } = useData();
-  const { getCustomerById, singleCustomer } = useCustomer();
+export default function AllOrders({ handleOpen, margin }) {
+  const { data, getOrderById, updateOrder } = useData();
+  const { getCustomerById, singleCustomer, customer } = useCustomer();
 
   const [rows, setrows] = useState([]);
-  const [customerId, setcustomer] = useState("");
+  const [CustId, setCustId] = useState("");
   const [Customer, setCustomer] = useState({});
   const [rowModesModel, setrowmodesmodel] = useState({});
   useEffect(() => {
     setrows(data);
-    console.log(data);
   }, [data]);
 
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const customer = await getCustomerById(customerId);
-        console.log("Fetched customer:", customer);
+        const customer = await getCustomerById(CustId);
         return setCustomer(customer);
         // return;
         // setcustomer(customer);
@@ -47,10 +45,10 @@ export default function AllOrders({ handleOpen }) {
       }
     };
 
-    if (customerId) {
+    if (CustId) {
       fetchCustomer();
     }
-  }, [customerId]);
+  }, [CustId]);
 
   const getColorBasedOnStatus = (status) => {
     switch (status) {
@@ -100,32 +98,32 @@ export default function AllOrders({ handleOpen }) {
     setrows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     delete updatedRow.isNew;
 
-      try {
-        Swal.fire({
-          title: "Do you want to save the changes?",
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: "Save",
-          denyButtonText: `Don't save`,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            Swal.fire("Saved!", "", "success");
-                updateOrder(updatedRow._id, updatedRow)
-              .then((response) => {
-                console.log(response);
-              })
-              .catch((error) => {
-                Swal.fire("Error occurred: while editing user", error);
-                console.error("Error occurred: while editing user", error);
-              });
-          } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
-          }
-        });
-      } catch (error) {
-        throw error;
-      }
+    try {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+          updateOrder(updatedRow._id, updatedRow)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              Swal.fire("Error occurred: while editing user", error);
+              console.error("Error occurred: while editing user", error);
+            });
+        } else if (result.isDenied) {
+          Swal.fire("Changes are not saved", "", "info");
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
     // updateOrder(updatedRow._id, updatedRow);
     return updatedRow;
   };
@@ -186,7 +184,7 @@ export default function AllOrders({ handleOpen }) {
 
       headerAlign: "left",
       renderCell: (params) => {
-        setcustomer(params.value?._id);
+        setCustId(params.value?._id);
         return <span className="customer-name"> {Customer?.userName}</span>;
       },
     },
@@ -378,16 +376,17 @@ export default function AllOrders({ handleOpen }) {
     data && (
       <DataGrid
         className="dataGrid"
+        sx={{
+          marginTop: margin && 0,
+        }}
         rows={rows}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
+        disableColumnSelector={margin}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        // slotProps={{
-        //   toolbar: { setrows, setrowmodesmodel, showQuickFilter: true },
-        // }}
         initialState={{
           pagination: { paginationModel: { pageSize: 7 } },
         }}

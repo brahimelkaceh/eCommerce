@@ -1,12 +1,14 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
-import LinearChart from "../../Components/charts/LinearChart";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
 import "./style.css";
-import DatetimeChart from "../../Components/charts/DatetimeChart";
+import LinearChart from "./charts/LinearChart";
+import PieChart from "./charts/PieChart";
+import AllOrders from "../orders/components/AllOrders";
+import AllCustomers from "../customers/components/CustomersDataTable";
 const Container = () => {
   return (
     <Box
@@ -20,8 +22,8 @@ const Container = () => {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Cards />
-            <Grid item xs={8}>
-              <Box
+            <Grid container item xs={8}>
+              <Item
                 sx={{
                   background: "#fff",
                   borderRadius: "var(--border-radius)",
@@ -31,30 +33,30 @@ const Container = () => {
                 }}
               >
                 <LinearChart />
-              </Box>
+              </Item>
             </Grid>
+
             <Grid item xs={4}>
-              <Box className="dashboard-card"></Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box
+              <Item
                 sx={{
-                  height: "100%",
                   background: "#fff",
-                  borderRadius: "8px",
+                  borderRadius: "var(--border-radius)",
                   width: "100%",
+                  height: "100%",
+                  boxShadow: "var(--box-shadow)",
                 }}
               >
-                {/* <PieChart /> */}
-                {/* <DatetimeChart /> */}
-              </Box>
+                <PieChart />
+              </Item>
             </Grid>
             <Grid item xs={6}>
-              <Box className="dashboard-card">
-                <LinearChart />
-              </Box>
+              <AllOrders margin={true} />
+            </Grid>
+            <Grid item xs={6}>
+              <AllCustomers margin={true} />
             </Grid>
           </Grid>
+          <Grid></Grid>
         </Box>
       </Box>
     </Box>

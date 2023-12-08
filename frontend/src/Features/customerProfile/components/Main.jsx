@@ -10,12 +10,13 @@ import SuccessAlert from "../../customerlogin/components/SuccessAlert";
 const Main = () => {
   const { customer, getCustomerById } = useCustomer();
   const customerId = JSON.parse(localStorage.getItem("customerId"));
+  console.log(customerId);
   const [loading, isLoading] = useState(false);
   const [open, isOpen] = useState(false);
   useEffect(() => {
     getCustomerById(customerId);
   }, [customerId]);
-  // console.log(customer);
+  console.log(customer);
 
   const formik = useFormik({
     initialValues: {

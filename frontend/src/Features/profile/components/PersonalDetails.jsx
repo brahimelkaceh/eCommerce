@@ -28,7 +28,8 @@ const PersonalDetails = ({ value }) => {
     validationSchema: validationSchema,
 
     onSubmit: async (values) => {
-      console.log(userData?._id, values);
+      // console.log(userData?._id, values);
+      // return;
       editUser(userData?._id, values);
     },
   });
@@ -193,9 +194,7 @@ const PersonalDetails = ({ value }) => {
                   type="file"
                   name="images"
                   onChange={(e) => {
-                    // ();
                     formik.setFieldValue("images", e.target.files[0]); // Set the image file directly
-                    // setUpdatedImg(formik.values?.images?.name);
                   }}
                 />
               </Button>

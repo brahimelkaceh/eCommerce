@@ -7,6 +7,7 @@ export const CustomerProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [refresh, setRefresh] = useState(new Date().toISOString());
   const [customer, setCustomer] = useState([]);
+  const [custTotal, setcustTotal] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export const CustomerProvider = ({ children }) => {
         );
 
         setCustomers(customersWithId);
+        setcustTotal(customersWithId.length);
       } catch (error) {
         console.error("Error fetching customers:", error);
       }
@@ -47,7 +49,8 @@ export const CustomerProvider = ({ children }) => {
         }
       );
       const data = await response.json();
-      setCustomer(data.data);
+      setCustomer(data?.data);
+      return data.data;
     } catch (error) {
       console.error("Error fetching customer by ID:", error);
     }
@@ -65,12 +68,15 @@ export const CustomerProvider = ({ children }) => {
         }),
       });
       const data = await response.json();
-      localStorage.setItem("customerToken", JSON.stringify(data.token));
-      localStorage.setItem("customerId", JSON.stringify(data?.data?._id));
-      navigate("/customerProfile");
 
-      // setCustomer(data);
-      return data;
+      if (response?.status == 200) {
+        localStorage.setItem("customerToken", JSON.stringify(data.token));
+        localStorage.setItem("customerId", JSON.stringify(data?.data?._id));
+        navigate("/customerProfile");
+        return data;
+      } else {
+        return data;
+      }
     } catch (error) {
       console.error("Error logging in:", error);
     }
@@ -83,6 +89,7 @@ export const CustomerProvider = ({ children }) => {
     setRefresh,
     getCustomerById,
     loginCustomer,
+    custTotal,
   };
 
   return (

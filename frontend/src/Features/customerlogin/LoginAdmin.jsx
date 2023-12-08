@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import SuccessAlert from "./components/SuccessAlert";
 import { Box, CircularProgress, LinearProgress, Stack } from "@mui/material";
 import * as Yup from "yup";
+import ErrorAlert from "./components/ErrorAlert";
 
 const LoginAdmin = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const LoginAdmin = () => {
     image: "",
   });
   const [open, setOpen] = useState(false);
+  const [close, setClose] = useState(false);
 
   const handleClick = () => {
     setOpen(true);
@@ -42,8 +44,8 @@ const LoginAdmin = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
+    setClose(false);
   };
   const formik = useFormik({
     initialValues: initialValues,
@@ -138,13 +140,19 @@ const LoginAdmin = () => {
     isLoading(true);
     try {
       const response = await loginCustomer(formData.email, formData.password);
-      // console.log("Login successful:", response);
-
       if (response.status == "success") {
-        isLoading(false);
-        handleClick();
+        setOpen(true);
         setAlertMessage("Congratulations on Your Successful Login!");
-        // navigate("/customerProfile");
+        isLoading(false);
+        navigate("/customerProfile");
+      }
+      if (response.status === "fail") {
+        console.log("error:", response);
+        setAlertMessage(
+          "Email or password is not correct. Please check your credentials."
+        );
+        setClose(true);
+        isLoading(false);
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -157,6 +165,13 @@ const LoginAdmin = () => {
         <SuccessAlert
           handleClose={handleClose}
           open={open}
+          message={alertMessage}
+        />
+      )}
+      {close && (
+        <ErrorAlert
+          handleClose={handleClose}
+          open={close}
           message={alertMessage}
         />
       )}

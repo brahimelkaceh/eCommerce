@@ -9,6 +9,7 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState(null);
+  const [orderTotal, setOrderTotal] = useState(0);
 
   const [orderDetailsData, setOrderDetailsData] = useState([]);
   useEffect(() => {
@@ -20,6 +21,7 @@ export const DataProvider = ({ children }) => {
           id: order._id,
         }));
         setData(orderssWithId);
+        setOrderTotal(orderssWithId?.length);
       } catch (error) {
         setError(error);
       } finally {
@@ -54,6 +56,7 @@ export const DataProvider = ({ children }) => {
     getOrderById,
     orderDetailsData,
     updateOrder,
+    orderTotal,
   };
 
   return <DataContext.Provider value={values}>{children}</DataContext.Provider>;

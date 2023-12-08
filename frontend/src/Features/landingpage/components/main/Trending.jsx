@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useProduct } from "../../../Products/Context";
 import banner from "../../../../assets/img/banner.webp";
 import { CartStore } from "../../../cart/components/State/CartContext";
+import { Link } from "react-router-dom";
 const Trending = () => {
-  const { products ,discountPrice} = useProduct();
+  const { products, discountPrice } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
@@ -51,12 +52,14 @@ const Trending = () => {
                         <div className="col" key={product?._id}>
                           <div className="features-product-item">
                             <div className="features-product-thumb">
-                              <div className="discount-tag">
-                                -{product?.discountPrice}%
-                              </div>
-                              <a href="shop-details.html">
+                              {product?.discountPrice > 0 && (
+                                <div className="discount-tag">
+                                  -{product?.discountPrice}%
+                                </div>
+                              )}
+                              <Link to={`/shop/${product.id}`}>
                                 <img src={product?.images[0]} alt />
-                              </a>
+                              </Link>
                               <div className="product-overlay-action">
                                 <ul>
                                   <li>
@@ -81,17 +84,39 @@ const Trending = () => {
                                 <i className="far fa-star" />
                               </div> */}
                               <h5>
-                                <a href="shop-details.html">
+                                <Link to={`/shop/${product.id}`}>
                                   {product?.productName}
-                                </a>
+                                </Link>
                               </h5>
-                              <p className="price">
-                                ${product?.options[0]?.price}
-                              </p>
-                              <p className="price">
-                                Discount Price : $
-                                {discountPrice(product?.options[0]?.price , product?.discountPrice)}
-                              </p>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "end",
+                                  gap: "10px",
+                                }}
+                              >
+                                {product?.discountPrice > 0 && (
+                                  <p
+                                    className="price"
+                                    style={{
+                                      textDecorationLine: "line-through",
+                                      fontSize: "14px",
+                                      color: "#777",
+                                    }}
+                                  >
+                                    ${product?.options[0]?.price}
+                                  </p>
+                                )}
+
+                                <p className="price">
+                                  $
+                                  {discountPrice(
+                                    product?.options[0]?.price,
+                                    product?.discountPrice
+                                  )}
+                                </p>
+                              </div>
+
                               <div className="features-product-bottom">
                                 <ul>
                                   {product?.options[0]?.color?.map(

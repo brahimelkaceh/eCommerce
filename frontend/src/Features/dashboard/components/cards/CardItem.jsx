@@ -8,7 +8,6 @@ import PeopleIcon from "@mui/icons-material/People";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 
 export default function CardItem({ content, icon }) {
-  console.log(icon);
   const getIcon = () => {
     switch (icon) {
       case "sales":

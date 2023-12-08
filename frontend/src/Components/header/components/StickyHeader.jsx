@@ -97,10 +97,9 @@ const StickyHeader = () => {
                       </a>
                     </li>
                     <li className="header-profile">
-                      <a href="#">
+                      <Link to="/customerProfile">
                         <i className="flaticon-user"></i>
-                        customer
-                      </a>
+                      </Link>
                     </li>
                     <li className="header-wishlist">
                       <a href="#">
@@ -130,7 +129,7 @@ const StickyHeader = () => {
                                 </h4>
                                 <div className="cart-price">
                                   <span className="new">
-                                    ${product.RealPrice}
+                                    ${product.RealPrice.toFixed(2)}
                                   </span>
                                   {/* Add your logic for displaying discounted price here */}
                                   {/* <span>
@@ -138,29 +137,30 @@ const StickyHeader = () => {
                                   </span> */}
                                 </div>
                               </div>
-                              <div className="del-icon">
-                                <button
-                                  onClick={() =>
-                                    dispatch({
-                                      type: "DELETE_PRODUCT",
-                                      id: product._id,
-                                    })
-                                  }
-                                >
-                                  <i className="far fa-trash-alt"></i>
-                                </button>
-                              </div>
+                              <button
+                                className="del-icon"
+                                onClick={() =>
+                                  dispatch({
+                                    type: "DELETE_PRODUCT",
+                                    id: product._id,
+                                  })
+                                }
+                              >
+                                <i className="far fa-trash-alt"></i>
+                              </button>
                             </li>
                           ))}
                         <li>
                           <div className="total-price">
                             <span className="f-left">Total:</span>
-                            <span className="f-right">{totalPrice} $</span>
+                            <span className="f-right">
+                              {totalPrice.toFixed(2)} $
+                            </span>
                           </div>
                         </li>
                         <li>
                           <div className="checkout-link">
-                            <a href="/cart">Shopping Cart</a>
+                            <Link to="/cart">Shopping Cart</Link>
                             <Link className="black-color" to="/checkout">
                               Checkout
                             </Link>

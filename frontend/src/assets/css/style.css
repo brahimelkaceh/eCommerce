@@ -681,7 +681,7 @@ label {
 .header-shop-cart ul.minicart {
   background: #fff;
   opacity: 0;
-  padding: 25px;
+  padding: 20px;
   position: absolute;
   right: 0px;
   top: 52px;
@@ -751,6 +751,13 @@ label {
 }
 .header-shop-cart .minicart .del-icon {
   margin-top: 30px;
+  background-color: transparent;
+  border: none;
+  background-color: #001921;
+  padding: 4px;
+  color: #fbb50c;
+  border-radius: 50%;
+  width: 100%;
 }
 .minicart .del-icon > a {
   font-size: 18px;
@@ -6652,4 +6659,49 @@ header.side-header {
   font-family: "Lato", sans-serif;
   letter-spacing: 1px;
   padding: 10px;
+}
+
+.number-control {
+  display: flex;
+  align-items: center;
+}
+
+.number-left::before,
+.number-del,
+.number-right::after {
+  content: attr(data-content);
+  background-color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  width: 20px;
+  color: white;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.number-left::before {
+  content: "-";
+}
+
+.number-right::after {
+  content: "+";
+}
+.number-del::after {
+  content: "X";
+}
+
+.number-quantity {
+  padding: 0.25rem;
+  border: 0;
+  width: 50px;
+  -moz-appearance: textfield;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.number-left:hover::before,
+.number-right:hover::after {
+  background-color: #666666;
 }

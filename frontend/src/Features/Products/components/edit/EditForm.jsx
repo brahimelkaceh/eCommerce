@@ -99,7 +99,6 @@ const EditForm = ({ onClose, id }) => {
             formData.append(key, value);
           }
         });
-        onClose();
 
         Swal.fire({
           title: "Do you want to Update this product?",
@@ -111,7 +110,6 @@ const EditForm = ({ onClose, id }) => {
           if (result.isConfirmed) {
             try {
               const res = await editP(id, formData);
-              console.log(res);
               Swal.fire("Product Updated!", "", "success");
               setRefresh(new Date().toISOString());
             } catch (error) {
@@ -125,6 +123,7 @@ const EditForm = ({ onClose, id }) => {
           } else if (result.isDenied) {
             Swal.fire("Product creation canceled", "", "info");
           }
+          onClose();
         });
       } catch (error) {
         console.error("Error submitting form:", error);

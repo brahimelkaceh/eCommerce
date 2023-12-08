@@ -40,8 +40,6 @@ const style = {
 
 export default function DetailsOrderModal({ handleClose, open }) {
   const { orderDetailsData } = useData();
-  const [total, setTotal] = useState("");
-  // console.log(orderDetailsData);
   const dateObject = new Date(orderDetailsData?.orderDate);
   const options = {
     year: "numeric",

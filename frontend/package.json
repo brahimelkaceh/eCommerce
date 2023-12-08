@@ -19,7 +19,7 @@
     "@mui/styles": "^5.14.17",
     "@mui/x-charts": "^6.18.1",
     "@mui/x-data-grid-generator": "^6.18.1",
-    "@nivo/line": "^0.83.0",
+    "@nivo/line": "^0.83.1",
     "antd": "^5.10.3",
     "apexcharts": "^3.44.0",
     "axios": "^1.6.1",

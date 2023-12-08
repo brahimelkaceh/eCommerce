@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function stringToColor(string) {
   let hash = 0;
@@ -94,6 +95,7 @@ const Index = () => {
           <NotificationsActiveIcon />
         </Badge>
       </IconButton>
+
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -127,7 +129,7 @@ const Index = () => {
             };
             const formatted = dateObject.toLocaleDateString(undefined, options);
             return (
-              <React.Fragment key={i}>
+              <Link to="/orders" key={i}>
                 <ListItem
                   onClick={handleClose}
                   sx={{
@@ -164,7 +166,7 @@ const Index = () => {
                   </Box>
                 </ListItem>
                 <Divider />
-              </React.Fragment>
+              </Link>
             );
           })}
         </List>

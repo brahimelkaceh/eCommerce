@@ -19,7 +19,11 @@ const Newsletter = () => {
                   </h6>
                 </div>
                 <form action="#" className="newsletter-form">
-                  <input type="email" placeholder="Your email address..." />
+                  <input
+                    className="input"
+                    type="email"
+                    placeholder="Your email address..."
+                  />
                   <button>
                     <span>Subscribe</span>{" "}
                     <i className="far fa-arrow-alt-circle-right" />

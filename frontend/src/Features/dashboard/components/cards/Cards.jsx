@@ -1,9 +1,13 @@
 import React from "react";
 import CardItem from "./CardItem";
 import { Box, Grid } from "@mui/material";
+import { useCustomer } from "../../../customers/Context";
+import { useData } from "../../../orders/Context";
 
 const Cards = () => {
   // console.log(MonetizationOnIcon);
+  const { custTotal } = useCustomer();
+  const { orderTotal } = useData();
   return (
     <Grid item xs={12}>
       <Grid container spacing={2}>
@@ -11,13 +15,13 @@ const Cards = () => {
           <CardItem content={"Sales"} icon={"sales"} />
         </Grid>
         <Grid item xs={3}>
-          <CardItem content={"Orders"} icon={"orders"} />
+          <CardItem content={orderTotal} icon={"orders"} />
         </Grid>
         <Grid item xs={3}>
           <CardItem content={"Revenue"} icon={"revenue"} />
         </Grid>
         <Grid item xs={3}>
-          <CardItem content={"Customers"} icon={"customers"} />
+          <CardItem content={custTotal} icon={"customers"} />
         </Grid>
       </Grid>
     </Grid>

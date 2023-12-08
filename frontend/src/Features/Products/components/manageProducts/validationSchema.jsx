@@ -8,7 +8,7 @@ const validationSchema = yup.object({
   shortDescription: yup.string().required("Short Description is required"),
   longDescription: yup.string().required("Long Description is required"),
   image: yup.string(),
-  discountPrice: yup.number().positive("Discount Price must be positive"),
+  discountPrice: yup.number().min(0, "Discount Price must not be negative"),
   quantity: yup
     .number()
     .required("Quantity is required")

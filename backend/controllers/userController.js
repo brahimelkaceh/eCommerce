@@ -121,6 +121,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res) => {
   const response = {};
   const images = req.files;
+  console.log(req.files);
 
   const uploadedImages = await addImages(images);
   try {

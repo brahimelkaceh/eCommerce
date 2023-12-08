@@ -9,7 +9,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 340px;
-  height: 400px;
+  height: fit-content;
   background-color: #eee;
   backdrop-filter: blur(10px);
   padding: 27px;
@@ -21,8 +21,7 @@
   font-size: 1.3em;
 }
 
-.login input[type="email"],
-.login input[type="password"] {
+.login .input {
   opacity: 1;
   display: block;
   border: none;
@@ -36,13 +35,12 @@
   color: #333;
 }
 
-.login input:focus {
+.login .input:focus {
   animation: bounce 1s;
   -webkit-appearance: none;
 }
 
 .login button,
-.login input[type="button"],
 .h1 {
   border: 0;
   outline: 0;
@@ -83,13 +81,17 @@
   transition: all 0.4s ease;
 }
 
-.login input[type="text"] {
+.login .input {
   animation: bounce 1s;
   -webkit-appearance: none;
 }
 
-.login input[type="password"] {
+.login input {
   animation: bounce1 1.3s;
+}
+.login .required-msg {
+  color: red;
+  font-size: 12px;
 }
 
 .ui {

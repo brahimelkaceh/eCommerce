@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import banner from "../../../../assets/img/banner.webp";
 import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
+import { Link } from "react-router-dom";
 const NewArrival = () => {
-  const { products,discountPrice } = useProduct();
-  const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+  const { products, discountPrice } = useProduct();
+  const { dispatch } = CartStore();
   return (
     <main>
       <section className="new-arrival-area home7-new-arrival pt-95 pb-50">
@@ -31,7 +32,7 @@ const NewArrival = () => {
             </div>
             <div className="col-xl-7 col-lg-6">
               <div className="row new-arrival-active">
-                {products?.map((product) => {
+                {products?.slice(-6).map((product) => {
                   return (
                     <div
                       className="col-xl-4 col-sm-6 grid-item grid-sizer cat-two"
@@ -41,9 +42,9 @@ const NewArrival = () => {
                         <div className="thumb mb-25">
                           <div className="discount-tag new">New</div>
 
-                          <a href="shop-details.html">
+                          <Link to={`/shop/${product.id}`}>
                             <img src={product?.images[0]} alt />
-                          </a>
+                          </Link>
                           <div className="product-overlay-action">
                             <ul>
                               <li>
@@ -83,13 +84,35 @@ const NewArrival = () => {
                           <h5>
                             <a href="#">{product?.productName}</a>
                           </h5>
-                          <span className="price">
-                            ${product?.options[0]?.price}
-                          </span>
-                          <span className="price">
-                            $
-                            {discountPrice(product.options[0].price,product.discountPrice) }
-                          </span>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "end",
+                              justifyContent: "center",
+                              gap: "10px",
+                            }}
+                          >
+                            {product?.discountPrice > 0 && (
+                              <span
+                                className="price"
+                                style={{
+                                  textDecorationLine: "line-through",
+                                  fontSize: "14px",
+                                  color: "#777",
+                                }}
+                              >
+                                ${product?.options[0]?.price}
+                              </span>
+                            )}
+
+                            <span className="price">
+                              $
+                              {discountPrice(
+                                product?.options[0]?.price,
+                                product?.discountPrice
+                              ).toFixed(2)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

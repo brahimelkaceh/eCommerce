@@ -59,7 +59,11 @@ const Header = () => {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <form>
-              <input type="text" placeholder="Search here..." />
+              <input
+                className="input"
+                type="text"
+                placeholder="Search here..."
+              />
               <button>
                 <i className="flaticon-search"></i>
               </button>
@@ -114,7 +118,11 @@ const Header = () => {
                     <h4 className="title">NEWSLETTER</h4>
                     <p>Fill your email below to subscribe to my newsletter</p>
                     <form action="#">
-                      <input type="email" placeholder="Email..." />
+                      <input
+                        className="input"
+                        type="email"
+                        placeholder="Email..."
+                      />
                       <button className="btn">Subscribe</button>
                     </form>
                   </div>
