@@ -10,7 +10,6 @@ import SuccessAlert from "../../customerlogin/components/SuccessAlert";
 const Main = () => {
   const { customer, getCustomerById } = useCustomer();
   const customerId = JSON.parse(localStorage.getItem("customerId"));
-  console.log(customerId);
   const [loading, isLoading] = useState(false);
   const [open, isOpen] = useState(false);
   useEffect(() => {

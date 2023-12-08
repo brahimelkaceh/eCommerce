@@ -123,11 +123,14 @@ const Main = () => {
                   <h3 className="title">{product.productName}</h3>
 
                   <p className="style-name">Product Sku:{product.sku}</p>
+                  <p className="style-name">
+                    Short Description :{product.shortDescription}
+                  </p>
                   <div className="price">
                     Price : {product.options[0].price}
                   </div>
 
-                  <div className="product-details-info">
+                  {/* <div className="product-details-info">
                     {product.options[0].size[0] && (
                       <div className="sidebar-product-size mb-30">
                         <h4 className="widget-title">Product Size</h4>
@@ -166,7 +169,7 @@ const Main = () => {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="perched-info">
                     <button

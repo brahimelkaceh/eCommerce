@@ -149,9 +149,6 @@ const Cart = () => {
               <div className="shop-cart-widget">
                 <form action="#">
                   <ul>
-                    <li className="sub-total">
-                      <span>SUBTOTAL</span> $ 136.00
-                    </li>
                     <li>
                       <span>SHIPPING</span>
                       <div className="shop-check-wrap">
