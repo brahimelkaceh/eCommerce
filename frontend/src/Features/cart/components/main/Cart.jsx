@@ -1,6 +1,7 @@
 import React from "react";
 import { CartStore } from "../State/CartContext";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 const Cart = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   console.log("total options.price", totalPrice);
@@ -57,15 +58,15 @@ const Cart = () => {
                       shoppingCart.map((product) => (
                         <tr key={product._id}>
                           <td className="product-thumbnail">
-                            <a href="shop-details.html">
+                            <Link to={`/shop/${product.id}`}>
                               <img src={product.images[0]} alt="" />
-                            </a>
+                            </Link>
                           </td>
                           <td className="product-name">
                             <h4>
-                              <a href="shop-details.html">
+                              <Link to={`/shop/${product.id}`}>
                                 {product.productName}
-                              </a>
+                              </Link>
                             </h4>
                           </td>
                           <td className="product-price">{product.RealPrice}</td>

@@ -1,23 +1,15 @@
 import React, { memo } from "react";
 import MuiAppBar from "@mui/material/AppBar";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 import { UserC } from "../../Features/auth/Context";
-import {
-  Avatar,
-  Badge,
-  Menu,
-  MenuItem,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { StyledBadge } from "../mui/MuiStyles";
 import Index from "../notification/Index";
 const drawerWidth = 240;
@@ -43,7 +35,7 @@ const AppBar = styled(MuiAppBar, {
 const Navbar = ({ handleDrawerOpen, open }) => {
   const { userData } = UserC();
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const navigate = useNavigate();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -119,7 +111,12 @@ const Navbar = ({ handleDrawerOpen, open }) => {
                 Profile <AccountCircle></AccountCircle>
               </Link>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem
+              onClick={() => {
+                localStorage.removeItem("userT");
+                navigate("/login");
+              }}
+            >
               Logout <LogoutIcon></LogoutIcon>
             </MenuItem>
           </Menu>

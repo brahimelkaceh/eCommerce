@@ -377,7 +377,7 @@ export default function AllOrders({ handleOpen, margin }) {
       <DataGrid
         className="dataGrid"
         sx={{
-          marginTop: margin && 0,
+          marginTop: 0,
         }}
         rows={rows}
         columns={columns}

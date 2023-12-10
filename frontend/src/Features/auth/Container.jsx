@@ -13,7 +13,6 @@ import SuccessAlert from "../../Components/alerts/SuccessAlert";
 const Container = () => {
   const navigate = useNavigate();
   const { setusername, setrole } = UserC();
-  const [formdata, setformdata] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -62,9 +61,7 @@ const Container = () => {
       setLoading(false);
     }
   };
-  const handlechange = (e) => {
-    setformdata({ ...formdata, [e.target.name]: e.target.value });
-  };
+
   return (
     <div className="main-page-container">
       {open && (

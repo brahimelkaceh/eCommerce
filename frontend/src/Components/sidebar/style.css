@@ -1,6 +1,12 @@
-a {
-  color: #fff;
+.list a {
+  color: #fff !important;
 }
 .active {
-  color: rgb(255, 213, 0);
+  color: rgb(255, 213, 0) !important;
+}
+.css-10hburv-MuiTypography-root {
+  font-size: 18px !important;
+}
+.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }

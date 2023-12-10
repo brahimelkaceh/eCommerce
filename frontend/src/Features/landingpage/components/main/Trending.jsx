@@ -108,7 +108,12 @@ const Trending = () => {
                                   </p>
                                 )}
 
-                                <p className="price">
+                                <p
+                                  className="price"
+                                  style={{
+                                    fontWeight: "bold",
+                                  }}
+                                >
                                   $
                                   {discountPrice(
                                     product?.options[0]?.price,
@@ -117,7 +122,7 @@ const Trending = () => {
                                 </p>
                               </div>
 
-                              <div className="features-product-bottom">
+                              {/* <div className="features-product-bottom">
                                 <ul>
                                   {product?.options[0]?.color?.map(
                                     (color, i) => {
@@ -148,7 +153,7 @@ const Trending = () => {
                                     }
                                   )}
                                 </ul>
-                              </div>
+                              </div> */}
                             </div>
                             {/* <div className="features-product-cart">
                               <a href="cart.html">add to cart</a>

@@ -31,7 +31,7 @@ h3 {
 /* .main-page  */
 .main-page {
   background-color: #eee;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .main-title {

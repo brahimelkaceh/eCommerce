@@ -105,7 +105,12 @@ const NewArrival = () => {
                               </span>
                             )}
 
-                            <span className="price">
+                            <span
+                              className="price"
+                              style={{
+                                fontWeight: "bold",
+                              }}
+                            >
                               $
                               {discountPrice(
                                 product?.options[0]?.price,

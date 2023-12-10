@@ -5,10 +5,13 @@ import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
 import Cards from "./components/cards/Cards";
 import "./style.css";
-import LinearChart from "./charts/LinearChart";
-import PieChart from "./charts/PieChart";
+import { LinearChart } from "./charts/LinearChart";
 import AllOrders from "../orders/components/AllOrders";
 import AllCustomers from "../customers/components/CustomersDataTable";
+
+import { ResponsivePie } from "@nivo/pie";
+import { BarChart } from "./charts/BarChart";
+
 const Container = () => {
   return (
     <Box
@@ -28,7 +31,7 @@ const Container = () => {
                   background: "#fff",
                   borderRadius: "var(--border-radius)",
                   width: "100%",
-                  height: "100%",
+                  height: "400px",
                   boxShadow: "var(--box-shadow)",
                 }}
               >
@@ -46,7 +49,8 @@ const Container = () => {
                   boxShadow: "var(--box-shadow)",
                 }}
               >
-                <PieChart />
+                {/* <PieChart /> */}
+                <BarChart />
               </Item>
             </Grid>
             <Grid item xs={6}>
@@ -56,7 +60,6 @@ const Container = () => {
               <AllCustomers margin={true} />
             </Grid>
           </Grid>
-          <Grid></Grid>
         </Box>
       </Box>
     </Box>

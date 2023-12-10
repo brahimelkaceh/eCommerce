@@ -21,8 +21,8 @@ import { UserC } from "../../Features/auth/Context";
 const Lists = ({ open }) => {
   const { role } = UserC();
   return role === "admin" ? (
-    <List>
-      <a href="/home">
+    <List className="list">
+      <Link to="/home">
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
@@ -35,7 +35,7 @@ const Lists = ({ open }) => {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
-      </a>
+      </Link>
       <NavLink to="/">
         <ListItem disablePadding>
           <ListItemButton>

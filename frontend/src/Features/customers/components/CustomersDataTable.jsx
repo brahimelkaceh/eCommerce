@@ -155,13 +155,14 @@ export default function allCustomers({ margin }) {
         );
       },
     },
-    { field: "userName", headerName: "UserName", width: 100, editable: true },
+    { field: "userName", headerName: "UserName", flex: 1, editable: true },
     {
       field: "firstName",
       headerName: "First Name",
       align: "left",
       headerAlign: "left",
       editable: true,
+      flex: 1,
     },
     {
       field: "lastName",
@@ -169,19 +170,19 @@ export default function allCustomers({ margin }) {
       align: "left",
       headerAlign: "left",
       editable: true,
-      // flex: 1,
+      flex: 1,
     },
     {
       field: "email",
       headerName: "Email",
       align: "left",
       headerAlign: "left",
-      // flex: 1,
+      flex: 1,
     },
     {
       field: "creationDate",
       headerName: "Creation Date",
-      // flex: 1,
+      flex: 1,
       renderCell: (params) => {
         const dateObject = new Date(params.value);
         const options = { year: "numeric", month: "short", day: "numeric" };
@@ -201,24 +202,13 @@ export default function allCustomers({ margin }) {
         );
       },
     },
-    // {
-    //   field: "lastLogin",
-    //   headerName: "Last Login",
-    //   type: "date",
-    //   flex: 1,
-    //   editable: true,
-    // },
-    // {
-    //   field: "lastUpdate",
-    //   headerName: "Last Update",
-    //   type: "date",
-    //   flex: 1,
-    //   editable: true,
-    // },
+
     {
       field: "active",
       headerName: "Status",
       editable: true,
+      flex: 1,
+
       valueOptions: [true, false],
       type: "boolean",
 

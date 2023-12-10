@@ -12,13 +12,13 @@ const Cards = () => {
     <Grid item xs={12}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <CardItem content={"Sales"} icon={"sales"} />
+          <CardItem content={`$${5500.99}`} icon={"revenue"} />
+        </Grid>
+        <Grid item xs={3}>
+          <CardItem content={1735} icon={"sales"} />
         </Grid>
         <Grid item xs={3}>
           <CardItem content={orderTotal} icon={"orders"} />
-        </Grid>
-        <Grid item xs={3}>
-          <CardItem content={"Revenue"} icon={"revenue"} />
         </Grid>
         <Grid item xs={3}>
           <CardItem content={custTotal} icon={"customers"} />

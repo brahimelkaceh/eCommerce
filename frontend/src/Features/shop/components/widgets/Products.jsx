@@ -8,13 +8,8 @@ import Stack from "@mui/material/Stack";
 const Products = ({ products }) => {
   const { discountPrice } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-    // const [page, setPage] = React.useState(1);
-    // const handleChange = (event, value) => {
-    //   setPage(value);
-    // };
-  useEffect(() => {
-    // console.log("ShoppingCart: ", shoppingCart);
 
+  useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
     // console.log("storedCart:1", storedCart);
     dispatch({ type: "SET_TO_CART", payload: storedCart });
@@ -47,12 +42,12 @@ const Products = ({ products }) => {
                     <div className="product-overlay-action">
                       <ul>
                         <li>
-                          <a href="cart.html">
+                          <a className="btn-icon" href="cart.html">
                             <i className="far fa-heart" />
                           </a>
                         </li>
                         <li>
-                          <Link to={`/shop/${product.id}`}>
+                          <Link className="btn-icon" to={`/shop/${product.id}`}>
                             <i className="far fa-eye" />
                           </Link>
                         </li>
@@ -81,14 +76,40 @@ const Products = ({ products }) => {
                         {product.productName}
                       </Link>
                     </h5>
-                    <span className="price">${product.options[0].price}</span>
-                    <span className="price">
-                      Discount price $
-                      {discountPrice(
-                        product.options[0].price,
-                        product.discountPrice
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "end",
+                        justifyContent: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      {product?.discountPrice > 0 && (
+                        <span
+                          className="price"
+                          style={{
+                            textDecorationLine: "line-through",
+                            fontSize: "14px",
+                            color: "#777",
+                          }}
+                        >
+                          ${product?.options[0]?.price}
+                        </span>
                       )}
-                    </span>
+
+                      <span
+                        className="price"
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        $
+                        {discountPrice(
+                          product?.options[0]?.price,
+                          product?.discountPrice
+                        ).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
