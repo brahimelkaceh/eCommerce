@@ -66,7 +66,7 @@ const StickyHeader = () => {
                             <li className="mega-menu-wrap">
                               <ul className="mega-menu-col">
                                 <li className="mega-title">
-                                  <a href="#">All Subcategoris</a>
+                                  <a href="#">All Categories</a>
                                 </li>
                                 {subcaty?.map((subcategory) => {
                                   return (

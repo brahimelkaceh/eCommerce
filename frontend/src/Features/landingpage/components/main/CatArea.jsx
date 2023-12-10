@@ -29,7 +29,7 @@ const CatArea = () => {
                 <div className="shop-cat-item">
                   <a href="shop-sidebar.html">
                     <div className="icon">
-                      <img src="" alt />
+                      <img src="/src/assets/img/icon/music.png" alt />
                     </div>
                     <p>
                       <a href={`/shop?category=${category._id}`}>

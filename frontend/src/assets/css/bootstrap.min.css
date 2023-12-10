@@ -227,10 +227,18 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
-button,
-input {
+button {
   overflow: visible;
 }
+
+input{
+  overflow: visible;
+  border: 1px solid #5f5f5f;
+  border-radius: 2px;
+  background: transparent;
+
+}
+
 button,
 select {
   text-transform: none;
@@ -7062,7 +7070,7 @@ button.bg-dark:hover {
   }
   .justify-content-lg-start {
     -ms-flex-pack: start !important;
-    justify-content: flex-start !important;
+    justify-content: flex-center !important;
   }
   .justify-content-lg-end {
     -ms-flex-pack: end !important;

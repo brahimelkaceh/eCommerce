@@ -18,7 +18,7 @@ const Container = () => {
         <Header />
 
         {/* Main */}
-        {/* <BreadCrumb /> */}
+        <BreadCrumb />
 
         <Main />
 

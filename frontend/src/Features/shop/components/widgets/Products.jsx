@@ -38,22 +38,24 @@ const Products = ({ products }) => {
                     <img src={product.images[0]} alt={product.productName} />
                   </Link>
                   <div className="product-overlay-action">
-                    <ul>
-                      <li>
-                        <a href="cart.html">
-                          <i className="far fa-heart" />
-                        </a>
-                      </li>
-                      <li>
-                        <Link to={`/shop/${product.id}`}>
-                          <i className="far fa-eye" />
-                        </Link>
-                      </li>
-                    </ul>
+                  <ul>
+                              <li>
+                                <button className="btn-icon">
+                                  <i className="far fa-heart" />
+                                </button>
+                              </li>
+                              <li>
+                                <a
+                                  href={`/shop/${product.id}`}
+                                  className="btn-icon"
+                                >
+                                  <i className="far fa-eye" />
+                                </a>
+                              </li>
+
+                            </ul>
                   </div>
-                  {/* <button title="Add To Cart" className="add-to-cart">
-                    Add To Cart
-                  </button> */}
+
                   <button
                     title="Add To Cart"
                     className="add-to-cart"

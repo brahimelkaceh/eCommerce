@@ -1,13 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import background from "../../../assets/img/bread-crumb-wallpaper.jpg";
 const BreadCrumb = () => {
   return (
     <div>
       <section
         className="breadcrumb-area breadcrumb-bg"
-        data-background={background}
-      >
+        style={{width:"100%" , backgroundSize: 'cover', backgroundImage: `url('src/assets/img/bg/4.png')`}}>
         <div className="container">
           <div className="row">
             <div className="col-12">
