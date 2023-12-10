@@ -1,5 +1,5 @@
 import React from "react";
-import Preloader from "../../Components/preloader/Preloader";
+// import Preloader from "../../Components/preloader/Preloader";
 import ScrollTop from "../../Components/scrollTop/ScrollTop";
 import BreadCrumb from "./components/BreadCrump";
 import Main from "./components/Main";
