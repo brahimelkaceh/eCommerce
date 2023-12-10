@@ -1,5 +1,5 @@
 import React from "react";
-import Preloader from "../../Components/preloader/Preloader";
+// import Preloader from "../../Components/preloader/Preloader";
 import ScrollTop from "../../Components/scrollTop/ScrollTop";
 import BreadCrumb from "./components/BreadCrump";
 import Main from "./components/Main";
@@ -9,22 +9,24 @@ import Header from "../../Components/header/Header";
 const Container = () => {
   return (
     <div>
-      <CartContextStore>
-        {/* Prealoader */}
-        <Preloader />
-        {/* Scroll-top */}
-        <ScrollTop />
-        {/* Header */}
-        <Header />
 
-        {/* Main */}
-        <BreadCrumb />
+        <CartContextStore>
+          {/* Prealoader */}
+          {/* <Preloader /> */}
+          {/* Scroll-top */}
+          <ScrollTop />
+          {/* Header */}
+          <Header />
 
-        <Main />
+          {/* Main */}
+          <BreadCrumb />
 
-        {/* Footer */}
-        <Footer />
-      </CartContextStore>
+          <Main />
+
+          {/* Footer */}
+          <Footer />
+        </CartContextStore>
+
     </div>
   );
 };

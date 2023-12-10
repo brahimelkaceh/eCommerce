@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
+
 import { useSubCatData } from "../../../Features/categories/Context";
 import logo from "../../../assets/img/logo/logo.png";
 import { Link } from "react-router-dom";
 import { useCustomer } from "../../../Features/customers/Context";
 import { CartStore } from "../../../Features/cart/components/State/CartContext";
-
 const StickyHeader = () => {
-  const { catData, SubcatData } = useSubCatData();
+
+  const { catData, SubcatData, setSelectedSubcategory,selectedSubcategory } =
+    useSubCatData();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     let storedCart = null;
@@ -31,6 +33,10 @@ const StickyHeader = () => {
       dispatch({ type: "SET_TO_CART", payload: storedCart });
     }
   }, []);
+  const handleClick = (id) => () => {
+    setSelectedSubcategory(id);
+
+  }
   return (
     <div
       id="sticky-header"
@@ -71,9 +77,11 @@ const StickyHeader = () => {
                                 {subcaty?.map((subcategory) => {
                                   return (
                                     <li key={subcategory?.id}>
-                                      <a href="#">
+                                      <Link to="/shop" onClick={handleClick(subcategory.id)}>
                                         {subcategory.subCategoryName}
-                                      </a>
+                                        
+                                      </Link>
+                                      
                                     </li>
                                   );
                                 })}

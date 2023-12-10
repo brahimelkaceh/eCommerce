@@ -8,22 +8,21 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 const Main = () => {
   const { products: allProducts } = useProduct();
-  const { SubcatData, catData } = useSubCatData();
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const { SubcatData, catData,subCategoryID,selectedSubcategory,setSelectedSubcategory } = useSubCatData();
   const [filteredProducts, setFilteredProducts] = useState([]);
-  // const [text, setText] = useState('');
    const [page, setPage] = React.useState(1);
    const handleChange = (event, value) => {
      setPage(value);
    };
   const [RealProducts, setRealProducts] = useState([]);
+
+  
    // it should be constant with no change
   useEffect(() => {
+    
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
       const filtered = allProducts.filter((product) => {
-        console.log("product", product.subCategoryId);
-        // console.log('selected sub', subcategoryId);
         return product.subCategoryId._id === subcategoryId;
       });
       setFilteredProducts(filtered);
@@ -35,7 +34,10 @@ const Main = () => {
   }, [selectedSubcategory, allProducts]);
 
   const handleSubcategoryClick = (subcategoryId) => {
+    console.log(subcategoryId)
     setSelectedSubcategory(subcategoryId);
+    console.log(selectedSubcategory,"In main") ;
+ 
   };
 
   const handleResetSubcategory = () => {
@@ -64,9 +66,6 @@ const Main = () => {
                             newProducts.push(product);
                           }
                         });
-                        // console.log("showed Products",newProducts);
-                        // console.log("real Products", RealProducts);
-                        // console.log("filtered Products", filteredProducts);
                         setFilteredProducts(newProducts);
                         setPage(1);
                       }}
@@ -82,7 +81,14 @@ const Main = () => {
                   SubcatData={SubcatData}
                   onSubcategoryClick={handleSubcategoryClick}
                 />
-                <div onClick={handleResetSubcategory}>View All Products</div>
+                <div
+                  onClick={handleResetSubcategory}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  View All Products
+                </div>
               </aside>
             </div>
 
@@ -120,7 +126,6 @@ const Main = () => {
                 products={filteredProducts.slice((page - 1) * 3, page * 3)}
               />
               <Stack spacing={2}>
-                {/* <Typography>Page: {page}</Typography> */}
                 <Pagination
                   count={Math.ceil(filteredProducts.length / 3)}
                   page={page}

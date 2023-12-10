@@ -27,8 +27,11 @@ export const SubcategoryProvider = ({ children }) => {
   const [subcategory, setSubcategory] = useState([]);
   const [refresh, setRefresh] = useState(new Date().getMilliseconds());
   const [refreshSub, setRefreshSub] = useState(new Date().getMilliseconds());
-  // ! ====== CATEGORIES MANAGEMENT =====
 
+  const [subCategoryID, setSubcategoryID] = useState(null);
+   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  // ! ====== CATEGORIES MANAGEMENT =====
+  console.log("hello from context : ", selectedSubcategory);
   useEffect(() => {
     const getCategoriesData = async () => {
       try {
@@ -143,6 +146,10 @@ export const SubcategoryProvider = ({ children }) => {
     createSubCat,
     deleteSubCat,
     subcategory,
+    selectedSubcategory,
+    setSelectedSubcategory,
+    subCategoryID,
+    setSubcategoryID,
   };
 
   return (
