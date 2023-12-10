@@ -82,8 +82,7 @@ const Main = () => {
       {/* breadcrumb-area */}
       <section
         className="breadcrumb-area breadcrumb-bg"
-        data-background="img/bg/breadcrumb_bg03.jpg"
-      >
+        style={{width:"100%" , backgroundSize: 'cover', backgroundImage: `url('src/assets/img/bg/3.png')`}}>
         <div className="container">
           <div className="row">
             <div className="col-12">

@@ -16,13 +16,13 @@ const NewArrival = () => {
                 <h3 className="title">New Arrival Collection</h3>
               </div>
               <div className="discount-end-time-wrap mb-50">
-                <img src="" alt />
+                <img src="/src/assets/img/bg/monday.jpg" alt />
                 <div className="content">
                   <div className="icon">
                     <img src="" alt />
                   </div>
                   <h2>Cyber Monday</h2>
-                  <span>Super Offer TO 50% OFF</span>
+                  <span>UP TO 50% OFF</span>
                   <div className="coming-time" data-countdown="2021/9/21" />
                   <a href="#" className="btn">
                     shop now

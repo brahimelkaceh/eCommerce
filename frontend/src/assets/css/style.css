@@ -226,7 +226,6 @@ label {
 .category-menu .cat-mega-menu ul li a:hover,
 .navbar-wrap > ul > li.active > a,
 .navbar-wrap > ul > li:hover > a,
-.sticky-menu .navbar-wrap > ul > li.active > a,
 .sticky-menu .navbar-wrap > ul > li:hover > a,
 .navbar-wrap > ul > li > ul li.active > a,
 .navbar-wrap > ul > li > ul li:hover > a,
@@ -451,7 +450,6 @@ label {
   width: 100%;
   z-index: 9;
   height: auto;
-  padding: 5px;
 }
 .header-top-wrap {
   padding: 27px 0px;
@@ -1285,7 +1283,7 @@ label {
 .header-style-five .navbar-wrap > ul > li:hover > a::before,
 .header-style-six .navbar-wrap > ul > li.active > a::before,
 .header-style-six .navbar-wrap > ul > li:hover > a::before {
-  width: 70%;
+  /* width: 70%; */
 }
 .header-style-three .header-action > ul > li > a,
 .header-style-four .header-action > ul > li > a,
@@ -2778,7 +2776,7 @@ header.side-header {
   right: 0;
 }
 .cat-section-title .title {
-  font-size: 28px;
+  font-size: 27px;
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: 0;
@@ -3027,7 +3025,7 @@ header.side-header {
 .checkout-form .form-grp .custom-select:focus {
   outline: none;
   box-shadow: none;
-}
+}.cat-section-title .title
 .different-address .custom-control-label {
   font-size: 13px;
   font-weight: 500;
@@ -4173,9 +4171,7 @@ header.side-header {
   z-index: 11;
   margin: auto;
   transition: all 0.3s ease 0s;
-  /* transform: translateY(px); */
   opacity: 0; /* Initially hidden  */
-
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
@@ -4187,10 +4183,10 @@ header.side-header {
 
 .thumb:hover .add-to-cart {
   transform: translateY(
-    -100%
+    -160%
   ); /* Show the button by moving it up from the bottom */
   background-color: #001b24;
-  color: #f0f3f5;
+  color: #ffffff;
   opacity: 1; /* Show the button with full opacity on hover */
 }
 
@@ -6655,7 +6651,6 @@ header.side-header {
   z-index: 11;
   margin: auto;
   transition: all 0.3s ease 0s;
-
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
@@ -6663,6 +6658,10 @@ header.side-header {
   font-family: "Lato", sans-serif;
   letter-spacing: 1px;
   padding: 10px;
+}
+
+.add-to-cart:hover {
+  background-color: #c2945a;
 }
 
 .number-control {

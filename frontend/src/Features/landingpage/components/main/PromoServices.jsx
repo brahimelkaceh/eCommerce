@@ -27,7 +27,7 @@ const PromoServices = () => {
                 </div>
                 <div className="content">
                   <h6>Eco-Friendly Shopping</h6>
-                  <p>Quality Guarantee</p>
+                  <p>Quality Assurance </p>
                 </div>
               </div>
             </div>
@@ -38,7 +38,7 @@ const PromoServices = () => {
                 </div>
                 <div className="content">
                   <h6>Money back guarantee</h6>
-                  <p>Options Including 24/7</p>
+                  <p>Flexible Options</p>
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@ const PromoServices = () => {
                 </div>
                 <div className="content">
                   <h6>Quality support</h6>
-                  <p>Online Help Support 24/7</p>
+                  <p>24/7 Online Assistance</p>
                 </div>
               </div>
             </div>

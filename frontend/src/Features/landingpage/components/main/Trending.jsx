@@ -47,7 +47,7 @@ const Trending = () => {
                     </Link>
                   </div>
                   <div className="row trending-product-active">
-                    {products?.slice(0, 4).map((product) => {
+                    {products?.slice(0, 3).map((product) => {
                       return (
                         <div className="col" key={product?._id}>
                           <div className="features-product-item">
@@ -121,8 +121,8 @@ const Trending = () => {
                                   )}
                                 </p>
                               </div>
-
-                              {/* <div className="features-product-bottom">
+                              {/* 
+                              <div className="features-product-bottom">
                                 <ul>
                                   {product?.options[0]?.color?.map(
                                     (color, i) => {

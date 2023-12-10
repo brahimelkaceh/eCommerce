@@ -24,19 +24,13 @@ const Products = ({ products }) => {
   return (
     <>
       <div className="row">
-        {/* products.slice(((page-1)*3),page*3).map((product) */}
         {products.map((product) => {
           return (
             product?.active && (
               <div key={product.id} className="col-xl-4 col-sm-6">
                 <div className="new-arrival-item text-center mb-50">
                   <div className="thumb mb-25">
-                    <Link
-                      to={`/shop/${product.id}`}
-                      // onClick={() => {
-                      //   getProductById(product.id);
-                      // }}
-                    >
+                    <Link to={`/shop/${product.id}`}>
                       <img src={product.images[0]} alt={product.productName} />
                     </Link>
                     <div className="product-overlay-action">
