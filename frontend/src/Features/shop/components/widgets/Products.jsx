@@ -2,13 +2,18 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+// import Typography from "@mui/material/Typography";
 const Products = ({ products }) => {
-  // const { getProductById } = useProduct();
-  const {  discountPrice } = useProduct();
+  const { discountPrice } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
+    // const [page, setPage] = React.useState(1);
+    // const handleChange = (event, value) => {
+    //   setPage(value);
+    // };
   useEffect(() => {
-    console.log("ShoppingCart: ", shoppingCart);
+    // console.log("ShoppingCart: ", shoppingCart);
 
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
     // console.log("storedCart:1", storedCart);
@@ -19,76 +24,84 @@ const Products = ({ products }) => {
     localStorage.setItem("ShopOrders", JSON.stringify(shoppingCart));
     localStorage.setItem("CartOrders", JSON.stringify(shoppingCart));
 
-    console.log("ShopOrders: ", JSON.parse(localStorage.getItem("ShopOrders")));
+    // console.log("ShopOrders: ", JSON.parse(localStorage.getItem("ShopOrders")));
   }, [shoppingCart]);
   return (
-    <div className="row">
-      {products.map((product) => {
-        return (
-          product?.active && (
-            <div key={product.id} className="col-xl-4 col-sm-6">
-              <div className="new-arrival-item text-center mb-50">
-                <div className="thumb mb-25">
-                  <Link
-                    to={`/shop/${product.id}`}
-                    // onClick={() => {
-                    //   getProductById(product.id);
-                    // }}
-                  >
-                    <img src={product.images[0]} alt={product.productName} />
-                  </Link>
-                  <div className="product-overlay-action">
-                    <ul>
-                      <li>
-                        <a href="cart.html">
-                          <i className="far fa-heart" />
-                        </a>
-                      </li>
-                      <li>
-                        <Link to={`/shop/${product.id}`}>
-                          <i className="far fa-eye" />
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                  {/* <button title="Add To Cart" className="add-to-cart">
+    <>
+      <div className="row">
+        {/* products.slice(((page-1)*3),page*3).map((product) */}
+        {products.map((product) => {
+          return (
+            product?.active && (
+              <div key={product.id} className="col-xl-4 col-sm-6">
+                <div className="new-arrival-item text-center mb-50">
+                  <div className="thumb mb-25">
+                    <Link
+                      to={`/shop/${product.id}`}
+                      // onClick={() => {
+                      //   getProductById(product.id);
+                      // }}
+                    >
+                      <img src={product.images[0]} alt={product.productName} />
+                    </Link>
+                    <div className="product-overlay-action">
+                      <ul>
+                        <li>
+                          <a href="cart.html">
+                            <i className="far fa-heart" />
+                          </a>
+                        </li>
+                        <li>
+                          <Link to={`/shop/${product.id}`}>
+                            <i className="far fa-eye" />
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                    {/* <button title="Add To Cart" className="add-to-cart">
                     Add To Cart
                   </button> */}
-                  <button
-                    title="Add To Cart"
-                    className="add-to-cart"
-                    onClick={() =>
-                      dispatch({
-                        type: "ADD_TO_CART",
-                        product: product,
-                        id: product._id,
-                      })
-                    }
-                  >
-                    Add To Cart
-                  </button>
-                </div>
-                <div className="content">
-                  <h5>
-                    <Link to={`/shop/${product.id}`}>
-                      {product.productName}
-                    </Link>
-                  </h5>
-                  <span className="price">${product.options[0].price}</span>
-                  <span className="price">
-                    Discount price $ 
-                    {discountPrice(
-                      product.options[0].price,
-                      product.discountPrice
-                    )}
-                  </span>
+                    <button
+                      title="Add To Cart"
+                      className="add-to-cart"
+                      onClick={() =>
+                        dispatch({
+                          type: "ADD_TO_CART",
+                          product: product,
+                          id: product._id,
+                        })
+                      }
+                    >
+                      Add To Cart
+                    </button>
+                  </div>
+                  <div className="content">
+                    <h5>
+                      <Link to={`/shop/${product.id}`}>
+                        {product.productName}
+                      </Link>
+                    </h5>
+                    <span className="price">${product.options[0].price}</span>
+                    <span className="price">
+                      Discount price $
+                      {discountPrice(
+                        product.options[0].price,
+                        product.discountPrice
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        );
-      })}
-    </div>
+            )
+          );
+        })}
+      </div>
+
+      {/* <Stack spacing={2}>
+        {/* <Typography>Page: {page}</Typography> */}
+      {/* <Pagination count={Math.ceil(products.length/3)} page={page} onChange={handleChange} /> */}
+      {/* </Stack> */}
+    </>
   );
 };
 

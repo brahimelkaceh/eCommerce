@@ -4,13 +4,20 @@ import { Link } from "react-router-dom";
 import { useSubCatData } from "../../categories/Context";
 import Categories from "./widgets/Categories";
 import Products from "./widgets/Products";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 const Main = () => {
   const { products: allProducts } = useProduct();
   const { SubcatData, catData } = useSubCatData();
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
-
+  // const [text, setText] = useState('');
+   const [page, setPage] = React.useState(1);
+   const handleChange = (event, value) => {
+     setPage(value);
+   };
+  const [RealProducts, setRealProducts] = useState([]);
+   // it should be constant with no change
   useEffect(() => {
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
@@ -20,8 +27,10 @@ const Main = () => {
         return product.subCategoryId._id === subcategoryId;
       });
       setFilteredProducts(filtered);
+  
     } else {
       setFilteredProducts(allProducts);
+          setRealProducts(allProducts);
     }
   }, [selectedSubcategory, allProducts]);
 
@@ -32,6 +41,7 @@ const Main = () => {
   const handleResetSubcategory = () => {
     setSelectedSubcategory(null);
   };
+  // console.log(filteredProducts);
 
   return (
     <div>
@@ -42,7 +52,26 @@ const Main = () => {
               <aside className="shop-sidebar">
                 <div className="widget side-search-bar">
                   <form action="#">
-                    <input type="text" />
+                    <input
+                      className="input"
+                      type="text"
+                      onChange={(e) => {
+                        // setText(e.target.value);
+                        const regex = new RegExp(e.target.value, "i");
+                        let newProducts = [];
+                        RealProducts.forEach((product) => {
+                          if (regex.test(product.productName)) {
+                            newProducts.push(product);
+                          }
+                        });
+                        // console.log("showed Products",newProducts);
+                        // console.log("real Products", RealProducts);
+                        // console.log("filtered Products", filteredProducts);
+                        setFilteredProducts(newProducts);
+                        setPage(1);
+                      }}
+                    />
+
                     <button>
                       <i className="flaticon-search" />
                     </button>
@@ -68,7 +97,7 @@ const Main = () => {
                             <i className="flaticon-menu" /> FILTER
                           </a>
                         </li>
-                        <li>Showing 1–{allProducts.length} of 80 results</li>
+                        <li>Showing 3 of {allProducts.length} results</li>
                       </ul>
                     </div>
                   </div>
@@ -87,7 +116,17 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <Products products={filteredProducts} />
+              <Products
+                products={filteredProducts.slice((page - 1) * 3, page * 3)}
+              />
+              <Stack spacing={2}>
+                {/* <Typography>Page: {page}</Typography> */}
+                <Pagination
+                  count={Math.ceil(filteredProducts.length / 3)}
+                  page={page}
+                  onChange={handleChange}
+                />
+              </Stack>
             </div>
           </div>
         </div>
