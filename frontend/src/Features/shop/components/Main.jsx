@@ -8,36 +8,38 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 const Main = () => {
   const { products: allProducts } = useProduct();
-  const { SubcatData, catData,subCategoryID,selectedSubcategory,setSelectedSubcategory } = useSubCatData();
+  const {
+    SubcatData,
+    catData,
+    subCategoryID,
+    selectedSubcategory,
+    setSelectedSubcategory,
+  } = useSubCatData();
   const [filteredProducts, setFilteredProducts] = useState([]);
-   const [page, setPage] = React.useState(1);
-   const handleChange = (event, value) => {
-     setPage(value);
-   };
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   const [RealProducts, setRealProducts] = useState([]);
 
-  
-   // it should be constant with no change
+  // it should be constant with no change
   useEffect(() => {
-    
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
       const filtered = allProducts.filter((product) => {
         return product.subCategoryId._id === subcategoryId;
       });
       setFilteredProducts(filtered);
-  
     } else {
       setFilteredProducts(allProducts);
-          setRealProducts(allProducts);
+      setRealProducts(allProducts);
     }
   }, [selectedSubcategory, allProducts]);
 
   const handleSubcategoryClick = (subcategoryId) => {
-    console.log(subcategoryId)
+    console.log(subcategoryId);
     setSelectedSubcategory(subcategoryId);
-    console.log(selectedSubcategory,"In main") ;
- 
+    console.log(selectedSubcategory, "In main");
   };
 
   const handleResetSubcategory = () => {
@@ -71,7 +73,7 @@ const Main = () => {
                       }}
                     />
 
-                    <button>
+                    <button onClick={(e) => e.preventDefault()}>
                       <i className="flaticon-search" />
                     </button>
                   </form>
@@ -103,31 +105,18 @@ const Main = () => {
                             <i className="flaticon-menu" /> FILTER
                           </a>
                         </li>
-                        <li>Showing 3 of {allProducts.length} results</li>
+                        <li>Showing 6 of {allProducts.length} results</li>
                       </ul>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="shop-top-right">
-                      <form action="#">
-                        <select name="select">
-                          <option value>Sort by newness</option>
-                          <option>Free Shipping</option>
-                          <option>Best Match</option>
-                          <option>Newest Item</option>
-                          <option>Size A - Z</option>
-                        </select>
-                      </form>
                     </div>
                   </div>
                 </div>
               </div>
               <Products
-                products={filteredProducts.slice((page - 1) * 3, page * 3)}
+                products={filteredProducts.slice((page - 1) * 6, page * 6)}
               />
               <Stack spacing={2}>
                 <Pagination
-                  count={Math.ceil(filteredProducts.length / 3)}
+                  count={Math.ceil(filteredProducts.length / 6)}
                   page={page}
                   onChange={handleChange}
                 />

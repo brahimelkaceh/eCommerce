@@ -1,48 +1,42 @@
 import React from "react";
-
+import bg01 from "../../../../assets/img/bg/s_breadcrumb_bg01.jpg";
+import { Link } from "react-router-dom";
+import { useProduct } from "../../Context";
 const BreadCrumb = () => {
+  const { productName } = useProduct();
   return (
     <div>
       <div
         className="breadcrumb-area breadcrumb-style-two"
-        data-background="img/bg/s_breadcrumb_bg01.jpg"
+        style={{
+          width: "100%",
+          backgroundSize: "cover",
+          backgroundImage: `url(${bg01})`,
+        }}
       >
         <div className="container">
           <div className="row">
             <div className="col-lg-3 d-none d-lg-block">
-              <div className="previous-product">
-                <a href="shop-details.html">
-                  <i className="fas fa-angle-left" /> previous product
-                </a>
-              </div>
+              <div className="previous-product"></div>
             </div>
             <div className="col-lg-6">
               <div className="breadcrumb-content">
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
+                      <Link to="/home">Home</Link>
                     </li>
                     <li className="breadcrumb-item">
-                      <a href="shop.html">Winter 20</a>
-                    </li>
-                    <li className="breadcrumb-item">
-                      <a href="shop.html">Women</a>
+                      <Link to="/shop">Shop</Link>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
-                      Tracker Jacket
+                      {productName}
                     </li>
                   </ol>
                 </nav>
               </div>
             </div>
-            <div className="col-lg-3 d-none d-lg-block">
-              <div className="next-product">
-                <a href="shop-details.html">
-                  Next product <i className="fas fa-angle-right" />
-                </a>
-              </div>
-            </div>
+            <div className="col-lg-3 d-none d-lg-block"></div>
           </div>
         </div>
       </div>

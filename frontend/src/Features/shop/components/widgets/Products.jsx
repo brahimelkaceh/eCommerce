@@ -47,9 +47,7 @@ const Products = ({ products }) => {
                         </li>
                       </ul>
                     </div>
-                    {/* <button title="Add To Cart" className="add-to-cart">
-                    Add To Cart
-                  </button> */}
+
                     <button
                       title="Add To Cart"
                       className="add-to-cart"

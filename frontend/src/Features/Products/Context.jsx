@@ -18,6 +18,7 @@ export const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState(null);
+  const [productName, setProductName] = useState("");
   const [refresh, setRefresh] = useState(new Date().toISOString());
 
   const updateProducts = (newProduct) => {
@@ -79,6 +80,7 @@ export const ProductProvider = ({ children }) => {
   const fetchProductById = async (productId) => {
     try {
       const product = await getP(productId);
+      setProductName(product.data.data?.productName);
       return product;
     } catch (error) {
       console.error(`Error fetching product with ID ${productId}:`, error);
@@ -103,8 +105,8 @@ export const ProductProvider = ({ children }) => {
     fetchProducts();
   }, [refresh]);
 
-  const discountPrice =  (price, discountPrice) => {
-    return  price - ((discountPrice * price) / 100).toFixed(2);
+  const discountPrice = (price, discountPrice) => {
+    return price - ((discountPrice * price) / 100).toFixed(2);
   };
 
   const productContextValue = {
@@ -116,7 +118,8 @@ export const ProductProvider = ({ children }) => {
     fetchProductById,
     updateProducts,
     setRefresh,
-    discountPrice
+    discountPrice,
+    productName,
   };
 
   return (

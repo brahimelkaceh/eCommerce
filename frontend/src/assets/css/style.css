@@ -3025,8 +3025,8 @@ header.side-header {
 .checkout-form .form-grp .custom-select:focus {
   outline: none;
   box-shadow: none;
-}.cat-section-title .title
-.different-address .custom-control-label {
+}
+.cat-section-title .title .different-address .custom-control-label {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
@@ -4165,7 +4165,7 @@ header.side-header {
   border: 0;
   border-radius: 3px;
   position: absolute;
-  bottom: 35px;
+  bottom: 10px;
   left: 0;
   right: 0;
   z-index: 11;

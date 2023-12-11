@@ -177,9 +177,9 @@ const Cart = () => {
                   {/* <a href="checkout.html" className="btn">
                     PROCEED TO CHECKOUT
                   </a> */}
-                  <button className="btn" onClick={handleClick}>
+                  <Link to="/checkout" className="btn" onClick={handleClick}>
                     Checkout
-                  </button>
+                  </Link>
                 </form>
               </div>
             </div>

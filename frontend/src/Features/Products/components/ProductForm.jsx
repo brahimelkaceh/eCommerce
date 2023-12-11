@@ -65,6 +65,9 @@ const ProductForm = ({ open, onClose }) => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
+      // return;
+
       try {
         const formData = new FormData();
 
@@ -309,7 +312,7 @@ const ProductForm = ({ open, onClose }) => {
               label="Quantity"
               variant="outlined"
               type="number"
-              sx={{ gridColumn: "span 1" }}
+              sx={{ gridColumn: "span 2" }}
               size="small"
               value={formik.values.quantity}
               onChange={formik.handleChange}
@@ -317,7 +320,7 @@ const ProductForm = ({ open, onClose }) => {
               helperText={formik.touched.quantity && formik.errors.quantity}
             />
 
-            <FormControl sx={{ gridColumn: "span 1" }}>
+            {/* <FormControl sx={{ gridColumn: "span 1" }}>
               <Select
                 multiple
                 displayEmpty
@@ -419,10 +422,10 @@ const ProductForm = ({ open, onClose }) => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
 
             <FormControl
-              sx={{ gridColumn: "span 1" }}
+              sx={{ gridColumn: "span 2" }}
               size="small"
               variant="outlined"
               error={
@@ -451,7 +454,12 @@ const ProductForm = ({ open, onClose }) => {
               name="active"
               control={<Switch defaultChecked color="warning" />}
               label="Publish"
-              checked={formik.values.active}
+              disabled={formik.values.options.availability == "Out of Stock"}
+              checked={
+                formik.values.options.availability == "Out of Stock"
+                  ? false
+                  : formik.values.active
+              }
               onChange={formik.handleChange}
             />
           </FormGroup>

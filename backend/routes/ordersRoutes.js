@@ -12,10 +12,12 @@ const {
 const { TokenCheck } = require("../middlewares/TokenCheck");
 const { CustomerTokenCheck } = require("../middlewares/CustomerTokenCheck");
 const { ManagerTokenCheck } = require("../middlewares/ManagerTokenCheck");
+const { getProductsByCategory } = require("../controllers/productsController");
 
-Router.post("/orders", CustomerTokenCheck,createOrder);
+Router.post("/orders", CustomerTokenCheck, createOrder);
 Router.get("/orders/:id", ManagerTokenCheck, getOrderById);
 Router.put("/orders/:id", ManagerTokenCheck, updateOrder);
 Router.get("/orders", ManagerTokenCheck, listOrders);
+Router.get("/shop", getProductsByCategory);
 
 module.exports = Router;
