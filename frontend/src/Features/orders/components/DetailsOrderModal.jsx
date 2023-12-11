@@ -95,7 +95,8 @@ export default function DetailsOrderModal({ handleClose, open }) {
                   <React.Fragment key={i}>
                     <ListItem>
                       <ListItemAvatar>
-                        <Avatar src={orderItem?.product?.images[0]}>
+                        {/* src={orderItem?.product?.images[0]} */}
+                        <Avatar>
                           <ImageIcon />
                         </Avatar>
                       </ListItemAvatar>

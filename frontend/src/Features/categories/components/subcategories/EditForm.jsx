@@ -16,21 +16,49 @@ import initialValues from "./InitialValues";
 import validationSchema from "./ValidationSchema";
 import DoneIcon from "@mui/icons-material/Done";
 import { useSubCatData } from "../../Context";
-
+import Swal from "sweetalert2";
 const EditForm = ({ onClose }) => {
   const { catData, updateSubCat, subcategory, setRefresh } = useSubCatData();
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
+    // updateSubCat(subcategory?._id, values)
+    //     .then((response) => {
+    //       setRefresh(new Date().toISOString());
+    //       onClose();
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error occurred: while creating user", error);
+    //     });
     onSubmit: (values) => {
-      updateSubCat(subcategory?._id, values)
-        .then((response) => {
-          setRefresh(new Date().toISOString());
-          onClose();
-        })
-        .catch((error) => {
-          console.error("Error occurred: while creating user", error);
-        });
+          try {
+            Swal.fire({
+              title: "Do you want to save the changes?",
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: "Save",
+              denyButtonText: `Don't save`,
+            }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                Swal.fire("Saved!", "", "success");
+
+                updateSubCat(subcategory?._id, values)
+                  .then((response) => {
+                    setRefresh(new Date().toISOString());
+                      onClose();
+                  })
+                  .catch((error) => {
+                    Swal.fire("Error occurred: while editing subCategory", error);
+                    console.error("Error occurred: while editing subCategory", error);
+                  });
+              } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+              }
+            });
+          } catch (error) {
+            throw error;
+          }
     },
   });
   useEffect(() => {

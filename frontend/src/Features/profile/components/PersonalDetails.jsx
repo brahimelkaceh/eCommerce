@@ -13,15 +13,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
 import DoneIcon from "@mui/icons-material/Done";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { UserC } from "../../auth/Context";
 import { useFormik } from "formik";
 import initialValues, { validationSchema } from "./InitialValues";
 import { editUser } from "../../managers/service";
-
+import Swal from "sweetalert2";
 const PersonalDetails = ({ value }) => {
-  const { userData } = UserC();
+  const { userData, setrefresh } = UserC();
   const [updatedImg, setUpdatedImg] = useState("");
   const formik = useFormik({
     initialValues: initialValues,
@@ -30,7 +31,34 @@ const PersonalDetails = ({ value }) => {
     onSubmit: async (values) => {
       // console.log(userData?._id, values);
       // return;
-      editUser(userData?._id, values);
+      // editUser(userData?._id, values);
+      try {
+        Swal.fire({
+          title: "Do you want to save the changes?",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Save",
+          denyButtonText: `Don't save`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+            editUser(userData?._id, values)
+              .then((response) => {
+                setrefresh(new Date().toString());
+                console.log(response);
+              })
+              .catch((error) => {
+                Swal.fire("Error occurred: while editing user", error);
+                console.error("Error occurred: while editing user", error);
+              });
+          } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+          }
+        });
+      } catch (error) {
+        throw error;
+      }
     },
   });
 
