@@ -19,6 +19,8 @@ import CustomerLogin from "./Pages/customerLogin/CustomerLogin";
 import SingleProduct from "./Pages/product/SingleProduct";
 import CustomerRoutes from "./utils/CustomerRoutes";
 import CustomerProfile from "./Pages/customerProfile/CustomerProfile";
+import NotFound from "./Pages/notfound/Notfound";
+
 const App = () => {
   return (
     <Routes>
@@ -50,6 +52,8 @@ const App = () => {
       <Route path="/cart" element={<Cart />} />
 
       <Route path="/customerLogin" element={<CustomerLogin />} />
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
