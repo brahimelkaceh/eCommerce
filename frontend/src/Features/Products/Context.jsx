@@ -96,7 +96,12 @@ export const ProductProvider = ({ children }) => {
           ...product,
           id: product._id,
         }));
-        setProducts(productsWithId);
+        // console.log("products : ", productsWithId); // !!!
+        const filteredData = productsWithId.filter(
+          (product) => product.subCategoryId.active == true
+        );
+        console.log(" products updated : " ,filteredData)
+        setProducts(filteredData);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

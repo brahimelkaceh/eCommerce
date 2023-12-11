@@ -11,8 +11,7 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 
   // 1. Check if the specified category exists
   const category = await Category.findById(categoryId);
-
-  if (!category) {
+  if (!category ) {
     return next(new AppError("Can't find this category", 404));
   }
 
@@ -39,8 +38,10 @@ exports.createSubCategory = catchAsync(async (req, res, next) => {
 exports.getAllSubcategories = async (req, res) => {
   const subcategories = await Subcategory.find({}).populate(
     "categoryId",
-    "categoryName"
+    "categoryName active"
   );
+  const result = subcategories.map((sub) => sub.toObject({ getters: true }));
+  console.log(result);
   res.json({
     status: "success",
     data: subcategories.map((sub) => sub.toObject({ getters: true })),
@@ -53,7 +54,7 @@ exports.searchSubCategory = catchAsync(async (req, res, next) => {
 
   const subCategories = await Subcategory.find(searchParams).populate(
     "categoryId",
-    "categoryName"
+    "categoryName active"
   );
 
   if (!subCategories.length) {
@@ -99,7 +100,7 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   // Find the subcategory by its ID
   const subcategory = await Subcategory.findById(subcategoryId).populate(
     "categoryId",
-    "categoryName"
+    "categoryName active"
   );
 
   if (!subcategory) {
@@ -112,7 +113,6 @@ exports.updateSubCategory = catchAsync(async (req, res, next) => {
   subcategory.categoryId = categoryId;
   // Save the updated subcategory
   await subcategory.save();
-
   res.status(200).json({
     status: "success",
     data: subcategory.toObject({ getters: true }),
