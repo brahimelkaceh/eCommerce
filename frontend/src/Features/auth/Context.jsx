@@ -9,6 +9,7 @@ export const UserState = ({ children }) => {
   const [role, setrole] = useState("");
   const [loading, setloading] = useState(false);
   const [userData, setUserData] = useState([]);
+  const [refresh , setrefresh] = useState(new Date().toString())
   useEffect(() => {
     const fetchProfile = async () => {
       setloading(true);
@@ -24,7 +25,7 @@ export const UserState = ({ children }) => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [refresh]);
 
   return (
     <UserContext.Provider
@@ -35,6 +36,7 @@ export const UserState = ({ children }) => {
         setrole,
         loading,
         userData,
+        setrefresh,
       }}
     >
       {children}

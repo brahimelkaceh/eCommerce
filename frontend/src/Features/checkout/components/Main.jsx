@@ -313,7 +313,7 @@ const Main = () => {
                       </li>
                       <li className="cart-total-amount">
                         <span>TOTAL</span>
-                        <span className="amount">{totalPrice} $</span>
+                        <span className="amount">{totalPrice.toFixed(2)} $</span>
                       </li>
                     </ul>
                     <div className="payment-method-info">
