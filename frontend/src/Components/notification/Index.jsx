@@ -118,7 +118,7 @@ const Index = () => {
             bgcolor: "background.paper",
           }}
         >
-          {notif.map((data, i) => {
+          {notif.reverse().map((data, i) => {
             const dateObject = new Date(data.data?.createdAt);
             const options = {
               year: "numeric",

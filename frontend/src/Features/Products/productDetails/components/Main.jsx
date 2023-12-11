@@ -141,7 +141,8 @@ const Main = () => {
                         color: "#777",
                       }}
                     >
-                      {product.options[0].price} $
+                      {product?.discountPrice > 0 &&
+                        `${product.options[0].price}$`}
                     </p>
                     <p className="price">
                       {product?.options[0]?.price -

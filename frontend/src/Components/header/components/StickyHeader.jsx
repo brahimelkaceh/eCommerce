@@ -5,9 +5,9 @@ import logo from "../../../assets/img/logo/logo.png";
 import { Link } from "react-router-dom";
 import { useCustomer } from "../../../Features/customers/Context";
 import { CartStore } from "../../../Features/cart/components/State/CartContext";
+import LogoutIcon from "@mui/icons-material/Logout";
 const StickyHeader = () => {
-
-  const { catData, SubcatData, setSelectedSubcategory,selectedSubcategory } =
+  const { catData, SubcatData, setSelectedSubcategory, selectedSubcategory } =
     useSubCatData();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
@@ -35,8 +35,7 @@ const StickyHeader = () => {
   }, []);
   const handleClick = (id) => () => {
     setSelectedSubcategory(id);
-
-  }
+  };
   return (
     <div
       id="sticky-header"
@@ -57,7 +56,7 @@ const StickyHeader = () => {
                 </div>
                 <div className="navbar-wrap main-menu d-none d-lg-flex">
                   <ul className="navigation">
-                    {catData?.slice(-4)?.map((category, i) => {
+                    {catData.slice(-4)?.map((category, i) => {
                       const subcaty = SubcatData?.filter(
                         (subcategory) =>
                           subcategory?.categoryId?._id === category?._id
@@ -67,7 +66,10 @@ const StickyHeader = () => {
                           key={i}
                           className="active menu-item-has-children has--mega--menu"
                         >
-                          <a href="#">✦ {category?.categoryName} ✦</a>
+                          {/* <a href="#">✦ {category?.categoryName} ✦</a> */}
+                          <Link to={`/shop?category=${category?._id}`}>
+                            ✦ {category?.categoryName} ✦
+                          </Link>
                           <ul className="mega-menu">
                             <li className="mega-menu-wrap">
                               <ul className="mega-menu-col">
@@ -77,11 +79,12 @@ const StickyHeader = () => {
                                 {subcaty?.map((subcategory) => {
                                   return (
                                     <li key={subcategory?.id}>
-                                      <Link to="/shop" onClick={handleClick(subcategory.id)}>
+                                      <Link
+                                        to="/shop"
+                                        onClick={handleClick(subcategory.id)}
+                                      >
                                         {subcategory.subCategoryName}
-                                        
                                       </Link>
-                                      
                                     </li>
                                   );
                                 })}
@@ -111,7 +114,7 @@ const StickyHeader = () => {
                     </li>
                     <li className="header-wishlist">
                       <a href="#">
-                        <i className="flaticon-heart-shape-outline"></i>
+                        <i className="flaticon-logout"></i>
                       </a>
                     </li>
                     <li className="header-shop-cart">
