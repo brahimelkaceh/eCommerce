@@ -211,3 +211,17 @@ exports.deleteProduct = catchAsync(async (req, res) => {
 
   return res.json({ response });
 });
+
+exports.getProductsByCategory = catchAsync(async (req, res) => {
+  console.log("salam");
+  const categoryId = req.query.category;
+  const subCategoryId = await SubCategory.find({ categoryId });
+  const products = await Products.find({ subCategoryId });
+  if (!products) {
+    throw new AppError("No products found for this subcategory!", 400);
+  }
+  res.status(200).json({
+    status: "success",
+    data: products,
+  });
+});
