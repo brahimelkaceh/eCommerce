@@ -14,7 +14,7 @@ const Categories = ({ catData, SubcatData, onSubcategoryClick }) => {
                   (subcategory) => subcategory.categoryId._id === category._id
                 ).map((subcategory) => (
                   <li key={subcategory._id}>
-                    <a
+                    <Link
                       onClick={() => onSubcategoryClick(subcategory._id)}
                       style={{
                         cursor: "pointer",
@@ -22,7 +22,7 @@ const Categories = ({ catData, SubcatData, onSubcategoryClick }) => {
                     >
                       {subcategory.subCategoryName}{" "}
                       <i className="fas fa-angle-double-right" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -94,7 +94,7 @@ const Main = () => {
 
   return (
     <div>
-      <section className="shop-area pt-100 pb-100">
+      <section className="shop-area pt-50 pb-100">
         <div className="container">
           <div className="row">
             <div className="col-xl-3 col-lg-4">

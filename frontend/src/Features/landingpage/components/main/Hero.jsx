@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -45,15 +46,15 @@ const Hero = () => {
                         style, and unparalleled craftsmanship that define the
                         timeless allure of our carefully selected items.
                       </p>
-                      <a
-                        href="shop-sidebar.html"
+                      <Link
+                        to="/shop"
                         className="btn"
                         data-animation-in="fadeInUpBig"
                         data-delay-in=".8"
                         data-duration-in="1.5"
                       >
                         Shop now
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

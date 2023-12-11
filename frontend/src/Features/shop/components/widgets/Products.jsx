@@ -24,10 +24,10 @@ const Products = ({ products }) => {
   return (
     <>
       <div className="row">
-        {products.map((product) => {
+        {products.map((product, i) => {
           return (
             product?.active && (
-              <div key={product.id} className="col-xl-4 col-sm-6">
+              <div key={i} className="col-xl-4 col-sm-6">
                 <div className="new-arrival-item text-center mb-50">
                   <div className="thumb mb-25">
                     <Link to={`/shop/${product.id}`}>

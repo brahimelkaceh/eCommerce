@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 
 import { useSubCatData } from "../../../Features/categories/Context";
 import logo from "../../../assets/img/logo/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCustomer } from "../../../Features/customers/Context";
 import { CartStore } from "../../../Features/cart/components/State/CartContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 const StickyHeader = () => {
+  const navigate = useNavigate();
   const { catData, SubcatData, setSelectedSubcategory, selectedSubcategory } =
     useSubCatData();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
@@ -113,9 +114,16 @@ const StickyHeader = () => {
                       </Link>
                     </li>
                     <li className="header-wishlist">
-                      <a href="#">
-                        <i className="flaticon-logout"></i>
-                      </a>
+                      {localStorage.getItem("customerToken") && (
+                        <Link
+                          onClick={() => {
+                            localStorage.removeItem("customerToken");
+                            navigate("/home");
+                          }}
+                        >
+                          Logout
+                        </Link>
+                      )}
                     </li>
                     <li className="header-shop-cart">
                       <a href="#">
