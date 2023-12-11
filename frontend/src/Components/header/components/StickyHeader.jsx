@@ -67,7 +67,7 @@ const StickyHeader = () => {
                           key={i}
                           className="active menu-item-has-children has--mega--menu"
                         >
-                          <a href="#">✦ {category?.categoryName} ✦</a>
+                          <a href={`/shop?category=${category?._id}`}>✦ {category?.categoryName} ✦</a>
                           <ul className="mega-menu">
                             <li className="mega-menu-wrap">
                               <ul className="mega-menu-col">

@@ -27,16 +27,16 @@ const CatArea = () => {
             return (
               <div key={category.id} className="col">
                 <div className="shop-cat-item">
-                  <a href="shop-sidebar.html">
-                    <div className="icon">
+                  {/* <a href="shop-sidebar.html"> */}
+                    {/* <div className="icon">
                       <img src="" alt />
-                    </div>
+                    </div> */}
                     <p>
                       <a href={`/shop?category=${category._id}`}>
-                        {category.categoryName} <span>( 9 Items )</span>
+                        {category.categoryName} <span>( X Items )</span>
                       </a>
                     </p>
-                  </a>
+                  {/* </a> */}
                 </div>
               </div>
             );

@@ -1,49 +1,92 @@
 import React, { useState, useEffect } from "react";
 import { useProduct } from "../../Products/Context";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSubCatData } from "../../categories/Context";
 import Categories from "./widgets/Categories";
 import Products from "./widgets/Products";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom"; // Import your custom hooks
+
 const Main = () => {
   const { products: allProducts } = useProduct();
-  const { SubcatData, catData,subCategoryID,selectedSubcategory,setSelectedSubcategory } = useSubCatData();
+  const {
+    SubcatData,
+    catData,
+    subCategoryID,
+    selectedSubcategory,
+    setSelectedSubcategory,
+  } = useSubCatData();
   const [filteredProducts, setFilteredProducts] = useState([]);
-   const [page, setPage] = React.useState(1);
-   const handleChange = (event, value) => {
-     setPage(value);
-   };
+  const [page, setPage] = useState(1);
   const [RealProducts, setRealProducts] = useState([]);
 
-  
-   // it should be constant with no change
+  const location = useLocation();
+  const [products, setProducts] = useState([]);
+  const categoryId = new URLSearchParams(location.search).get("category");
+  const navigate = useNavigate();
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
   useEffect(() => {
-    
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/shop?category=${categoryId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("userT")
+              )}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Response is not in JSON format");
+        }
+
+        const data = await response.json();
+        setProducts(data.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    if (categoryId) {
+      fetchProducts();
+    }
+  }, [categoryId]);
+
+  useEffect(() => {
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
-      const filtered = allProducts.filter((product) => {
-        return product.subCategoryId._id === subcategoryId;
-      });
+      const filtered = allProducts.filter(
+        (product) => product.subCategoryId._id === subcategoryId
+      );
       setFilteredProducts(filtered);
-  
     } else {
       setFilteredProducts(allProducts);
-          setRealProducts(allProducts);
+      setRealProducts(allProducts);
     }
   }, [selectedSubcategory, allProducts]);
 
   const handleSubcategoryClick = (subcategoryId) => {
-    console.log(subcategoryId)
     setSelectedSubcategory(subcategoryId);
-    console.log(selectedSubcategory,"In main") ;
- 
   };
 
   const handleResetSubcategory = () => {
     setSelectedSubcategory(null);
+    navigate("/shop");
   };
-  // console.log(filteredProducts);
 
   return (
     <div>
@@ -54,23 +97,7 @@ const Main = () => {
               <aside className="shop-sidebar">
                 <div className="widget side-search-bar">
                   <form action="#">
-                    <input
-                      className="input"
-                      type="text"
-                      onChange={(e) => {
-                        // setText(e.target.value);
-                        const regex = new RegExp(e.target.value, "i");
-                        let newProducts = [];
-                        RealProducts.forEach((product) => {
-                          if (regex.test(product.productName)) {
-                            newProducts.push(product);
-                          }
-                        });
-                        setFilteredProducts(newProducts);
-                        setPage(1);
-                      }}
-                    />
-
+                    <input type="text" />
                     <button>
                       <i className="flaticon-search" />
                     </button>
@@ -81,14 +108,7 @@ const Main = () => {
                   SubcatData={SubcatData}
                   onSubcategoryClick={handleSubcategoryClick}
                 />
-                <div
-                  onClick={handleResetSubcategory}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  View All Products
-                </div>
+                <div onClick={handleResetSubcategory}>View All Products</div>
               </aside>
             </div>
 
@@ -103,7 +123,7 @@ const Main = () => {
                             <i className="flaticon-menu" /> FILTER
                           </a>
                         </li>
-                        <li>Showing 3 of {allProducts.length} results</li>
+                        <li>Showing 1–{allProducts.length} of 80 results</li>
                       </ul>
                     </div>
                   </div>
@@ -122,9 +142,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <Products
-                products={filteredProducts.slice((page - 1) * 3, page * 3)}
-              />
+              <Products products={categoryId ? products : filteredProducts.slice((page - 1) * 3, page * 3)} />
               <Stack spacing={2}>
                 <Pagination
                   count={Math.ceil(filteredProducts.length / 3)}
