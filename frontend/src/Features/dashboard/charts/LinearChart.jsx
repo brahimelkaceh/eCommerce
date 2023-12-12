@@ -6,51 +6,51 @@ const data = [
     "color": "hsl(303, 70%, 50%)",
     "data": [
       {
-        "x": "plane",
+        "x": "January",
         "y": 109,
       },
       {
-        "x": "helicopter",
+        "x": "February",
         "y": 95,
       },
       {
-        "x": "boat",
+        "x": "March",
         "y": 218,
       },
       {
-        "x": "train",
+        "x": "April",
         "y": 39,
       },
       {
-        "x": "subway",
+        "x": "May",
         "y": 152,
       },
       {
-        "x": "bus",
+        "x": "June",
         "y": 282,
       },
       {
-        "x": "car",
+        "x": "July",
         "y": 290,
       },
       {
-        "x": "moto",
+        "x": "August",
         "y": 72,
       },
       {
-        "x": "bicycle",
+        "x": "September",
         "y": 63,
       },
       {
-        "x": "horse",
+        "x": "October",
         "y": 201,
       },
       {
-        "x": "skateboard",
+        "x": "November",
         "y": 267,
       },
       {
-        "x": "others",
+        "x": "December",
         "y": 30,
       },
     ],
@@ -60,51 +60,51 @@ const data = [
     "color": "hsl(318, 70%, 50%)",
     "data": [
       {
-        "x": "plane",
+        "x": "January",
         "y": 100,
       },
       {
-        "x": "helicopter",
+        "x": "February",
         "y": 86,
       },
       {
-        "x": "boat",
+        "x": "March",
         "y": 44,
       },
       {
-        "x": "train",
+        "x": "April",
         "y": 51,
       },
       {
-        "x": "subway",
+        "x": "May",
         "y": 111,
       },
       {
-        "x": "bus",
+        "x": "June",
         "y": 160,
       },
       {
-        "x": "car",
+        "x": "July",
         "y": 138,
       },
       {
-        "x": "moto",
+        "x": "August",
         "y": 171,
       },
       {
-        "x": "bicycle",
+        "x": "September",
         "y": 183,
       },
       {
-        "x": "horse",
+        "x": "October",
         "y": 238,
       },
       {
-        "x": "skateboard",
+        "x": "November",
         "y": 101,
       },
       {
-        "x": "others",
+        "x": "December",
         "y": 184,
       },
     ],
@@ -114,51 +114,51 @@ const data = [
     "color": "hsl(125, 70%, 50%)",
     "data": [
       {
-        "x": "plane",
+        "x": "January",
         "y": 80,
       },
       {
-        "x": "helicopter",
+        "x": "February",
         "y": 19,
       },
       {
-        "x": "boat",
+        "x": "March",
         "y": 168,
       },
       {
-        "x": "train",
+        "x": "April",
         "y": 73,
       },
       {
-        "x": "subway",
+        "x": "May",
         "y": 136,
       },
       {
-        "x": "bus",
+        "x": "June",
         "y": 204,
       },
       {
-        "x": "car",
+        "x": "July",
         "y": 182,
       },
       {
-        "x": "moto",
+        "x": "August",
         "y": 17,
       },
       {
-        "x": "bicycle",
+        "x": "September",
         "y": 13,
       },
       {
-        "x": "horse",
+        "x": "October",
         "y": 299,
       },
       {
-        "x": "skateboard",
+        "x": "November",
         "y": 40,
       },
       {
-        "x": "others",
+        "x": "December",
         "y": 187,
       },
     ],
@@ -168,51 +168,51 @@ const data = [
     "color": "hsl(242, 70%, 50%)",
     "data": [
       {
-        "x": "plane",
+        "x": "January",
         "y": 226,
       },
       {
-        "x": "helicopter",
+        "x": "February",
         "y": 274,
       },
       {
-        "x": "boat",
+        "x": "March",
         "y": 262,
       },
       {
-        "x": "train",
+        "x": "April",
         "y": 4,
       },
       {
-        "x": "subway",
+        "x": "May",
         "y": 80,
       },
       {
-        "x": "bus",
+        "x": "June",
         "y": 186,
       },
       {
-        "x": "car",
+        "x": "July",
         "y": 274,
       },
       {
-        "x": "moto",
+        "x": "August",
         "y": 273,
       },
       {
-        "x": "bicycle",
+        "x": "September",
         "y": 199,
       },
       {
-        "x": "horse",
+        "x": "October",
         "y": 80,
       },
       {
-        "x": "skateboard",
+        "x": "November",
         "y": 59,
       },
       {
-        "x": "others",
+        "x": "December",
         "y": 59,
       },
     ],
@@ -222,51 +222,51 @@ const data = [
     "color": "hsl(337, 70%, 50%)",
     "data": [
       {
-        "x": "plane",
+        "x": "January",
         "y": 91,
       },
       {
-        "x": "helicopter",
+        "x": "February",
         "y": 293,
       },
       {
-        "x": "boat",
+        "x": "March",
         "y": 192,
       },
       {
-        "x": "train",
+        "x": "April",
         "y": 242,
       },
       {
-        "x": "subway",
+        "x": "May",
         "y": 74,
       },
       {
-        "x": "bus",
+        "x": "June",
         "y": 239,
       },
       {
-        "x": "car",
+        "x": "July",
         "y": 1,
       },
       {
-        "x": "moto",
+        "x": "August",
         "y": 265,
       },
       {
-        "x": "bicycle",
+        "x": "September",
         "y": 274,
       },
       {
-        "x": "horse",
+        "x": "October",
         "y": 107,
       },
       {
-        "x": "skateboard",
+        "x": "November",
         "y": 119,
       },
       {
-        "x": "others",
+        "x": "December",
         "y": 225,
       },
     ],
@@ -299,7 +299,7 @@ export const LinearChart = () => (
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
-      legend: "count",
+      legend: "Earnings",
       legendOffset: -40,
       legendPosition: "middle",
     }}

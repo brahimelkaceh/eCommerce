@@ -99,37 +99,16 @@ const StickyHeader = () => {
                 </div>
                 <div className="header-action d-none d-md-block">
                   <ul>
-                    <li className="header-search">
-                      <a
-                        href="#"
-                        data-toggle="modal"
-                        data-target="#search-modal"
-                      >
-                        <i className="flaticon-search"></i>
-                      </a>
-                    </li>
                     <li className="header-profile">
-                      <Link to="/customerProfile">
+                      <Link to="/customerProfile" data-toggle="modal">
                         <i className="flaticon-user"></i>
                       </Link>
                     </li>
-                    <li className="header-wishlist">
-                      {localStorage.getItem("customerToken") && (
-                        <Link
-                          onClick={() => {
-                            localStorage.removeItem("customerToken");
-                            navigate("/home");
-                          }}
-                        >
-                          Logout
-                        </Link>
-                      )}
-                    </li>
                     <li className="header-shop-cart">
-                      <a href="#">
+                      <Link to="/cart">
                         <i className="flaticon-shopping-bag"></i>
                         <span>{qty}</span>
-                      </a>
+                      </Link>
                       <ul className="minicart">
                         {shoppingCart.length > 0 &&
                           shoppingCart.map((product) => (
@@ -186,6 +165,18 @@ const StickyHeader = () => {
                           </div>
                         </li>
                       </ul>
+                    </li>
+                    <li className="header-wishlist">
+                      {localStorage.getItem("customerToken") && (
+                        <Link
+                          onClick={() => {
+                            localStorage.removeItem("customerToken");
+                            navigate("/home");
+                          }}
+                        >
+                          Logout
+                        </Link>
+                      )}
                     </li>
                     <li className="sidebar-toggle-btn">
                       <a href="#" className="navSidebar-button">

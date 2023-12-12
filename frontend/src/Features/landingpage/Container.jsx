@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Preloader from "./components/Preloader";
 import ScrollTop from "./components/ScrollTop";
 import Hero from "./components/main/Hero";
@@ -29,11 +29,16 @@ import Footer from "../../Components/footer/Footer";
 import Header from "../../Components/header/Header";
 
 const Container = () => {
+  const [loading, setLoading] = useState(true);
+  setTimeout(() => {
+    setLoading(false);
+  }, 1000);
+
   return (
     <CartContextStore>
       <div>
         {/* Preloader */}
-        {/* <Preloader /> */}
+        {loading && <Preloader />}
         {/* Scroll-top */}
         <ScrollTop />
         {/* Header-area */}

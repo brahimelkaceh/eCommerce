@@ -14,7 +14,7 @@ const Container = () => {
         <DrawerHeader />
         <>
           <Grid container spacing={2}>
-            <Grid xs={6} item>
+            <Grid xs={12} md={6} item>
               <div
                 style={{
                   display: "flex",
@@ -29,7 +29,7 @@ const Container = () => {
 
               <AllCategories />
             </Grid>
-            <Grid xs={6} item>
+            <Grid xs={12} md={6} item>
               <div
                 style={{
                   display: "flex",

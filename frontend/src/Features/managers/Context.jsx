@@ -5,8 +5,10 @@ export const ManagerContext = createContext();
 export const ManagerProvider = ({ children }) => {
   const [managers, setManagers] = useState([]);
   const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchManagers = async () => {
+      setLoading(true);
       try {
         const Response = await getUsers();
         const formatDate = (dateString) => {
@@ -21,6 +23,7 @@ export const ManagerProvider = ({ children }) => {
           lastUpdate: formatDate(manager.lastUpdate),
         }));
         setManagers(managersWithId);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching managers:", error);
       }
@@ -32,6 +35,7 @@ export const ManagerProvider = ({ children }) => {
     managers,
     setManagers,
     setRefresh,
+    loading,
   };
   return (
     <ManagerContext.Provider value={managerContextValue}>

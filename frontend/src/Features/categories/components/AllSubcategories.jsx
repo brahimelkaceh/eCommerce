@@ -15,6 +15,7 @@ import { useSubCatData } from "../Context";
 import { useEffect } from "react";
 import { Chip, Typography } from "@mui/material";
 import EditSubCategoryModal from "./subcategories/EditModal";
+import Loader from "../../../Components/loader/Loader";
 
 export default function AllSubcategories() {
   const {
@@ -23,6 +24,7 @@ export default function AllSubcategories() {
     getSubcategoryById,
     deleteSubCat,
     catData,
+    loading,
   } = useSubCatData();
   const [rows, setRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
@@ -275,8 +277,8 @@ export default function AllSubcategories() {
 
       <Box
         sx={{
-          height: 500,
           width: "100%",
+          position: "relative",
           "& .actions": {
             color: "text.secondary",
           },
@@ -286,6 +288,7 @@ export default function AllSubcategories() {
         }}
         className="dashboard-card"
       >
+        {loading && <Loader />}
         <DataGrid
           rows={rows}
           columns={columns}

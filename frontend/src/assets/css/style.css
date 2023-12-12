@@ -6696,7 +6696,7 @@ header.side-header {
 }
 
 .number-quantity {
-  padding: 0.25rem;
+  border-radius: 0;
   border: 0;
   width: 50px;
   -moz-appearance: textfield;

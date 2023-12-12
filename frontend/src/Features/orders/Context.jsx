@@ -14,6 +14,7 @@ export const DataProvider = ({ children }) => {
   const [orderDetailsData, setOrderDetailsData] = useState([]);
   useEffect(() => {
     const fetchDataFromApi = async () => {
+      setLoading(true);
       try {
         const responseData = await fetchData("");
         const orderssWithId = responseData.data.map((order) => ({
@@ -42,7 +43,6 @@ export const DataProvider = ({ children }) => {
   const updateOrder = async (id, updatedOrderData) => {
     try {
       const updatedOrder = await updateOrderById(id, updatedOrderData);
-      console.log(updatedOrder);
       setOrder(updatedOrder);
     } catch (error) {
       console.error("Error updating order:", error);
