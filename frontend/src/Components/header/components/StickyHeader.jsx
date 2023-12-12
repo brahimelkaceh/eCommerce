@@ -169,9 +169,9 @@ const StickyHeader = () => {
                     <li className="header-wishlist">
                       {localStorage.getItem("customerToken") && (
                         <Link
+                          to="/home"
                           onClick={() => {
                             localStorage.removeItem("customerToken");
-                            navigate("/home");
                           }}
                         >
                           Logout

@@ -1,8 +1,8 @@
 import React from "react";
 import CardItem from "./CardItem";
 import { Box, Grid } from "@mui/material";
-import { useCustomer } from "../../../customers/Context";
-import { useData } from "../../../orders/Context";
+import { useCustomer } from "../../customers/Context";
+import { useData } from "../../orders/Context";
 
 const Cards = () => {
   // console.log(MonetizationOnIcon);

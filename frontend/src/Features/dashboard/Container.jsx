@@ -3,14 +3,12 @@ import Grid from "@mui/material/Grid";
 import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
-import Cards from "./components/cards/Cards";
-import "./style.css";
-import { LinearChart } from "./charts/LinearChart";
+import Cards from "./components/Cards";
 import AllOrders from "../orders/components/AllOrders";
 import AllCustomers from "../customers/components/CustomersDataTable";
-
-import { ResponsivePie } from "@nivo/pie";
+import { LinearChart } from "./charts/LinearChart";
 import { BarChart } from "./charts/BarChart";
+import "./style.css";
 
 const Container = () => {
   return (
@@ -26,30 +24,12 @@ const Container = () => {
           <Grid container spacing={2}>
             <Cards />
             <Grid container item xs={8}>
-              <Item
-                sx={{
-                  background: "#fff",
-                  borderRadius: "var(--border-radius)",
-                  width: "100%",
-                  height: "400px",
-                  boxShadow: "var(--box-shadow)",
-                }}
-              >
+              <Item className="main-item ">
                 <LinearChart />
               </Item>
             </Grid>
-
             <Grid item xs={4}>
-              <Item
-                sx={{
-                  background: "#fff",
-                  borderRadius: "var(--border-radius)",
-                  width: "100%",
-                  height: "100%",
-                  boxShadow: "var(--box-shadow)",
-                }}
-              >
-                {/* <PieChart /> */}
+              <Item className="main-item ">
                 <BarChart />
               </Item>
             </Grid>
