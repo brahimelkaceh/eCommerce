@@ -1,10 +1,9 @@
 import React from "react";
-import { useSubCatData } from "../../../categories/Context";
-import { useProduct } from "../../../Products/Context";
+
 import { Link } from "react-router-dom";
 
 const CatArea = () => {
-  const { catData } = useSubCatData();
+  const subcategory = ["Furniture", "Wall Art", "Music", "Electronics", "Bags"];
 
   return (
     <section className="category-area pt-80 pb-45">
@@ -23,20 +22,18 @@ const CatArea = () => {
           </div>
         </div>
         <div className="row justify-content-center">
-          {catData?.map((category) => {
+          {subcategory?.map((category, i) => {
             return (
-              <div key={category.id} className="col">
+              <div key={i} className="col">
                 <div className="shop-cat-item">
-                  <a href="shop-sidebar.html">
+                  <Link to={`/shop`}>
                     <div className="icon">
-                      <img src="/src/assets/img/icon/music.png" alt />
+                      <img src={`/src/assets/img/icon/icon${i + 1}.png`} alt />
                     </div>
                     <p>
-                      <a href={`/shop?category=${category._id}`}>
-                        {category.categoryName} <span>( 9 Items )</span>
-                      </a>
+                      <Link to={`/shop`}>{category}</Link>
                     </p>
-                  </a>
+                  </Link>
                 </div>
               </div>
             );
