@@ -104,6 +104,7 @@ export default function AllCategories() {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
+          setRefresh(new Date().toString());
           Swal.fire("Saved!", "", "success");
           updateCat(updatedRow._id, updatedRow)
             .then((response) => {

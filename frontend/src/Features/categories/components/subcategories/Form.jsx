@@ -25,18 +25,19 @@ const Form = ({ onClose }) => {
     onSubmit: (values) => {
       createSubCat(values)
         .then((response) => {
+          console.log(response);
           if (response) {
-               Swal.fire({
-                 title: "Good job!",
-                 text: "You created subCategory Successfully!",
-                 icon: "success",
-               });
+            Swal.fire({
+              title: "Good job!",
+              text: "You created subCategory Successfully!",
+              icon: "success",
+            });
           } else {
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "Something went wrong!",
-              footer: 'check if the category is Active ',
+              footer: "check if the category is Active ",
             });
           }
 
