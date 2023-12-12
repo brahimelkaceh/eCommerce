@@ -19,6 +19,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { Avatar, Chip } from "@mui/material";
+import Loader from "../../../Components/loader/Loader";
 
 export default function allManagers() {
   const ManagerContext = useManager();
@@ -281,6 +282,7 @@ export default function allManagers() {
       sx={{
         height: "100%",
         width: "100%",
+        position: "relative",
         "& .actions": {
           color: "text.secondary",
         },
@@ -293,6 +295,7 @@ export default function allManagers() {
         boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
       }}
     >
+      {ManagerContext.loading && <Loader />}
       <DataGrid
         rows={rows}
         columns={columns}

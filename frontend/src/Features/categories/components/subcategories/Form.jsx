@@ -23,20 +23,35 @@ const Form = ({ onClose }) => {
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      createSubCat(values)
-        .then((response) => {
-          Swal.fire({
-            title: "Good job!",
-            text: "You clicked the button!",
-            icon: "success",
-          });
-          console.log(response);
-          onClose();
-          setRefresh(new Date().getMilliseconds());
-        })
-        .catch((error) => {
-          console.error("Error occurred: while creating user", error);
-        });
+      onClose();
+     Swal.fire({
+       title: "Do you want to create this subCategory?",
+       showDenyButton: true,
+       showCancelButton: true,
+       confirmButtonText: "Create",
+       denyButtonText: "Cancel",
+     }).then(async (result) => {
+       if (result.isConfirmed) {
+         try {
+           await createSubCat(values);
+           console.log("hello world");
+           Swal.fire("SubCategory Created!", "", "success");
+           setRefresh(new Date().toISOString());
+         } catch (error) {
+           Swal.fire({
+             icon: "error",
+             title: "Oops...",
+             text: "Something went wrong!",
+             footer: "check if the SubCategory is Active ",
+           });
+           console.error("Error occurred while creating product", error);
+         }
+       } else if (result.isDenied) {
+         Swal.fire("Product creation canceled", "", "info");
+       }
+     });
+
+       
     },
   });
   return (
@@ -98,11 +113,13 @@ const Form = ({ onClose }) => {
               }
               helperText={formik.touched.categoryId && formik.errors.categoryId}
             >
-              {catData?.map((cat) => {
+              {catData?.map((cat) => {               
                 return (
-                  <MenuItem value={cat._id} key={cat._id}>
-                    <em>{cat.categoryName}</em>
-                  </MenuItem>
+                  cat.active && (
+                    <MenuItem value={cat._id} key={cat._id}>
+                      <em>{cat.categoryName}</em>
+                    </MenuItem>
+                  )
                 );
               })}
             </Select>

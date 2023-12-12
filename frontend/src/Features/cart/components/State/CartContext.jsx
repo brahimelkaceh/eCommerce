@@ -7,7 +7,7 @@ export const CartContextStore = ({ children }) => {
   const [cart, dispatch] = useReducer(CartReducer, {
     shoppingCart: [],
     totalPrice: 0,
-    qty: 0 
+    qty: 0,
   });
   return (
     <CartContext.Provider value={{ ...cart, dispatch }}>
@@ -19,7 +19,7 @@ export default CartContextStore;
 
 export const CartStore = () => {
   const Context = useContext(CartContext);
-    // console.log(Context);
+  // console.log(Context);
   if (!Context) {
     throw new Error("no context found");
   }

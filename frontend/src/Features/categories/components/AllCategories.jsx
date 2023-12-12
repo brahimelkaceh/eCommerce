@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
+import Loader from "../../../Components/loader/Loader";
 import {
   GridRowModes,
   DataGrid,
@@ -20,7 +21,8 @@ import { useEffect } from "react";
 import { Chip, Typography } from "@mui/material";
 
 export default function AllCategories() {
-  const { catData, deleteCat, updateCat, setRefresh } = useSubCatData();
+  const { catData, deleteCat, updateCat, setRefresh, loading } =
+    useSubCatData();
 
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -102,6 +104,7 @@ export default function AllCategories() {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
+          setRefresh(new Date().toString());
           Swal.fire("Saved!", "", "success");
           updateCat(updatedRow._id, updatedRow)
             .then((response) => {
@@ -261,8 +264,9 @@ export default function AllCategories() {
   return (
     <Box
       sx={{
-        height: 500,
+        // height: 500,
         width: "100%",
+        position: "relative",
         "& .actions": {
           color: "text.secondary",
         },
@@ -272,6 +276,7 @@ export default function AllCategories() {
       }}
       className="dashboard-card"
     >
+      {loading && <Loader />}
       <DataGrid
         rows={rows}
         columns={columns}

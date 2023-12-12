@@ -22,7 +22,7 @@ import { useState } from "react";
 import { useCustomer } from "../../../Features/customers/Context";
 
 export default function AllOrders({ handleOpen, margin }) {
-  const { data, getOrderById, updateOrder } = useData();
+  const { data, getOrderById, updateOrder, loading } = useData();
   const { getCustomerById, singleCustomer, customer } = useCustomer();
 
   const [rows, setrows] = useState([]);
@@ -373,34 +373,51 @@ export default function AllOrders({ handleOpen, margin }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
 
   return (
-    data && (
-      <DataGrid
-        className="dataGrid"
+    <>
+      <Box
         sx={{
-          marginTop: 0,
+          width: "100%",
+          position: "relative",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        disableColumnSelector={margin}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 7 } },
-        }}
-        pageSizeOptions={[5, 10, 25]}
-        disableColumnFilter
-        disableDensitySelector
-        slots={{ toolbar: GridToolbar }}
-        filterModel={filterModel}
-        onFilterModelChange={(newModel) => setFilterModel(newModel)}
-        columnVisibilityModel={columnVisibilityModel}
-        onColumnVisibilityModelChange={(newModel) =>
-          setColumnVisibilityModel(newModel)
-        }
-      />
-    )
+        // className="dashboard-card"
+      >
+        {loading && <Loader />}
+        {data && (
+          <DataGrid
+            className="dataGrid"
+            sx={{
+              marginTop: 0,
+            }}
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            disableColumnSelector={margin}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 7 } },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            disableColumnFilter
+            disableDensitySelector
+            slots={{ toolbar: GridToolbar }}
+            filterModel={filterModel}
+            onFilterModelChange={(newModel) => setFilterModel(newModel)}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
+          />
+        )}
+      </Box>
+    </>
   );
 }

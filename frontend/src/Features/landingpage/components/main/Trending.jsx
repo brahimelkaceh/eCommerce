@@ -3,8 +3,9 @@ import { useProduct } from "../../../Products/Context";
 import banner from "../../../../assets/img/images/banner.png";
 import { CartStore } from "../../../cart/components/State/CartContext";
 import { Link } from "react-router-dom";
+import Preloader from "../Preloader";
 const Trending = () => {
-  const { products, discountPrice } = useProduct();
+  const { products, discountPrice, loading } = useProduct();
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("CartOrders"));
@@ -47,6 +48,7 @@ const Trending = () => {
                     </Link>
                   </div>
                   <div className="row trending-product-active">
+                    {loading && <Preloader />}
                     {products?.slice(0, 3).map((product) => {
                       return (
                         <div className="col" key={product?._id}>
@@ -76,13 +78,6 @@ const Trending = () => {
                               </div>
                             </div>
                             <div className="features-product-content">
-                              {/* <div className="rating">
-                                <i className="far fa-star" />
-                                <i className="far fa-star" />
-                                <i className="far fa-star" />
-                                <i className="far fa-star" />
-                                <i className="far fa-star" />
-                              </div> */}
                               <h5>
                                 <Link to={`/shop/${product.id}`}>
                                   {product?.productName}

@@ -14,26 +14,25 @@ import {
   updateCategory,
 } from "./CategoriesService";
 
-
-
 const DataSubcategoriesContext = createContext();
 
 export const SubcategoryProvider = ({ children }) => {
   const [SubcatData, setSubcatData] = useState([]);
   const [catData, setCatData] = useState([]);
   const [categoryError, setCategoryError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [subcategory, setSubcategory] = useState([]);
   const [refresh, setRefresh] = useState(new Date().getMilliseconds());
   const [refreshSub, setRefreshSub] = useState(new Date().getMilliseconds());
 
   const [subCategoryID, setSubcategoryID] = useState(null);
-   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   // ! ====== CATEGORIES MANAGEMENT =====
   console.log("hello from context : ", selectedSubcategory);
   useEffect(() => {
     const getCategoriesData = async () => {
+      setLoading(true);
       try {
         const response = await fetchCategories("");
         setCatData(response.data);
@@ -80,9 +79,15 @@ export const SubcategoryProvider = ({ children }) => {
   // ! ======== SUBCATEGORIES MANAGEMENT =================================
   useEffect(() => {
     const fetchDataFromApi = async () => {
+      setLoading(true);
+      console.log(refresh);
       try {
         const responseData = await fetchSubcategoriesData("");
-        setSubcatData(responseData.data);
+        const FilteredData = responseData.data.filter(
+          (subCat) => subCat.categoryId.active == true
+        );
+        console.log(FilteredData);
+        setSubcatData(FilteredData);
       } catch (error) {
         setError(error);
       } finally {
@@ -90,7 +95,7 @@ export const SubcategoryProvider = ({ children }) => {
       }
     };
     fetchDataFromApi();
-  }, [refresh, refreshSub]);
+  }, [refresh]);
   const getSubcategoryById = async (id) => {
     try {
       const fetchedSubcategory = await fetchSubcategoryById(id);
@@ -103,7 +108,8 @@ export const SubcategoryProvider = ({ children }) => {
   const updateSubCat = async (id, updatedSubcategoryData) => {
     try {
       await updateSubcategory(id, updatedSubcategoryData);
-      setRefreshSub(new Date().toISOString());
+      console.log("updated subcategory");
+      setRefresh(new Date().getMilliseconds());
     } catch (error) {
       console.error("Error updating subcategory:", error);
     }
@@ -136,9 +142,9 @@ export const SubcategoryProvider = ({ children }) => {
     deleteCat,
     updateCat,
     categoryError,
+    loading,
     // ! =================================================================
     SubcatData,
-    loading,
     error,
     getSubcategoryById,
     updateSubCat,

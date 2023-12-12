@@ -8,17 +8,13 @@ export const CustomerProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(new Date().toISOString());
   const [customer, setCustomer] = useState([]);
   const [custTotal, setcustTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         const Response = await getCustomers();
-        const formatDate = (dateString) => {
-          const utcDate = new Date(dateString); // Original date in UTC
-          return utcDate; // Convert to string in the desired format
-        };
-        // console.log(Response.data.data);
         const customersWithId = Response.data.data.customers.map(
           (customer) => ({
             ...customer,
@@ -36,6 +32,7 @@ export const CustomerProvider = ({ children }) => {
   }, [refresh]);
 
   const getCustomerById = async (customerId) => {
+    setLoading(true);
     try {
       const response = await fetch(
         `http://localhost:5000/customers/${customerId}`,
@@ -50,6 +47,7 @@ export const CustomerProvider = ({ children }) => {
       );
       const data = await response.json();
       setCustomer(data?.data);
+      setLoading(false);
       return data.data;
     } catch (error) {
       console.error("Error fetching customer by ID:", error);
@@ -90,6 +88,7 @@ export const CustomerProvider = ({ children }) => {
     getCustomerById,
     loginCustomer,
     custTotal,
+    loading,
   };
 
   return (

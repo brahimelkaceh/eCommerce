@@ -6,14 +6,16 @@ import BreadCrumb from "./components/BreadCrump";
 import Header from "../../../Components/header/Header";
 import Main from "./components/Main";
 import CartContextStore from "../../cart/components/State/CartContext";
+import { useProduct } from "../Context";
 const Container = () => {
+  const { loading } = useProduct();
   return (
     <div>
       {/* Prealoader */}
-      {/* <Preloader /> */}
+      {loading && <Preloader />}
       {/* Scroll-top */}
+      {/* <ScrollTop /> */}
       <CartContextStore>
-        <ScrollTop />
         {/* Header */}
         <Header />
 

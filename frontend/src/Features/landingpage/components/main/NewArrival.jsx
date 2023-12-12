@@ -3,8 +3,9 @@ import banner from "../../../../assets/img/banner.webp";
 import { useProduct } from "../../../Products/Context";
 import { CartStore } from "../../../cart/components/State/CartContext";
 import { Link } from "react-router-dom";
+import Preloader from "../Preloader";
 const NewArrival = () => {
-  const { products, discountPrice } = useProduct();
+  const { products, discountPrice, loading } = useProduct();
   const { dispatch } = CartStore();
   return (
     <main>
@@ -32,6 +33,7 @@ const NewArrival = () => {
             </div>
             <div className="col-xl-7 col-lg-6">
               <div className="row new-arrival-active">
+                {loading && <Preloader />}
                 {products?.slice(-6).map((product) => {
                   return (
                     <div

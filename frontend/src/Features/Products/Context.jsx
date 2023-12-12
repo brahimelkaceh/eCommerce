@@ -1,16 +1,6 @@
 // In your ProductProvider file
 import React, { createContext, useContext, useState, useEffect } from "react";
-import {
-  // fetchProductData,
-  // fetchProductById, // Added this import
-  // updateProduct,
-  // createProduct,
-  deleteP,
-  createP,
-  editP,
-  getProducts,
-  getP,
-} from "./Services";
+import { deleteP, createP, editP, getProducts, getP } from "./Services";
 import axios from "axios";
 
 export const ProductContext = createContext();
@@ -20,6 +10,7 @@ export const ProductProvider = ({ children }) => {
   const [newProduct, setNewProduct] = useState(null);
   const [productName, setProductName] = useState("");
   const [refresh, setRefresh] = useState(new Date().toISOString());
+  const [loading, setLoading] = useState(false);
 
   const updateProducts = (newProduct) => {
     setProducts((prevProducts) => [...prevProducts, newProduct]);
@@ -78,10 +69,12 @@ export const ProductProvider = ({ children }) => {
   };
 
   const fetchProductById = async (productId) => {
+    setLoading(true);
     try {
       const product = await getP(productId);
       setProductName(product.data.data?.productName);
       return product;
+      setLoading(false);
     } catch (error) {
       console.error(`Error fetching product with ID ${productId}:`, error);
       return null;
@@ -90,13 +83,20 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const response = await getProducts();
         const productsWithId = response.data.data.map((product) => ({
           ...product,
           id: product._id,
         }));
-        setProducts(productsWithId);
+        // console.log("products : ", productsWithId); // !!!
+        const filteredData = productsWithId.filter(
+          (product) => product.subCategoryId.active == true
+        );
+        // console.log(" products updated : " ,filteredData)
+        setProducts(filteredData);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -120,6 +120,7 @@ export const ProductProvider = ({ children }) => {
     setRefresh,
     discountPrice,
     productName,
+    loading,
   };
 
   return (

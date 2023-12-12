@@ -30,10 +30,10 @@ const Container = () => {
           open={open}
         />
         <Grid container spacing={2}>
-          <Grid xs={7} item>
+          <Grid xs={12} sm={12} md={7} item>
             <AllOrders handleOpen={handleOpen} />
           </Grid>
-          <Grid xs={5} item>
+          <Grid xs={12} sm={12} md={5} item>
             <Item
               style={{
                 background: "#fff",
