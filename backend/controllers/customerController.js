@@ -117,10 +117,11 @@ exports.activate = catchAsync(async (req, res) => {
   await customer.save();
 
   // Redirect to a confirmation page or display a success message
-  return res.status(200).json({
-    status: "success",
-    data: "Account activated successfully",
-  });
+  // return res.status(200).json({
+  //   status: "success",
+  //   data: "Account activated successfully",
+  // });
+  return res.redirect("http://localhost:5173/home")
 });
 
 exports.getAllCustomers = catchAsync(async (req, res, next) => {
