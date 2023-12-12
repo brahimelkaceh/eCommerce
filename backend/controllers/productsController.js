@@ -25,7 +25,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       active,
     } = req.body;
     const subcategory = await SubCategory.findById(subCategoryId);
-    if (!subcategory) {
+    if (!subcategory || subcategory.active == false ) {
       return next(
         new AppError("Can't find the corresponding subcategory", 404)
       );

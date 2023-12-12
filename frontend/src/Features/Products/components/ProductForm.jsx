@@ -111,11 +111,12 @@ const ProductForm = ({ open, onClose }) => {
               Swal.fire("Product Created!", "", "success");
               setRefresh(new Date().toISOString());
             } catch (error) {
-              Swal.fire(
-                "Error occurred while creating product",
-                error.message,
-                "error"
-              );
+             Swal.fire({
+               icon: "error",
+               title: "Oops...",
+               text: "Something went wrong!",
+               footer: "check if the SubCategory is Active ",
+             });
               console.error("Error occurred while creating product", error);
             }
           } else if (result.isDenied) {

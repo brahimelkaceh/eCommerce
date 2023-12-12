@@ -100,7 +100,7 @@ export const ProductProvider = ({ children }) => {
         const filteredData = productsWithId.filter(
           (product) => product.subCategoryId.active == true
         );
-        console.log(" products updated : " ,filteredData)
+        // console.log(" products updated : " ,filteredData)
         setProducts(filteredData);
       } catch (error) {
         console.error("Error fetching products:", error);

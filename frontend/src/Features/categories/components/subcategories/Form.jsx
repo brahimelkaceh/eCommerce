@@ -25,12 +25,21 @@ const Form = ({ onClose }) => {
     onSubmit: (values) => {
       createSubCat(values)
         .then((response) => {
-          Swal.fire({
-            title: "Good job!",
-            text: "You clicked the button!",
-            icon: "success",
-          });
-          console.log(response);
+          if (response) {
+               Swal.fire({
+                 title: "Good job!",
+                 text: "You created subCategory Successfully!",
+                 icon: "success",
+               });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: 'check if the category is Active ',
+            });
+          }
+
           onClose();
           setRefresh(new Date().getMilliseconds());
         })
