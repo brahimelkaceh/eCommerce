@@ -25,6 +25,7 @@ const Products = ({ products }) => {
     <>
       <div className="row">
         {products.map((product, i) => {
+          console.log("activation",product.active)
           return (
             product?.active && (
               <div key={i} className="col-xl-4 col-sm-6">
