@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getP } from "../../Services";
 import { Navigate, useParams } from "react-router-dom";
 import { CartStore } from "../../../cart/components/State/CartContext";
+import NotFound from "../../../../Pages/notfound/Notfound";
 const Main = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
   const { fetchProductById } = useProduct();
@@ -15,13 +16,14 @@ const Main = () => {
   useEffect(() => {
     const getProuctData = async () => {
       const response = await fetchProductById(id);
-      if (!response.ok) {
+      if (!response.data) {
         Navigate("/404");
       }
+      // console.log("response data", response.data);
       setproduct(response.data.data);
     };
     getProuctData();
-  }, []);
+  }, [id]);
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("ShopOrders"));
     dispatch({ type: "SET_TO_CART", payload: storedCart });
@@ -34,7 +36,7 @@ const Main = () => {
   }, [shoppingCart]);
   return (
     <div>
-      {product && (
+      {product ? (
         <section className="shop-details-area pt-100 pb-95">
           <div className="container">
             <div className="row">
@@ -288,6 +290,8 @@ const Main = () => {
             </div>
           </div>
         </section>
+      ) : (
+        <NotFound />
       )}
     </div>
   );
