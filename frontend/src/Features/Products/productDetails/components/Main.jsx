@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useProduct } from "../../Context";
+import { useNavigate } from "react-router-dom";
 import { getP } from "../../Services";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { CartStore } from "../../../cart/components/State/CartContext";
 const Main = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
@@ -9,9 +11,13 @@ const Main = () => {
   const [product, setproduct] = useState(null);
   const [bigimage, setbigimage] = useState(null);
   const { id } = useParams();
+  const Navigate = useNavigate();
   useEffect(() => {
     const getProuctData = async () => {
       const response = await fetchProductById(id);
+      if (!response.ok) {
+        Navigate("/404");
+      }
       setproduct(response.data.data);
     };
     getProuctData();
