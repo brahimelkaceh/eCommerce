@@ -83,7 +83,11 @@ export const SubcategoryProvider = ({ children }) => {
 
       try {
         const responseData = await fetchSubcategoriesData("");
-        setSubcatData(responseData.data);
+        const FilteredData = responseData.data.filter((subCat) => 
+          subCat.categoryId.active == true
+        )
+        setSubcatData(FilteredData);
+
       } catch (error) {
         setError(error);
       } finally {

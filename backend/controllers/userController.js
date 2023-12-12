@@ -121,15 +121,10 @@ exports.createUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res) => {
   const response = {};
   const images = req.files;
-  console.log(req.files);
-
   const uploadedImages = await addImages(images);
   try {
     const id = req.params.id;
     const user = await checkingID(id);
-    //doing some magic
-    // do the magic here !!!
-    // finishing the magic
     if (!user) {
       response.message = CONSTANTS.USER_NOT_FOUND;
       response.status = CONSTANTS.SERVER_NOT_ALLOWED_HTTP_CODE;

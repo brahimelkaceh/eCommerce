@@ -25,7 +25,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
       active,
     } = req.body;
     const subcategory = await SubCategory.findById(subCategoryId);
-    if (!subcategory) {
+    if (!subcategory || subcategory.active == false ) {
       return next(
         new AppError("Can't find the corresponding subcategory", 404)
       );
@@ -79,7 +79,7 @@ exports.getAllProducts = async (req, res, next) => {
       .paginate();
     const products = await features.query.populate(
       "subCategoryId",
-      "subCategoryName"
+      "subCategoryName active"
     );
 
     // SEND RESPONSE
@@ -101,7 +101,7 @@ exports.searchProducts = catchAsync(async (req, res) => {
   try {
     const product = await Products.findOne(searchParams).populate(
       "subCategoryId",
-      "subCategoryName"
+      "subCategoryName active"
     );
     if (product) {
       response.message = CONSTANTS.PRODUCTS_FOUND;
@@ -128,7 +128,7 @@ exports.getProductById = catchAsync(async (req, res, next) => {
   try {
     const product = await Products.findById(id).populate(
       "subCategoryId",
-      "subCategoryName"
+      "subCategoryName active"
     );
 
     if (!product) {
@@ -177,8 +177,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
         new: true, // Return the updated document
         runValidators: true, // Run validators on update
       }
-    ).populate("subCategoryId", "subCategoryName");
-    console.log(updatedProduct);
+    ).populate("subCategoryId", "subCategoryName active");
     if (!updatedProduct) {
       return next(new AppError("Product not found", 404));
     }
