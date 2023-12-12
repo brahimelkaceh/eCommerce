@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useProduct } from "../../Context";
 import { useNavigate } from "react-router-dom";
