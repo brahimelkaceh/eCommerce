@@ -49,7 +49,7 @@ const Trending = () => {
                   </div>
                   <div className="row trending-product-active">
                     {loading && <Preloader />}
-                    {products?.slice(0, 3).map((product) => {
+                    {products?.slice(23, 26).map((product) => {
                       return (
                         <div className="col" key={product?._id}>
                           <div className="features-product-item">

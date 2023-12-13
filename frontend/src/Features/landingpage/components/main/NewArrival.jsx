@@ -34,7 +34,7 @@ const NewArrival = () => {
             <div className="col-xl-7 col-lg-6">
               <div className="row new-arrival-active">
                 {loading && <Preloader />}
-                {products?.slice(6, 12).map((product) => {
+                {products?.slice(27, 33).map((product) => {
                   return (
                     <div
                       className="col-xl-4 col-sm-6 grid-item grid-sizer cat-two"
