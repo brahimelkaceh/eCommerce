@@ -24,7 +24,7 @@ const NewArrival = () => {
                   </div>
                   <h2>Cyber Monday</h2>
                   <span>UP TO 50% OFF</span>
-                  <div className="coming-time" data-countdown="2021/9/21" />
+                  {/* <div className="coming-time" data-countdown="2021/9/21" /> */}
                   <Link to="/shop" className="btn">
                     shop now
                   </Link>
