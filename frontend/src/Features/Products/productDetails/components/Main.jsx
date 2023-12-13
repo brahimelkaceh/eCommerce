@@ -36,7 +36,7 @@ const Main = () => {
   }, [shoppingCart]);
   return (
     <div>
-      {product ? (
+      {product &&(
         <section className="shop-details-area pt-100 pb-95">
           <div className="container">
             <div className="row">
@@ -131,7 +131,7 @@ const Main = () => {
 
                   <p className="style-name">Product Sku:{product.sku}</p>
                   <p className="style-name">
-                    Short Description :{product.shortDescription}
+                    {product.shortDescription}
                   </p>
                   <div
                     style={{
@@ -290,8 +290,8 @@ const Main = () => {
             </div>
           </div>
         </section>
-      ) : (
-        <NotFound />
+      // ) : (
+      //   <NotFound />
       )}
     </div>
   );
