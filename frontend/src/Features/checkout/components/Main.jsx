@@ -4,28 +4,14 @@ import { CartStore } from "../../cart/components/State/CartContext";
 import { useFormik } from "formik";
 import { createOrder } from "../service";
 import * as Yup from "yup";
+import SuccessAlert from "../../customerlogin/components/SuccessAlert";
 const Main = () => {
   const { qty, shoppingCart, totalPrice, dispatch } = CartStore();
-  // const handleClick = (event) => {
-  //   event.preventDefault();
-  //   const jwt = localStorage.customerId;
-
-  //   const orderItems = shoppingCart.map((product) => ({
-  //     product: product._id,
-  //     quantity: product.orderQty,
-  //     productName: product.productName,
-  //     productPrice: product.options[0].price,
-  //     quantity: product.quantity,
-  //   }));
-  //   const order = {
-  //     customerID: JSON.parse(jwt),
-  //     orderItems: orderItems,
-  //     cartTotalPrice: totalPrice,
-  //     Status: "Open",
-  //   };
-  //   console.log(order);
-  //   // createOrder(order)
-  // };
+  const [open, isOpen] = useState(false);
+  const [loading, isLoading] = useState(false);
+  const handleClose = () => {
+    isOpen(false);
+  };
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -51,6 +37,7 @@ const Main = () => {
 
     onSubmit: async (values) => {
       // console.log(values);
+      isLoading(true);
       const jwt = localStorage.customerId;
       const orderItems = shoppingCart.map((product) => ({
         product: product._id,
@@ -66,23 +53,37 @@ const Main = () => {
         Status: "Open",
       };
       if (orderItems.length) {
-        createOrder(order);
-        console.log("order send successfully", order);
+        await createOrder(order);
         localStorage.removeItem("ShopOrders");
         localStorage.removeItem("CartOrders");
         dispatch({ type: "SET_TO_CART", payload: [] });
+        isOpen(true);
+        isLoading(false);
+
         formik.handleReset();
       } else {
-        console.log("there is no order to send");
+        console.log("There is no order to send");
       }
     },
   });
   return (
     <main>
+      {open && (
+        <SuccessAlert
+          handleClose={handleClose}
+          open={open}
+          message="Order created successfully"
+        />
+      )}
       {/* breadcrumb-area */}
       <section
         className="breadcrumb-area breadcrumb-bg"
-        style={{width:"100%" , backgroundSize: 'cover', backgroundImage: `url('src/assets/img/bg/3.png')`}}>
+        style={{
+          width: "100%",
+          backgroundSize: "cover",
+          backgroundImage: `url('src/assets/img/bg/3.png')`,
+        }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -313,7 +314,9 @@ const Main = () => {
                       </li>
                       <li className="cart-total-amount">
                         <span>TOTAL</span>
-                        <span className="amount">{totalPrice.toFixed(2)} $</span>
+                        <span className="amount">
+                          {totalPrice.toFixed(2)} $
+                        </span>
                       </li>
                     </ul>
                     <div className="payment-method-info">
@@ -356,7 +359,9 @@ const Main = () => {
                         </label>
                       </div>
                     </div>
-                    <button className="btn">Place order</button>
+                    <button type="submit" className="btn">
+                      {loading ? "Loading" : " Place order"}
+                    </button>
                   </div>
                 </div>
               </aside>

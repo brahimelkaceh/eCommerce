@@ -2,7 +2,7 @@ import { ResponsiveLine } from "@nivo/line";
 
 const data = [
   {
-    "id": "japan",
+    "id": "Bath thowel",
     "color": "hsl(303, 70%, 50%)",
     "data": [
       {
@@ -56,7 +56,7 @@ const data = [
     ],
   },
   {
-    "id": "france",
+    "id": "Floral vase",
     "color": "hsl(318, 70%, 50%)",
     "data": [
       {
@@ -110,7 +110,7 @@ const data = [
     ],
   },
   {
-    "id": "us",
+    "id": "Cherub vase",
     "color": "hsl(125, 70%, 50%)",
     "data": [
       {
@@ -164,7 +164,7 @@ const data = [
     ],
   },
   {
-    "id": "germany",
+    "id": "Torgtuga planter",
     "color": "hsl(242, 70%, 50%)",
     "data": [
       {
@@ -218,7 +218,7 @@ const data = [
     ],
   },
   {
-    "id": "norway",
+    "id": "Bambo cup",
     "color": "hsl(337, 70%, 50%)",
     "data": [
       {

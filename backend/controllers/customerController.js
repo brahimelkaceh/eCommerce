@@ -41,7 +41,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   // Construct the activation URL with the token
   const activationURL = `${req.protocol}://${req.get(
-    "host",
+    "host"
   )}/customers/activate?token=${activationToken}`;
   await new Email(newCustomer, activationURL).sendWelcome();
 
@@ -80,7 +80,7 @@ exports.login = catchAsync(async (req, res, next) => {
     process.env.SECRET_KEY,
     {
       expiresIn: "1h",
-    },
+    }
   );
 
   // 3) If everything ok, send token to client
@@ -117,10 +117,7 @@ exports.activate = catchAsync(async (req, res) => {
   await customer.save();
 
   // Redirect to a confirmation page or display a success message
-  return res.status(200).json({
-    status: "success",
-    data: "Account activated successfully",
-  });
+  return res.redirect("http://localhost:5173/customerLogin");
 });
 
 exports.getAllCustomers = catchAsync(async (req, res, next) => {
@@ -160,17 +157,19 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
   const customerId = req.params.id;
   const images = req.files;
   const uploadedImages = await addImages(images);
-  const { firstName, lastName, email, userName,active } = req.body;
+  const { firstName, lastName, email, userName, active } = req.body;
   const updatedCustomer = await Customer.findByIdAndUpdate(
     customerId,
     {
       userName,
       firstName,
       lastName,
-      images: uploadedImages.length? uploadedImages.map((image) => image.imageUrl):req.body.images,
-      active
+      images: uploadedImages.length
+        ? uploadedImages.map((image) => image.imageUrl)
+        : req.body.images,
+      active,
     },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   );
   if (!updatedCustomer) {
     res.status(404).json({

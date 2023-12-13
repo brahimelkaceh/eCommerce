@@ -106,6 +106,7 @@ const LoginAdmin = () => {
         setActive(false);
         isLoading(false);
         setAlertMessage("Congratulations on Your Successful Registration!");
+        setMessage("Please check your email!!");
       }
     } catch (error) {
       isLoading(false);
@@ -144,7 +145,7 @@ const LoginAdmin = () => {
         setOpen(true);
         setAlertMessage("Congratulations on Your Successful Login!");
         isLoading(false);
-        navigate("/customerProfile");
+        navigate("/home");
       }
       if (response.status === "fail") {
         console.log("error:", response);

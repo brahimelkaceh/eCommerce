@@ -440,6 +440,10 @@ export default function AllProducts() {
           // slotProps={{
           //   toolbar: { setrows, setrowsmodesmodel, showQuickFilter: true },
           // }}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 8 } },
+          }}
+          pageSizeOptions={[5, 10, 25]}
           disableColumnFilter
           disableDensitySelector
           filterModel={filterModel}

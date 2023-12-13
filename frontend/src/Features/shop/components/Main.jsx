@@ -11,12 +11,13 @@ import Preloader from "../../landingpage/components/Preloader";
 
 const Main = () => {
   const { products: allProducts } = useProduct();
-  const [loading, setLoading] = useState(false);
 
   const { SubcatData, catData, selectedSubcategory, setSelectedSubcategory } =
     useSubCatData();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [page, setPage] = React.useState(1);
+  const [loading, setLoading] = useState(false); // New loading state
+
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -28,7 +29,6 @@ const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
     const fetchProducts = async () => {
       try {
         const response = await fetch(
@@ -53,33 +53,32 @@ const Main = () => {
         }
 
         const data = await response.json();
-        setLoading(false);
         setProducts(data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     if (categoryId) {
       fetchProducts();
+      setLoading(true);
+      console.log(categoryId);
     }
   }, [categoryId]);
-
   // it should be constant with no change
   useEffect(() => {
-    setLoading(true);
     if (selectedSubcategory) {
       const subcategoryId = selectedSubcategory;
       const filtered = allProducts.filter(
         (product) => product.subCategoryId._id === subcategoryId
       );
-      setLoading(true);
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts(allProducts);
       setRealProducts(allProducts);
     }
-    setLoading(false);
   }, [selectedSubcategory, allProducts]);
 
   const handleSubcategoryClick = (subcategoryId) => {
@@ -91,7 +90,6 @@ const Main = () => {
     navigate("/shop");
   };
   // console.log(filteredProducts);
-  console.log(loading);
 
   return (
     <div>
@@ -139,6 +137,7 @@ const Main = () => {
                 </div>
               </aside>
             </div>
+            {loading && <Preloader />}
 
             <div className="col-xl-9 col-lg-8">
               <div className="shop-top-meta mb-35">
@@ -151,13 +150,12 @@ const Main = () => {
                             <i className="flaticon-menu" /> FILTER
                           </a>
                         </li>
-                        <li>Showing 6 –{allProducts.length} of 80 results</li>
+                        <li>Showing 6 –{allProducts.length} of 80 results </li>
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
-              {loading && <p>loading...</p>}
               <Products
                 products={
                   categoryId
