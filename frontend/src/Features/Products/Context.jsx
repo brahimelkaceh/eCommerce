@@ -73,8 +73,8 @@ export const ProductProvider = ({ children }) => {
     try {
       const product = await getP(productId);
       setProductName(product.data.data?.productName);
-      return product;
       setLoading(false);
+      return product;
     } catch (error) {
       console.error(`Error fetching product with ID ${productId}:`, error);
       return null;
