@@ -59,22 +59,17 @@
   display: block;
   margin-bottom: -0px;
   font-size: 1.3em;
+  color: #001b24 !important;
 }
 
 .login-btn {
-  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  background: #001b24;
   color: #fff;
   padding: 16px !important;
 }
 
 .login-btn:hover {
-  background: linear-gradient(
-    144deg,
-    var(--blue-backround),
-    20%,
-    #1e1e1e 50%,
-    var(--blue-backround)
-  );
+  background: #c2945a;
   color: rgb(255, 255, 255);
   padding: 16px !important;
   cursor: pointer;
@@ -96,7 +91,7 @@
 
 .ui {
   font-weight: bolder;
-  background: -webkit-linear-gradient(#b563ff, #535efc, #0ec8ee);
+  background: #001b24;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   border-bottom: 4px solid transparent;

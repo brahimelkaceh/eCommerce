@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import { DrawerHeader, Item } from "../../Components/mui/MuiStyles";
 import { Box } from "@mui/material";
 import Sidebar from "../../Components/sidebar/Sidebar";
-import Cards from "./components/cards/Cards";
+import Cards from "./components/Cards";
 import "./style.css";
 import { LinearChart } from "./charts/LinearChart";
 import AllOrders from "../orders/components/AllOrders";

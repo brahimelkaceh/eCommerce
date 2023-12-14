@@ -24,7 +24,7 @@ const NewArrival = () => {
                   </div>
                   <h2>Cyber Monday</h2>
                   <span>UP TO 50% OFF</span>
-                  <div className="coming-time" data-countdown="2021/9/21" />
+                  {/* <div className="coming-time" data-countdown="2021/9/21" /> */}
                   <Link to="/shop" className="btn">
                     shop now
                   </Link>
@@ -34,7 +34,7 @@ const NewArrival = () => {
             <div className="col-xl-7 col-lg-6">
               <div className="row new-arrival-active">
                 {loading && <Preloader />}
-                {products?.slice(-6).map((product) => {
+                {products?.slice(27, 33).map((product) => {
                   return (
                     <div
                       className="col-xl-4 col-sm-6 grid-item grid-sizer cat-two"

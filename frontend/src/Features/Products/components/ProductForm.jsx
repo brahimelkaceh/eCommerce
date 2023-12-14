@@ -108,16 +108,16 @@ const ProductForm = ({ open, onClose }) => {
           if (result.isConfirmed) {
             try {
               await createP(formData);
-              Swal.fire("SubCategory Created!", "", "success");
+              Swal.fire("Product Created!", "", "success");
               setRefresh(new Date().toISOString());
             } catch (error) {
-             Swal.fire({
-               icon: "error",
-               title: "Oops...",
-               text: "Something went wrong!",
-               footer: "check if the Category is Active ",
-             });
-              console.error("Error occurred while creating SubCategory", error);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: "check if the Subcategory is Active ",
+              });
+              console.error("Error occurred while creating Product", error);
             }
           } else if (result.isDenied) {
             Swal.fire("Product creation canceled", "", "info");
@@ -200,9 +200,11 @@ const ProductForm = ({ open, onClose }) => {
               {SubcatData?.map((subCategory) => {
                 console.log("subCat", subCategory.active);
                 return (
-                  subCategory.active && <MenuItem value={subCategory._id} key={subCategory._id}>
-                    <em>{subCategory.subCategoryName}</em>
-                  </MenuItem>
+                  subCategory.active && (
+                    <MenuItem value={subCategory._id} key={subCategory._id}>
+                      <em>{subCategory.subCategoryName}</em>
+                    </MenuItem>
+                  )
                 );
               })}
             </Select>

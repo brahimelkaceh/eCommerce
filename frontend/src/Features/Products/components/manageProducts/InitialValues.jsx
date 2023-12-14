@@ -6,7 +6,7 @@ const initialValues = {
   shortDescription: "",
   longDescription: "",
   images: "",
-  discountPrice: "",
+  discountPrice: 0,
   quantity: "",
   options: {
     price: "",

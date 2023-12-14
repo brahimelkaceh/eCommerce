@@ -94,7 +94,6 @@ export const ProductProvider = ({ children }) => {
         const filteredData = productsWithId.filter(
           (product) => product.subCategoryId.active == true
         );
-        // console.log(" products updated : " ,filteredData)
         setProducts(filteredData);
         setLoading(false);
       } catch (error) {
@@ -121,6 +120,7 @@ export const ProductProvider = ({ children }) => {
     discountPrice,
     productName,
     loading,
+    setLoading,
   };
 
   return (

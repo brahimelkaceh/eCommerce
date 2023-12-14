@@ -105,7 +105,7 @@ const EditForm = ({ onClose, id }) => {
           title: "Do you want to Update this product?",
           showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: "Create",
+          confirmButtonText: "Save",
           denyButtonText: "Cancel",
         }).then(async (result) => {
           if (result.isConfirmed) {
